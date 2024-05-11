@@ -1,0 +1,59 @@
+generator jsClient {
+    provider = "prisma-client-js"
+    output   = "../../node_modules/.prisma"
+}
+
+generator graphql {
+    provider = "prisma-to-graphql"
+    output   = "../../node_modules/.prisma/graphql"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = "file:../../../../.not-committed/full-run-time-test/dev.db"
+}
+
+model User {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    email    String
+    /// TODO: support these comments
+    /// @graphql-ignore {"output": true}
+    password String
+
+    firstName   String?
+    lastName    String?
+    role        String?
+    phoneNumber String?
+
+    settings UserSettings?
+}
+
+model UserSettings {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    receivesMarketingEmails Boolean @default(false)
+    canViewReports          Boolean @default(false)
+
+    userId String @unique
+
+    stats UserStats?
+    user  User       @relation(fields: [userId], references: [id])
+}
+
+model UserStats {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    likes    Int
+    dislikes Int
+    views    Int
+
+    userSettingsId String       @unique
+    settings       UserSettings @relation(fields: [userSettingsId], references: [id])
+}

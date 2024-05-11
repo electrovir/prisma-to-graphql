@@ -1,0 +1,51 @@
+generator jsClient {
+    provider = "prisma-client-js"
+    output   = "../node_modules/.prisma"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = "file:../../../.not-committed/prisma-resolver/test.db"
+}
+
+model User {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    email String @unique
+
+    firstName   String?
+    lastName    String?
+    role        String?
+    phoneNumber String?
+
+    settings UserSettings?
+}
+
+model UserSettings {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    receivesMarketingEmails Boolean @default(false)
+    canViewReports          Boolean @default(false)
+
+    userId String @unique
+
+    stats UserStats?
+    user  User       @relation(fields: [userId], references: [id])
+}
+
+model UserStats {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    likes    Int
+    dislikes Int
+    views    Int
+
+    userSettingsId String       @unique
+    settings       UserSettings @relation(fields: [userSettingsId], references: [id])
+}

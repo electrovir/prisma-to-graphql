@@ -1,0 +1,7 @@
+{
+    "compilerOptions": {
+        "composite": true,
+        "target": "ES2022"
+    },
+    "extends": "virmator/base-configs/tsconfig.base.json"
+}
