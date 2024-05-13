@@ -19,8 +19,7 @@ model User {
     updatedAt DateTime @updatedAt
 
     email    String
-    /// @graphql-omit1 {output: true}
-    /// @graphql-omit2 {output: true}
+    /// @graphql-omit {output: true}
     password String
 
     firstName   String?

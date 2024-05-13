@@ -36,7 +36,7 @@ export type FetchGraphqlParams<
  */
 export type GraphqlFetcher<Resolvers extends Readonly<BaseResolvers>> = <
     const OperationType extends AvailableOperationTypes<Resolvers>,
-    const Operations extends GraphqlOperations<Resolvers, OperationType>,
+    const Operations extends Readonly<GraphqlOperations<Resolvers, OperationType>>,
 >(
     params: Readonly<FetchGraphqlParams<Resolvers, OperationType>>,
     operations: Operations,

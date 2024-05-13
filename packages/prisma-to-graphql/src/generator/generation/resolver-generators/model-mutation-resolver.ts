@@ -38,10 +38,11 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
                             return {
                                 type: 'property',
                                 name: field.name,
+                                // here
                                 value: createWithoutRelationInputName({
                                     modelNameGettingCreated: field.type,
                                     modelNameGettingOmitted: prismaModel.modelName,
-                                    operationName: 'create',
+                                    operationName: 'connection',
                                 }),
                                 required,
                             };

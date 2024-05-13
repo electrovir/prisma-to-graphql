@@ -16,7 +16,7 @@ import {
 import {assert} from 'chai';
 import {createUtcFullDate} from 'date-vir';
 import {Server} from 'node:http';
-import {assertRunTimeType, assertTypeOf} from 'run-time-assertions';
+import {assertRunTimeType, assertThrows, assertTypeOf} from 'run-time-assertions';
 import {buildUrl, joinUrlParts} from 'url-vir';
 import {setupFullServer} from './full-run-time.test-helper';
 
@@ -24,6 +24,7 @@ import {setupFullServer} from './full-run-time.test-helper';
 import type {PrismaClient} from '.prisma';
 // @ts-ignore: this won't be generated until tests run at least once
 import type {Resolvers} from '.prisma/graphql/schema';
+import {ResolverOutput} from '@prisma-to-graphql/fetch-graphql';
 
 type GraphqlTestCase = {
     it: string;
@@ -902,7 +903,6 @@ const testCases: GraphqlTestCase[] = [
                                 items {
                                     firstName
                                     phoneNumber
-                                    password
                                     email
                                 }
                             }
@@ -928,7 +928,6 @@ const testCases: GraphqlTestCase[] = [
                 select: {
                     firstName: true,
                     phoneNumber: true,
-                    password: true,
                     email: true,
                 },
                 orderBy: {
@@ -946,6 +945,142 @@ const testCases: GraphqlTestCase[] = [
                         b: ArrayElement<typeof latestPrismaResults>,
                     ) => a.email.localeCompare(b.email),
                 ),
+            );
+        },
+    },
+    {
+        it: 'creates nested values',
+        async test({serverUrl, prismaClient, fetchGraphql}) {
+            const graphqlResult = await fetchGraphql(
+                {
+                    operationName: 'CreateNestedValues',
+                    // @ts-ignore: this won't be generated until tests run at least once
+                    operationType: 'Mutation',
+                    url: joinUrlParts(serverUrl, 'graphql'),
+                },
+                {
+                    Users: {
+                        args: {
+                            create: {
+                                data: [
+                                    {
+                                        email: 'nested-creation@example.com',
+                                        firstName: 'nested',
+                                        password: 'something secret',
+                                        settings: {
+                                            create: {
+                                                canViewReports: true,
+                                                stats: {
+                                                    create: {
+                                                        dislikes: 5,
+                                                        likes: 4,
+                                                        views: 9,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                        select: {
+                            items: {
+                                firstName: true,
+                                settings: {
+                                    canViewReports: true,
+                                    stats: {
+                                        likes: true,
+                                    },
+                                },
+                            },
+                            total: true,
+                        },
+                    },
+                },
+            );
+
+            assert.deepStrictEqual(graphqlResult, {
+                Users: {
+                    items: [
+                        {
+                            firstName: 'nested',
+                            settings: {
+                                canViewReports: true,
+                                stats: {
+                                    likes: 4,
+                                },
+                            },
+                        },
+                    ],
+                    total: 1,
+                },
+            });
+
+            const prismaResult = await prismaClient.user.findMany({
+                where: {
+                    email: 'nested-creation@example.com',
+                },
+                select: {
+                    firstName: true,
+                    settings: {
+                        select: {
+                            canViewReports: true,
+                            stats: {
+                                select: {
+                                    likes: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+
+            assert.deepStrictEqual(prismaResult, graphqlResult.Users.items);
+        },
+    },
+    {
+        it: 'fails to read hidden output fields',
+        async test({fetchGraphql, serverUrl}) {
+            type UsersOutput = ArrayElement<ResolverOutput<Resolvers, 'Query', 'Users'>['items']>;
+
+            assertTypeOf<UsersOutput>().toHaveProperty('email');
+            assertTypeOf<UsersOutput>().not.toHaveProperty('password');
+
+            await assertThrows(
+                async () => {
+                    const graphqlResult = await fetchGraphql(
+                        {
+                            operationName: 'CreateNestedValues',
+                            // @ts-ignore: this won't be generated until tests run at least once
+                            operationType: 'Query',
+                            url: joinUrlParts(serverUrl, 'graphql'),
+                        },
+                        {
+                            Users: {
+                                args: {
+                                    where: {
+                                        email: {
+                                            equals: 'nested-creation@example.com',
+                                        },
+                                    },
+                                },
+                                select: {
+                                    items: {
+                                        firstName: true,
+                                        password: true,
+                                    },
+                                    total: true,
+                                },
+                            },
+                        },
+                    );
+
+                    // @ts-expect-error: this field is hidden
+                    graphqlResult.Users.items[0]!.password;
+                },
+                {
+                    matchMessage: 'Cannot query field "password" on type "User".',
+                },
             );
         },
     },
@@ -1040,7 +1175,7 @@ async function runTests(testCases: ReadonlyArray<Readonly<GraphqlTestCase>>) {
         // @ts-ignore: this won't be generated until tests run at least once
         const {operationParams} = await import('.prisma/graphql/schema.cjs');
 
-        const fetchGraphql = createGraphqlFetcher(operationParams);
+        const fetchGraphql = createGraphqlFetcher<Resolvers>(operationParams);
 
         await awaitedForEach(testCases, async (testCase) => {
             try {
