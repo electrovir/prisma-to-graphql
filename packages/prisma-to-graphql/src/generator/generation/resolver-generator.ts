@@ -1,7 +1,7 @@
 import {OperationType} from '../../builders/operation-type';
 import {GeneratedGraphql} from './generated-graphql';
 import {GenerationOptions} from './generation-options';
-import {PrismaModel} from './prisma-model';
+import {PrismaModel} from './model/prisma-model';
 
 /**
  * A generator used inside of the `prisma-to-graphql` Prisma generator to create resolvers and all

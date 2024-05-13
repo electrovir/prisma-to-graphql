@@ -1,4 +1,4 @@
-import {filterMap} from '@augment-vir/common';
+import {filterMap, isTruthy} from '@augment-vir/common';
 import {
     GraphqlBlockByType,
     TopLevelNamedGraphqlBlock,
@@ -6,20 +6,22 @@ import {
 import {prismaFilters} from '../filter-inputs/prisma-filters';
 import {GeneratedGraphql} from '../generated-graphql';
 import {GenerationOptions} from '../generation-options';
-import {PrismaModel} from '../prisma-model';
+import {PrismaModel} from '../model/prisma-model';
 import {ResolverGenerator} from '../resolver-generator';
 import {createOutputTypeBlock, createWhereInputBlock} from './model-find-many-resolver';
 import {createResolverInputName, createWithoutRelationInputName} from './model-resolver-io';
 
 function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedGraphqlBlock[] {
-    const relationFields = prismaModel.dmmfModel.fields.filter((field) => field.relationName);
+    const relationFields = Object.values(prismaModel.fields).filter(
+        (field) => field.relationName && !field.hideIn?.inputs,
+    );
 
     const createWithoutRelationBlocks = relationFields.flatMap(
         (omittedField): TopLevelNamedGraphqlBlock[] => {
             const createWithoutRelationBlock: GraphqlBlockByType<'input'> = {
                 type: 'input',
                 name: createWithoutRelationInputName({
-                    modelNameGettingCreated: prismaModel.dmmfModel.name,
+                    modelNameGettingCreated: prismaModel.modelName,
                     modelNameGettingOmitted: omittedField.type,
                     operationName: 'create',
                 }),
@@ -38,7 +40,7 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
                                 name: field.name,
                                 value: createWithoutRelationInputName({
                                     modelNameGettingCreated: field.type,
-                                    modelNameGettingOmitted: prismaModel.dmmfModel.name,
+                                    modelNameGettingOmitted: prismaModel.modelName,
                                     operationName: 'create',
                                 }),
                                 required,
@@ -53,7 +55,7 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
                         }
                     },
                     (mappedFieldName, field) => {
-                        return field.name !== omittedField.name;
+                        return field.name !== omittedField.name && !field.hideIn?.inputs;
                     },
                 ),
             };
@@ -61,7 +63,7 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
             const createOrConnectWithoutRelationBlock: GraphqlBlockByType<'input'> = {
                 type: 'input',
                 name: createWithoutRelationInputName({
-                    modelNameGettingCreated: prismaModel.dmmfModel.name,
+                    modelNameGettingCreated: prismaModel.modelName,
                     modelNameGettingOmitted: omittedField.type,
                     operationName: 'createOrConnect',
                 }),
@@ -70,7 +72,7 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
                         type: 'property',
                         name: 'connect',
                         value: createResolverInputName({
-                            modelName: prismaModel.dmmfModel.name,
+                            modelName: prismaModel.modelName,
                             inputName: 'whereUnfilteredUnique',
                         }),
                         required: true,
@@ -87,7 +89,7 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
             const connectionWithoutRelationBlock: GraphqlBlockByType<'input'> = {
                 type: 'input',
                 name: createWithoutRelationInputName({
-                    modelNameGettingCreated: prismaModel.dmmfModel.name,
+                    modelNameGettingCreated: prismaModel.modelName,
                     modelNameGettingOmitted: omittedField.type,
                     operationName: 'connection',
                 }),
@@ -108,7 +110,7 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
                         type: 'property',
                         name: 'connect',
                         value: createResolverInputName({
-                            modelName: prismaModel.dmmfModel.name,
+                            modelName: prismaModel.modelName,
                             inputName: 'whereUnfilteredUnique',
                         }),
                         required: false,
@@ -133,38 +135,44 @@ function createWhereRequiredProvidedUniqueBlock(
     return {
         type: 'input',
         name: createResolverInputName({
-            modelName: prismaModel.dmmfModel.name,
+            modelName: prismaModel.modelName,
             inputName: 'whereRequiredProvidedUnique',
         }),
         props: [
-            ...Object.values(prismaModel.fields).map((field): GraphqlBlockByType<'property'> => {
-                if (field.relationName) {
-                    return {
-                        type: 'property',
-                        name: field.name,
-                        value: createResolverInputName({
-                            modelName: field.type,
-                            inputName: 'where',
-                        }),
-                        required: false,
-                    };
-                } else {
-                    const isUnique = field.isUnique || field.isId;
-                    const isRequired = isUnique && !field.isGenerated;
+            ...filterMap(
+                Object.values(prismaModel.fields),
+                (field): GraphqlBlockByType<'property'> | undefined => {
+                    if (field.hideIn?.inputs) {
+                        return undefined;
+                    } else if (field.relationName) {
+                        return {
+                            type: 'property',
+                            name: field.name,
+                            value: createResolverInputName({
+                                modelName: field.type,
+                                inputName: 'where',
+                            }),
+                            required: false,
+                        };
+                    } else {
+                        const isUnique = field.isUnique || field.isId;
+                        const isRequired = isUnique && !field.isGenerated;
 
-                    const propType = isUnique ? field.type : prismaFilters[field.type]?.name;
-                    if (!propType) {
-                        throw new Error(`No filter exists yet for type '${field.type}'`);
+                        const propType = isUnique ? field.type : prismaFilters[field.type]?.name;
+                        if (!propType) {
+                            throw new Error(`No filter exists yet for type '${field.type}'`);
+                        }
+
+                        return {
+                            type: 'property',
+                            name: field.name,
+                            value: propType,
+                            required: isRequired,
+                        };
                     }
-
-                    return {
-                        type: 'property',
-                        name: field.name,
-                        value: propType,
-                        required: isRequired,
-                    };
-                }
-            }),
+                },
+                isTruthy,
+            ),
         ],
     };
 }
@@ -173,37 +181,44 @@ function createCreateInputBlocks(prismaModel: PrismaModel) {
     const createInputBlock: GraphqlBlockByType<'input'> = {
         type: 'input',
         name: createResolverInputName({
-            modelName: prismaModel.dmmfModel.name,
+            modelName: prismaModel.modelName,
             inputName: 'createData',
         }),
-        props: Object.values(prismaModel.fields).map((field): GraphqlBlockByType<'property'> => {
-            const required =
-                field.isRequired &&
-                !field.isGenerated &&
-                !field.hasDefaultValue &&
-                !field.isUpdatedAt;
+        props: filterMap(
+            Object.values(prismaModel.fields),
+            (field): GraphqlBlockByType<'property'> | undefined => {
+                if (field.hideIn?.inputs) {
+                    return undefined;
+                }
+                const required =
+                    field.isRequired &&
+                    !field.isGenerated &&
+                    !field.hasDefaultValue &&
+                    !field.isUpdatedAt;
 
-            if (field.relationName) {
-                return {
-                    type: 'property',
-                    name: field.name,
-                    value: createWithoutRelationInputName({
-                        modelNameGettingCreated: field.type,
-                        modelNameGettingOmitted: prismaModel.dmmfModel.name,
-                        operationName: 'connection',
-                    }),
+                if (field.relationName) {
+                    return {
+                        type: 'property',
+                        name: field.name,
+                        value: createWithoutRelationInputName({
+                            modelNameGettingCreated: field.type,
+                            modelNameGettingOmitted: prismaModel.modelName,
+                            operationName: 'connection',
+                        }),
 
-                    required,
-                };
-            } else {
-                return {
-                    type: 'property',
-                    name: field.name,
-                    value: field.type,
-                    required,
-                };
-            }
-        }),
+                        required,
+                    };
+                } else {
+                    return {
+                        type: 'property',
+                        name: field.name,
+                        value: field.type,
+                        required,
+                    };
+                }
+            },
+            isTruthy,
+        ),
     };
 
     const whereInputBlock = createWhereInputBlock(prismaModel);
@@ -218,31 +233,37 @@ function createUpdateInputBlocks(prismaModel: PrismaModel) {
     const updateDataInputBlock: GraphqlBlockByType<'input'> = {
         type: 'input',
         name: createResolverInputName({
-            modelName: prismaModel.dmmfModel.name,
+            modelName: prismaModel.modelName,
             inputName: 'updateData',
         }),
-        props: Object.values(prismaModel.fields).map((field): GraphqlBlockByType<'property'> => {
-            if (field.relationName) {
-                return {
-                    type: 'property',
-                    name: field.name,
-                    value: createWithoutRelationInputName({
-                        modelNameGettingCreated: field.type,
-                        modelNameGettingOmitted: prismaModel.dmmfModel.name,
-                        operationName: 'connection',
-                    }),
+        props: filterMap(
+            Object.values(prismaModel.fields),
+            (field): GraphqlBlockByType<'property'> | undefined => {
+                if (field.hideIn?.inputs) {
+                    return undefined;
+                } else if (field.relationName) {
+                    return {
+                        type: 'property',
+                        name: field.name,
+                        value: createWithoutRelationInputName({
+                            modelNameGettingCreated: field.type,
+                            modelNameGettingOmitted: prismaModel.modelName,
+                            operationName: 'connection',
+                        }),
 
-                    required: false,
-                };
-            } else {
-                return {
-                    type: 'property',
-                    name: field.name,
-                    value: field.type,
-                    required: false,
-                };
-            }
-        }),
+                        required: false,
+                    };
+                } else {
+                    return {
+                        type: 'property',
+                        name: field.name,
+                        value: field.type,
+                        required: false,
+                    };
+                }
+            },
+            isTruthy,
+        ),
     };
 
     return {
@@ -257,7 +278,7 @@ function createArgInputBlocks(prismaModel: Readonly<PrismaModel>) {
         type: 'input',
         name: createResolverInputName({
             inputName: 'create',
-            modelName: prismaModel.dmmfModel.name,
+            modelName: prismaModel.modelName,
         }),
         props: [
             {
@@ -275,7 +296,7 @@ function createArgInputBlocks(prismaModel: Readonly<PrismaModel>) {
         type: 'input',
         name: createResolverInputName({
             inputName: 'update',
-            modelName: prismaModel.dmmfModel.name,
+            modelName: prismaModel.modelName,
         }),
         props: [
             {
@@ -288,7 +309,7 @@ function createArgInputBlocks(prismaModel: Readonly<PrismaModel>) {
                 type: 'property',
                 name: 'where',
                 value: createResolverInputName({
-                    modelName: prismaModel.dmmfModel.name,
+                    modelName: prismaModel.modelName,
                     inputName: 'whereUnfilteredUnique',
                 }),
                 required: true,
@@ -303,7 +324,7 @@ function createArgInputBlocks(prismaModel: Readonly<PrismaModel>) {
         type: 'input',
         name: createResolverInputName({
             inputName: 'upsert',
-            modelName: prismaModel.dmmfModel.name,
+            modelName: prismaModel.modelName,
         }),
         props: [
             {
@@ -350,7 +371,7 @@ export const modelMutationOperation: ResolverGenerator = {
 
         const operationBlock: GraphqlBlockByType<'operation'> = {
             type: 'operation',
-            name: prismaModel.pluralName,
+            name: prismaModel.pluralModelName,
             args: [
                 {
                     type: 'property',
@@ -392,7 +413,7 @@ export const modelMutationOperation: ResolverGenerator = {
                 {
                     type: 'prisma',
                     operationType: 'Mutation',
-                    prismaModelName: prismaModel.dmmfModel.name,
+                    prismaModelName: prismaModel.modelName,
                     resolverName: operationBlock.name,
                 },
             ],

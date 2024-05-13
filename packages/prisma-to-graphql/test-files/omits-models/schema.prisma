@@ -1,0 +1,37 @@
+
+            generator graphql {
+                provider = "prisma-to-graphql"
+                output = "./output/"
+                
+            }
+        
+
+
+    datasource db {
+        provider = "sqlite"
+        url      = "file:../../../.not-committed/dev.db"
+    }
+
+
+
+                model User {
+                    id        String   @id @default(uuid())
+                    createdAt DateTime @default(now())
+                    updatedAt DateTime @updatedAt
+
+                    email    String
+                    /// @graphql-omit
+                    password String
+
+                    firstName   String?
+                }
+                
+                /// @graphql-omit
+                model UserSettings {
+                    id        String   @id @default(uuid())
+                    createdAt DateTime @default(now())
+                    updatedAt DateTime @updatedAt
+                    
+                    something Boolean
+                }
+            

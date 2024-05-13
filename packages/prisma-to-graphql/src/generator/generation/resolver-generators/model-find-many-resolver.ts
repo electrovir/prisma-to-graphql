@@ -1,8 +1,8 @@
-import {filterMap} from '@augment-vir/common';
+import {filterMap, isTruthy} from '@augment-vir/common';
 import {GraphqlBlockByType} from '../../../builders/graphql-builder/graphql-block';
 import {prismaFilters} from '../filter-inputs/prisma-filters';
 import {GeneratedGraphql} from '../generated-graphql';
-import {PrismaModel} from '../prisma-model';
+import {PrismaModel} from '../model/prisma-model';
 import {ResolverGenerator} from '../resolver-generator';
 import {createQueryOutputName, createResolverInputName} from './model-resolver-io';
 
@@ -53,7 +53,7 @@ export function createWhereInputBlock(
     prismaModel: Readonly<PrismaModel>,
 ): GraphqlBlockByType<'input'> {
     const whereInputName = createResolverInputName({
-        modelName: prismaModel.dmmfModel.name,
+        modelName: prismaModel.modelName,
         inputName: 'where',
     });
 
@@ -79,31 +79,39 @@ export function createWhereInputBlock(
                 value: `[${whereInputName}!]`,
                 required: false,
             },
-            ...Object.values(prismaModel.fields).map((field): GraphqlBlockByType<'property'> => {
-                if (field.relationName) {
-                    return {
-                        type: 'property',
-                        name: field.name,
-                        value: createResolverInputName({
-                            modelName: field.type,
-                            inputName: 'where',
-                        }),
-                        required: false,
-                    };
-                } else {
-                    const filterName = prismaFilters[field.type]?.name;
-                    if (!filterName) {
-                        throw new Error(`No filter exists yet for type '${field.type}'`);
+            ...filterMap(
+                Object.values(prismaModel.fields),
+                (field): GraphqlBlockByType<'property'> | undefined => {
+                    if (field.hideIn?.inputs) {
+                        return undefined;
                     }
 
-                    return {
-                        type: 'property',
-                        name: field.name,
-                        value: filterName,
-                        required: false,
-                    };
-                }
-            }),
+                    if (field.relationName) {
+                        return {
+                            type: 'property',
+                            name: field.name,
+                            value: createResolverInputName({
+                                modelName: field.type,
+                                inputName: 'where',
+                            }),
+                            required: false,
+                        };
+                    } else {
+                        const filterName = prismaFilters[field.type]?.name;
+                        if (!filterName) {
+                            throw new Error(`No filter exists yet for type '${field.type}'`);
+                        }
+
+                        return {
+                            type: 'property',
+                            name: field.name,
+                            value: filterName,
+                            required: false,
+                        };
+                    }
+                },
+                isTruthy,
+            ),
         ],
     };
 }
@@ -112,46 +120,53 @@ function createQueryInputBlocks(prismaModel: Readonly<PrismaModel>) {
     const orderByInputBlock: GraphqlBlockByType<'input'> = {
         type: 'input',
         name: createResolverInputName({
-            modelName: prismaModel.dmmfModel.name,
+            modelName: prismaModel.modelName,
             inputName: 'orderBy',
         }),
-        props: Object.values(prismaModel.fields).map((field): GraphqlBlockByType<'property'> => {
-            if (field.relationName) {
-                return {
-                    type: 'property',
-                    name: field.name,
-                    value: createResolverInputName({
-                        modelName: field.type,
-                        inputName: 'orderBy',
-                    }),
-                    required: false,
-                };
-            } else {
-                const sortType = field.isRequired
-                    ? sortOrderBlock.name
-                    : sortOrderWithNullsBlock.name;
+        props: filterMap(
+            Object.values(prismaModel.fields),
+            (field): GraphqlBlockByType<'property'> | undefined => {
+                if (field.hideIn?.inputs) {
+                    return undefined;
+                }
+                if (field.relationName) {
+                    return {
+                        type: 'property',
+                        name: field.name,
+                        value: createResolverInputName({
+                            modelName: field.type,
+                            inputName: 'orderBy',
+                        }),
+                        required: false,
+                    };
+                } else {
+                    const sortType = field.isRequired
+                        ? sortOrderBlock.name
+                        : sortOrderWithNullsBlock.name;
 
-                return {
-                    type: 'property',
-                    name: field.name,
-                    value: sortType,
-                    required: false,
-                };
-            }
-        }),
+                    return {
+                        type: 'property',
+                        name: field.name,
+                        value: sortType,
+                        required: false,
+                    };
+                }
+            },
+            isTruthy,
+        ),
     };
 
     const distinctInputBlock: GraphqlBlockByType<'enum'> = {
         type: 'enum',
         name: createResolverInputName({
-            modelName: prismaModel.dmmfModel.name,
+            modelName: prismaModel.modelName,
             inputName: 'distinct',
         }),
         values: filterMap(
             Object.values(prismaModel.fields),
             (field) => field.name,
             (name, field) => {
-                return !field.relationName;
+                return !field.relationName && !field.hideIn?.inputs;
             },
         ),
     };
@@ -174,14 +189,14 @@ export function createWhereUnfilteredUniqueInputBlock(
     prismaModel: Readonly<PrismaModel>,
 ): GraphqlBlockByType<'input'> {
     const whereInputName = createResolverInputName({
-        modelName: prismaModel.dmmfModel.name,
+        modelName: prismaModel.modelName,
         inputName: 'where',
     });
 
     return {
         type: 'input',
         name: createResolverInputName({
-            modelName: prismaModel.dmmfModel.name,
+            modelName: prismaModel.modelName,
             inputName: 'whereUnfilteredUnique',
         }),
         props: [
@@ -203,33 +218,41 @@ export function createWhereUnfilteredUniqueInputBlock(
                 value: `[${whereInputName}!]`,
                 required: false,
             },
-            ...Object.values(prismaModel.fields).map((field): GraphqlBlockByType<'property'> => {
-                if (field.relationName) {
-                    return {
-                        type: 'property',
-                        name: field.name,
-                        value: createResolverInputName({
-                            modelName: field.type,
-                            inputName: 'where',
-                        }),
-                        required: false,
-                    };
-                } else {
-                    const isUnique = field.isUnique || field.isId;
-
-                    const propType = isUnique ? field.type : prismaFilters[field.type]?.name;
-                    if (!propType) {
-                        throw new Error(`No filter exists yet for type '${field.type}'`);
+            ...filterMap(
+                Object.values(prismaModel.fields),
+                (field): GraphqlBlockByType<'property'> | undefined => {
+                    if (field.hideIn?.inputs) {
+                        return undefined;
                     }
 
-                    return {
-                        type: 'property',
-                        name: field.name,
-                        value: propType,
-                        required: false,
-                    };
-                }
-            }),
+                    if (field.relationName) {
+                        return {
+                            type: 'property',
+                            name: field.name,
+                            value: createResolverInputName({
+                                modelName: field.type,
+                                inputName: 'where',
+                            }),
+                            required: false,
+                        };
+                    } else {
+                        const isUnique = field.isUnique || field.isId;
+
+                        const propType = isUnique ? field.type : prismaFilters[field.type]?.name;
+                        if (!propType) {
+                            throw new Error(`No filter exists yet for type '${field.type}'`);
+                        }
+
+                        return {
+                            type: 'property',
+                            name: field.name,
+                            value: propType,
+                            required: false,
+                        };
+                    }
+                },
+                isTruthy,
+            ),
         ],
     };
 }
@@ -244,7 +267,7 @@ export function createOutputTypeBlock(
 ): GraphqlBlockByType<'type'> {
     return {
         type: 'type',
-        name: createQueryOutputName(prismaModel.dmmfModel.name),
+        name: createQueryOutputName(prismaModel.modelName),
         props: [
             {
                 type: 'property',
@@ -259,7 +282,7 @@ export function createOutputTypeBlock(
             {
                 type: 'property',
                 name: 'items',
-                value: `[${prismaModel.dmmfModel.name}!]`,
+                value: `[${prismaModel.modelName}!]`,
                 required: true,
             },
         ],
@@ -281,7 +304,7 @@ export const modelFindManyOperation: ResolverGenerator = {
                 return field.type;
             },
             (fieldType, field) => {
-                return !field.relationName;
+                return !field.relationName && !field.hideIn?.inputs;
             },
         );
         const propFiltersNeeded = propTypes.map((propType) => {
@@ -336,7 +359,7 @@ export const modelFindManyOperation: ResolverGenerator = {
                     required: false,
                 },
             ],
-            name: prismaModel.pluralName,
+            name: prismaModel.pluralModelName,
             output: {
                 value: outputTypeBlock.name,
                 required: true,
@@ -362,7 +385,7 @@ export const modelFindManyOperation: ResolverGenerator = {
                 {
                     type: 'prisma',
                     operationType: 'Query',
-                    prismaModelName: prismaModel.dmmfModel.name,
+                    prismaModelName: prismaModel.modelName,
                     resolverName: operationBlock.name,
                 },
             ],

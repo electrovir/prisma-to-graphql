@@ -21,10 +21,11 @@
         "compile": "rm -rf dist && rm -f tsconfig.tsbuildinfo && tsc -b --pretty -f --pretty tsconfig.json",
         "docs": "virmator docs",
         "start": "npm run compile --prefix ../.. && test-as-package tsx src/test/full-run-time.test-helper.ts",
-        "test": "test-as-package virmator test",
-        "test:all": "concurrently --colors --kill-others-on-fail -c auto --names tests,docs \"npm run test\" \"npm run test:docs\"",
+        "test": "npm run compile && test-as-package virmator test",
+        "test:all": "concurrently --colors --kill-others-on-fail -c auto --names tests,docs \"npm run test:uncompiled\" \"npm run test:docs\"",
         "test:docs": "virmator docs check",
-        "test:types": "tsc --noEmit"
+        "test:types": "tsc --noEmit",
+        "test:uncompiled": "npm run compile && test-as-package virmator test"
     },
     "dependencies": {
         "@augment-vir/common": "^28.0.0",
@@ -37,6 +38,7 @@
         "@prisma/internals": "^5.13.0",
         "date-vir": "^5.1.4",
         "graphql": "^16.8.1",
+        "json5": "^2.2.3",
         "object-shape-tester": "^2.3.2",
         "pluralize": "^8.0.0",
         "run-time-assertions": "^1.2.0",

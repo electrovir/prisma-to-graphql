@@ -1,7 +1,7 @@
 import {capitalizeFirstLetter, mergePropertyArrays} from '@augment-vir/common';
 import {GeneratedGraphql} from './generated-graphql';
 import {GenerationOptions} from './generation-options';
-import {PrismaModel} from './prisma-model';
+import {PrismaModel} from './model/prisma-model';
 import {ResolverGenerator} from './resolver-generator';
 import {modelFindManyOperation} from './resolver-generators/model-find-many-resolver';
 import {modelMutationOperation} from './resolver-generators/model-mutation-resolver';

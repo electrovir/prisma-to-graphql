@@ -1,14 +1,13 @@
-import {DMMF} from '@prisma/generator-helper';
-import pluralize from 'pluralize';
+import {filterMap, isTruthy} from '@augment-vir/common';
 import {
     GraphqlBlockByType,
     TopLevelNamedGraphqlBlock,
-} from '../../builders/graphql-builder/graphql-block';
-import {generateModelGraphqlResolvers} from './generate-resolvers';
-import {GeneratedGraphql} from './generated-graphql';
-import {GenerationOptions} from './generation-options';
-import {generateExtraScalarBlocks, matchExtraGraphqlScalars} from './graphql-scalars';
-import {PrismaModel, combineFields} from './prisma-model';
+} from '../../../builders/graphql-builder/graphql-block';
+import {generateModelGraphqlResolvers} from '../generate-resolvers';
+import {GeneratedGraphql} from '../generated-graphql';
+import {GenerationOptions} from '../generation-options';
+import {generateExtraScalarBlocks, matchExtraGraphqlScalars} from '../graphql-scalars';
+import {PrismaModel} from './prisma-model';
 
 /**
  * Generates all the GraphQL blocks needed for the given model.
@@ -16,15 +15,9 @@ import {PrismaModel, combineFields} from './prisma-model';
  * @category Prisma Generator
  */
 export function generateGraphqlModel(
-    dmmfModel: Readonly<DMMF.Model>,
+    prismaModel: Readonly<PrismaModel>,
     options: Readonly<GenerationOptions>,
 ): GeneratedGraphql {
-    const prismaModel: Readonly<PrismaModel> = {
-        dmmfModel: dmmfModel,
-        fields: combineFields(dmmfModel, options),
-        pluralName: pluralize(dmmfModel.name),
-    };
-
     const resolverBlocks = generateModelGraphqlResolvers(prismaModel, options);
 
     const topLevelNamedGraphqlBlocks: TopLevelNamedGraphqlBlock[] = [
@@ -40,12 +33,16 @@ export function generateGraphqlModel(
 }
 
 function generateModelTypeBlocks(
-    prismaModel: Readonly<Pick<PrismaModel, 'fields' | 'dmmfModel'>>,
+    prismaModel: Readonly<Pick<PrismaModel, 'fields' | 'modelName'>>,
 ): GraphqlBlockByType<'type' | 'scalar'>[] {
     const neededScalars: string[] = [];
 
-    const propertyBlocks = Object.values(prismaModel.fields).map(
-        (field): GraphqlBlockByType<'property'> => {
+    const propertyBlocks = filterMap(
+        Object.values(prismaModel.fields),
+        (field): GraphqlBlockByType<'property'> | undefined => {
+            if (field.hideIn?.outputs) {
+                return undefined;
+            }
             const propType = field.type;
             neededScalars.push(matchExtraGraphqlScalars(propType));
             return {
@@ -55,11 +52,12 @@ function generateModelTypeBlocks(
                 required: field.isRequired,
             };
         },
+        isTruthy,
     );
 
     const modelBlock: GraphqlBlockByType<'type'> = {
         type: 'type',
-        name: prismaModel.dmmfModel.name,
+        name: prismaModel.modelName,
         props: propertyBlocks,
     };
 

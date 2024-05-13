@@ -12,6 +12,7 @@ module.exports = {
         'codegen',
         'dmmf',
         'portfinder',
+        'uncompiled',
         'upsert',
     ],
 };

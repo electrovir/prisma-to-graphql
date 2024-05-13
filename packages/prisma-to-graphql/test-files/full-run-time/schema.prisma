@@ -19,8 +19,8 @@ model User {
     updatedAt DateTime @updatedAt
 
     email    String
-    /// TODO: support these comments
-    /// @graphql-ignore {"output": true}
+    /// @graphql-omit1 {output: true}
+    /// @graphql-omit2 {output: true}
     password String
 
     firstName   String?

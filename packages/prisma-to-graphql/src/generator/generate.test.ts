@@ -193,6 +193,81 @@ describe(generate.name, () => {
                 }
             `,
         },
+        {
+            it: 'omits-fields',
+            schema: /* Prisma */ `
+                model User {
+                    id        String   @id @default(uuid())
+                    createdAt DateTime @default(now())
+                    updatedAt DateTime @updatedAt
+
+                    email    String
+                    /// @graphql-omit
+                    password String
+
+                    firstName   String?
+                }
+            `,
+        },
+        {
+            force: true,
+            it: 'omits-output-fields',
+            schema: /* Prisma */ `
+                model User {
+                    id        String   @id @default(uuid())
+                    createdAt DateTime @default(now())
+                    updatedAt DateTime @updatedAt
+
+                    email    String
+                    /// @graphql-omit {output: true}
+                    password String
+
+                    firstName   String?
+                }
+            `,
+        },
+        {
+            force: true,
+            it: 'omits-input-fields',
+            schema: /* Prisma */ `
+                model User {
+                    id        String   @id @default(uuid())
+                    createdAt DateTime @default(now())
+                    updatedAt DateTime @updatedAt
+
+                    email    String
+                    /// @graphql-omit {input: true}
+                    password String
+
+                    firstName   String?
+                }
+            `,
+        },
+        {
+            it: 'omits-models',
+            schema: /* Prisma */ `
+                model User {
+                    id        String   @id @default(uuid())
+                    createdAt DateTime @default(now())
+                    updatedAt DateTime @updatedAt
+
+                    email    String
+                    /// @graphql-omit
+                    password String
+
+                    firstName   String?
+                }
+                
+                /// @graphql-omit
+                model UserSettings {
+                    id        String   @id @default(uuid())
+                    createdAt DateTime @default(now())
+                    updatedAt DateTime @updatedAt
+                    
+                    something Boolean
+                }
+            `,
+        },
     ];
 
     expectationCases(

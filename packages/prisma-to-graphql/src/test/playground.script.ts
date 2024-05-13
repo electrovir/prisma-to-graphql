@@ -13,35 +13,6 @@
 import {PrismaClient} from '.prisma';
 
 async function main(prismaClient: PrismaClient) {
-    // console.log(
-    //     await prismaClient.user.upsert({
-    //         where: {
-    //             id: 'derp',
-    //             email: {
-    //                 equals: 'yolo2@example.com',
-    //             },
-    //             password: {
-    //                 equals: 'yolo-password2',
-    //             },
-    //         },
-    //         create: {
-    //             email,
-    //         },
-    //     }),
-    // );
-
-    // await prismaClient.user.create({
-    //     data: {
-    //         email: '',
-    //         password: '',
-    //         settings: {
-    //             connect: {
-    //                 AND: {},
-    //             },
-    //         },
-    //     },
-    // });
-
     await prismaClient.userSettings.upsert({
         update: {},
         create: {

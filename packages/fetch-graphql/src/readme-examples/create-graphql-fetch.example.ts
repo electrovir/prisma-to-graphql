@@ -32,7 +32,7 @@ async function getUsers(fetchGraphql: FetchGraphql) {
         },
     );
 
-    console.log(users);
+    console.info(users);
 }
 
 getUsers(fetchGraphql);

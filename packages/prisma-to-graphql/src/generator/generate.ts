@@ -2,6 +2,7 @@ import {
     awaitedForEach,
     filterMap,
     getObjectTypedEntries,
+    isTruthy,
     mergePropertyArrays,
 } from '@augment-vir/common';
 import {notCommittedDir} from '@prisma-to-graphql/scripts';
@@ -20,8 +21,9 @@ import {
 import {buildAllResolverBlocks} from '../builders/resolver-builder/resolver-builder';
 import {buildSchemaTs} from './build-schema-ts';
 import {compileTs} from './compile-ts';
-import {generateGraphqlModel} from './generation/generate-model';
 import {GeneratedGraphql} from './generation/generated-graphql';
+import {generateGraphqlModel} from './generation/model/generate-model';
+import {parseDmmfModel} from './generation/model/parse-dmmf-model';
 import {GeneratorOptions, defaultGeneratorOptions} from './generator-options';
 
 /**
@@ -74,20 +76,26 @@ export async function generateGraphqlOutputs(
         ...partialOptions,
     };
 
-    const generatedModels = dmmf.datamodel.models.map((model) => {
-        return generateGraphqlModel(model, options);
-    });
+    const prismaModels = filterMap(
+        dmmf.datamodel.models,
+        (model) => {
+            return parseDmmfModel(model, options);
+        },
+        isTruthy,
+    );
+
+    const generatedModels = prismaModels.map((model) => generateGraphqlModel(model, options));
 
     const allGeneratedGraphql: GeneratedGraphql = mergePropertyArrays(...generatedModels);
 
     const allModels: GraphqlBlockByType<'type'> = {
         type: 'type',
         name: '_AllModels',
-        props: dmmf.datamodel.models.map((model): GraphqlBlockByType<'property'> => {
+        props: prismaModels.map((model): GraphqlBlockByType<'property'> => {
             return {
                 type: 'property',
-                name: model.name,
-                value: model.name,
+                name: model.modelName,
+                value: model.modelName,
                 required: false,
             };
         }),

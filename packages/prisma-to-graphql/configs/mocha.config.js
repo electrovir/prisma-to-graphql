@@ -9,6 +9,7 @@ const mochaConfig = {
         'DEBUG_COLORS',
         'NODE_CLIENT',
     ],
+    parallel: false,
 };
 
 module.exports = mochaConfig;
