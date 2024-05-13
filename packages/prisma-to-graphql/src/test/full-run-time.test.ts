@@ -967,6 +967,18 @@ const testCases: GraphqlTestCase[] = [
                                         email: 'nested-creation@example.com',
                                         firstName: 'nested',
                                         password: 'something secret',
+                                        posts: {
+                                            create: [
+                                                {
+                                                    title: 'test 1',
+                                                    body: 'this has been the first test',
+                                                },
+                                                {
+                                                    title: 'test 2',
+                                                    body: 'this has been the second test',
+                                                },
+                                            ],
+                                        },
                                         settings: {
                                             create: {
                                                 canViewReports: true,
@@ -992,6 +1004,9 @@ const testCases: GraphqlTestCase[] = [
                                         likes: true,
                                     },
                                 },
+                                posts: {
+                                    title: true,
+                                },
                             },
                             total: true,
                         },
@@ -1010,6 +1025,10 @@ const testCases: GraphqlTestCase[] = [
                                     likes: 4,
                                 },
                             },
+                            posts: [
+                                {title: 'test 1'},
+                                {title: 'test 2'},
+                            ],
                         },
                     ],
                     total: 1,
@@ -1030,6 +1049,11 @@ const testCases: GraphqlTestCase[] = [
                                     likes: true,
                                 },
                             },
+                        },
+                    },
+                    posts: {
+                        select: {
+                            title: true,
                         },
                     },
                 },

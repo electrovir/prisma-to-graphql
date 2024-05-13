@@ -6,10 +6,20 @@ import {
 import {prismaFilters} from '../filter-inputs/prisma-filters';
 import {GeneratedGraphql} from '../generated-graphql';
 import {GenerationOptions} from '../generation-options';
-import {PrismaModel} from '../model/prisma-model';
+import {PrismaField, PrismaModel} from '../model/prisma-model';
 import {ResolverGenerator} from '../resolver-generator';
 import {createOutputTypeBlock, createWhereInputBlock} from './model-find-many-resolver';
 import {createResolverInputName, createWithoutRelationInputName} from './model-resolver-io';
+
+function isFieldRequired(field: Readonly<PrismaField>): boolean {
+    return (
+        field.isRequired &&
+        !field.isGenerated &&
+        !field.hasDefaultValue &&
+        !field.isUpdatedAt &&
+        !(field.relationName && field.isList)
+    );
+}
 
 function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedGraphqlBlock[] {
     const relationFields = Object.values(prismaModel.fields).filter(
@@ -28,22 +38,24 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
                 props: filterMap(
                     Object.values(prismaModel.fields),
                     (field): GraphqlBlockByType<'property'> => {
-                        const required =
-                            field.isRequired &&
-                            !field.isGenerated &&
-                            !field.hasDefaultValue &&
-                            !field.isUpdatedAt;
+                        const required = isFieldRequired(field);
 
                         if (field.relationName) {
                             return {
                                 type: 'property',
                                 name: field.name,
                                 // here
-                                value: createWithoutRelationInputName({
-                                    modelNameGettingCreated: field.type,
-                                    modelNameGettingOmitted: prismaModel.modelName,
-                                    operationName: 'connection',
-                                }),
+                                value: field.isList
+                                    ? createWithoutRelationInputName({
+                                          modelNameGettingCreated: field.type,
+                                          modelNameGettingOmitted: prismaModel.modelName,
+                                          operationName: 'connectionMany',
+                                      })
+                                    : createWithoutRelationInputName({
+                                          modelNameGettingCreated: field.type,
+                                          modelNameGettingOmitted: prismaModel.modelName,
+                                          operationName: 'connection',
+                                      }),
                                 required,
                             };
                         } else {
@@ -61,6 +73,31 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
                 ),
             };
 
+            const createOrConnectManyWithoutRelationBlock: GraphqlBlockByType<'input'> = {
+                type: 'input',
+                name: createWithoutRelationInputName({
+                    modelNameGettingCreated: prismaModel.modelName,
+                    modelNameGettingOmitted: omittedField.type,
+                    operationName: 'createOrConnect',
+                }),
+                props: [
+                    {
+                        type: 'property',
+                        name: 'connect',
+                        value: `[${createResolverInputName({
+                            modelName: prismaModel.modelName,
+                            inputName: 'whereUnfilteredUnique',
+                        })}]`,
+                        required: true,
+                    },
+                    {
+                        type: 'property',
+                        name: 'create',
+                        value: `[${createWithoutRelationBlock.name}]`,
+                        required: true,
+                    },
+                ],
+            };
             const createOrConnectWithoutRelationBlock: GraphqlBlockByType<'input'> = {
                 type: 'input',
                 name: createWithoutRelationInputName({
@@ -83,6 +120,38 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
                         name: 'create',
                         value: createWithoutRelationBlock.name,
                         required: true,
+                    },
+                ],
+            };
+
+            const connectManyWithoutRelationBlock: GraphqlBlockByType<'input'> = {
+                type: 'input',
+                name: createWithoutRelationInputName({
+                    modelNameGettingCreated: prismaModel.modelName,
+                    modelNameGettingOmitted: omittedField.type,
+                    operationName: 'connectionMany',
+                }),
+                props: [
+                    {
+                        type: 'property',
+                        name: 'create',
+                        value: `[${createWithoutRelationBlock.name}]`,
+                        required: false,
+                    },
+                    {
+                        type: 'property',
+                        name: 'connectOrCreate',
+                        value: createOrConnectManyWithoutRelationBlock.name,
+                        required: false,
+                    },
+                    {
+                        type: 'property',
+                        name: 'connect',
+                        value: `[${createResolverInputName({
+                            modelName: prismaModel.modelName,
+                            inputName: 'whereUnfilteredUnique',
+                        })}]`,
+                        required: false,
                     },
                 ],
             };
@@ -121,7 +190,9 @@ function createNestedCreateInputBlocks(prismaModel: PrismaModel): TopLevelNamedG
 
             return [
                 createOrConnectWithoutRelationBlock,
+                createOrConnectManyWithoutRelationBlock,
                 createWithoutRelationBlock,
+                connectManyWithoutRelationBlock,
                 connectionWithoutRelationBlock,
             ];
         },
@@ -157,7 +228,7 @@ function createWhereRequiredProvidedUniqueBlock(
                         };
                     } else {
                         const isUnique = field.isUnique || field.isId;
-                        const isRequired = isUnique && !field.isGenerated;
+                        const required = isUnique && !field.isGenerated;
 
                         const propType = isUnique ? field.type : prismaFilters[field.type]?.name;
                         if (!propType) {
@@ -168,7 +239,7 @@ function createWhereRequiredProvidedUniqueBlock(
                             type: 'property',
                             name: field.name,
                             value: propType,
-                            required: isRequired,
+                            required,
                         };
                     }
                 },
@@ -191,21 +262,23 @@ function createCreateInputBlocks(prismaModel: PrismaModel) {
                 if (field.hideIn?.inputs) {
                     return undefined;
                 }
-                const required =
-                    field.isRequired &&
-                    !field.isGenerated &&
-                    !field.hasDefaultValue &&
-                    !field.isUpdatedAt;
+                const required = isFieldRequired(field);
 
                 if (field.relationName) {
                     return {
                         type: 'property',
                         name: field.name,
-                        value: createWithoutRelationInputName({
-                            modelNameGettingCreated: field.type,
-                            modelNameGettingOmitted: prismaModel.modelName,
-                            operationName: 'connection',
-                        }),
+                        value: field.isList
+                            ? createWithoutRelationInputName({
+                                  modelNameGettingCreated: field.type,
+                                  modelNameGettingOmitted: prismaModel.modelName,
+                                  operationName: 'connectionMany',
+                              })
+                            : createWithoutRelationInputName({
+                                  modelNameGettingCreated: field.type,
+                                  modelNameGettingOmitted: prismaModel.modelName,
+                                  operationName: 'connection',
+                              }),
 
                         required,
                     };

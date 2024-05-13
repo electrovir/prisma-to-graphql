@@ -44,8 +44,8 @@ export function extractFields(
     options: Readonly<Pick<GenerationOptions, 'removeRelationFromFields'>>,
 ): PrismaModel['fields'] {
     const rawFields = typedObjectFromEntries(
-        model.fields.map((field): [string, PrismaField] => {
-            const pickedField = pickObjectKeys(field, [
+        model.fields.map((dmmfField): [string, PrismaField] => {
+            const pickedField = pickObjectKeys(dmmfField, [
                 'relationName',
                 'type',
                 'relationFromFields',
@@ -57,12 +57,13 @@ export function extractFields(
                 'isUnique',
                 'isId',
                 'documentation',
+                'isList',
             ]);
 
-            const parsedCommentOutput = parseComment(pickedField.documentation, {field});
+            const parsedCommentOutput = parseComment(pickedField.documentation, {field: dmmfField});
 
             return [
-                field.name,
+                dmmfField.name,
                 {
                     ...pickedField,
                     ...parsedCommentOutput?.field,

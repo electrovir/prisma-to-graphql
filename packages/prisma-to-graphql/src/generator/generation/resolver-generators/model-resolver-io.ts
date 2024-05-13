@@ -60,7 +60,12 @@ export function createWithoutRelationInputName({
 }: {
     modelNameGettingCreated: string;
     modelNameGettingOmitted: string;
-    operationName: 'createOrConnect' | 'create' | 'connection';
+    operationName:
+        | 'createOrConnect'
+        | 'createOrConnectMany'
+        | 'create'
+        | 'connection'
+        | 'connectionMany';
 }): string {
     return [
         modelNameGettingCreated,

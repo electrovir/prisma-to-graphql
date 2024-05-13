@@ -48,7 +48,7 @@ function generateModelTypeBlocks(
             return {
                 type: 'property',
                 name: field.name,
-                value: propType,
+                value: field.isList ? `[${propType}]` : propType,
                 required: field.isRequired,
             };
         },

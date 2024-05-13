@@ -30,6 +30,9 @@ async function main(prismaClient: PrismaClient) {
         data: {
             email: '',
             password: '',
+            posts: {
+                // createMany,
+            },
             settings: {
                 connect: {
                     id: 'yo',
@@ -37,9 +40,6 @@ async function main(prismaClient: PrismaClient) {
                     stats: {},
                     user: {},
                 },
-                // connect: {
-                //     AND,
-                // },
             },
         },
     });

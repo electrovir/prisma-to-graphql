@@ -18,6 +18,7 @@ export type PrismaField = Pick<
     | 'isUnique'
     | 'isId'
     | 'documentation'
+    | 'isList'
 > & {
     hideIn?: Partial<{
         inputs: boolean;
