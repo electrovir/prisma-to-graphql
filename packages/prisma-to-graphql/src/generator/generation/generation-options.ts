@@ -17,6 +17,8 @@ export const generationOptionsShape = defineShape(
         generateMutation: true,
         /** Generate TypeScript types for the generated GraphQL schema. */
         generateSchemaTs: true,
+        /** Generate TypeScript run-time variables for model and field names. */
+        generateModelsTs: true,
     }),
 );
 

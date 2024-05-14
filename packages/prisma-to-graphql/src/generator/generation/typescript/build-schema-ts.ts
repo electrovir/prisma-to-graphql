@@ -6,7 +6,7 @@ import {TypeScriptPluginConfig} from '@graphql-codegen/typescript';
 import * as typescriptResolversPlugin from '@graphql-codegen/typescript-resolvers';
 import * as operationParamsPlugin from '@prisma-to-graphql/graphql-codegen-operation-params';
 import {buildSchema, parse, printSchema} from 'graphql';
-import {supportedExtraGraphqlScalars} from './generation/graphql-scalars';
+import {supportedExtraGraphqlScalars} from '../graphql-scalars';
 
 const supportedExtraScalarMapping: Record<
     ArrayElement<typeof supportedExtraGraphqlScalars>,

@@ -3,7 +3,7 @@ import {DMMF} from '@prisma/generator-helper';
 import pluralize from 'pluralize';
 import {parseComment} from '../comments/parse-comments';
 import {GenerationOptions} from '../generation-options';
-import {PrismaField, PrismaModel} from './prisma-model';
+import {PrismaField, PrismaModel, dmmfFieldKeys} from './prisma-model';
 
 /**
  * Convert Prisma's DMMF representation of a model in an internal representation.
@@ -45,27 +45,20 @@ export function extractFields(
 ): PrismaModel['fields'] {
     const rawFields = typedObjectFromEntries(
         model.fields.map((dmmfField): [string, PrismaField] => {
-            const pickedField = pickObjectKeys(dmmfField, [
-                'relationName',
-                'type',
-                'relationFromFields',
-                'isGenerated',
-                'isRequired',
-                'hasDefaultValue',
-                'isUpdatedAt',
-                'name',
-                'isUnique',
-                'isId',
-                'documentation',
-                'isList',
-            ]);
+            const pickedField = pickObjectKeys(dmmfField, dmmfFieldKeys);
+            const prismaField = {
+                ...pickedField,
+                isRelation: !!pickedField.relationName,
+            };
 
-            const parsedCommentOutput = parseComment(pickedField.documentation, {field: dmmfField});
+            const parsedCommentOutput = parseComment(pickedField.documentation, {
+                field: prismaField,
+            });
 
             return [
                 dmmfField.name,
                 {
-                    ...pickedField,
+                    ...prismaField,
                     ...parsedCommentOutput?.field,
                 },
             ];

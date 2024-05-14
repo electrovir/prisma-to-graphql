@@ -216,8 +216,8 @@ input User_UpdateDataInput {
 }
 
 input User_Without_UserSettings_CreateOrConnectInput {
-    connect: User_WhereUnfilteredUniqueInput!
-    create: User_Without_UserSettings_CreateInput!
+    connect: [User_WhereUnfilteredUniqueInput]!
+    create: [User_Without_UserSettings_CreateInput]!
 }
 
 input User_Without_UserSettings_CreateInput {
@@ -230,6 +230,12 @@ input User_Without_UserSettings_CreateInput {
     lastName: String
     role: String
     phoneNumber: String
+}
+
+input User_Without_UserSettings_ConnectionManyInput {
+    create: [User_Without_UserSettings_CreateInput]
+    connectOrCreate: User_Without_UserSettings_CreateOrConnectInput
+    connect: [User_WhereUnfilteredUniqueInput]
 }
 
 input User_Without_UserSettings_ConnectionInput {
@@ -315,14 +321,20 @@ input UserSettings_UpdateDataInput {
 }
 
 input UserSettings_Without_User_CreateOrConnectInput {
-    connect: UserSettings_WhereUnfilteredUniqueInput!
-    create: UserSettings_Without_User_CreateInput!
+    connect: [UserSettings_WhereUnfilteredUniqueInput]!
+    create: [UserSettings_Without_User_CreateInput]!
 }
 
 input UserSettings_Without_User_CreateInput {
     id: String
     createdAt: DateTime
     updatedAt: DateTime
+}
+
+input UserSettings_Without_User_ConnectionManyInput {
+    create: [UserSettings_Without_User_CreateInput]
+    connectOrCreate: UserSettings_Without_User_CreateOrConnectInput
+    connect: [UserSettings_WhereUnfilteredUniqueInput]
 }
 
 input UserSettings_Without_User_ConnectionInput {

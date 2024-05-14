@@ -36,7 +36,7 @@
         "@graphql-codegen/typescript-resolvers": "^4.0.6",
         "@prisma/generator-helper": "^5.13.0",
         "@prisma/internals": "^5.13.0",
-        "date-vir": "^5.1.4",
+        "date-vir": "^5.2.0",
         "graphql": "^16.8.1",
         "json5": "^2.2.3",
         "object-shape-tester": "^2.3.2",

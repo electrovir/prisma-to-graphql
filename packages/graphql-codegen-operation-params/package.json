@@ -26,7 +26,8 @@
         "test:types": "tsc --noEmit"
     },
     "dependencies": {
-        "graphql": ">=16"
+        "graphql": ">=16",
+        "json5": "^2.2.3"
     },
     "devDependencies": {
         "@augment-vir/chai": "^28.0.0",

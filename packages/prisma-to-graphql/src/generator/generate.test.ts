@@ -210,7 +210,6 @@ describe(generate.name, () => {
             `,
         },
         {
-            force: true,
             it: 'omits-output-fields',
             schema: /* Prisma */ `
                 model User {
@@ -227,7 +226,6 @@ describe(generate.name, () => {
             `,
         },
         {
-            force: true,
             it: 'omits-input-fields',
             schema: /* Prisma */ `
                 model User {
@@ -265,6 +263,27 @@ describe(generate.name, () => {
                     updatedAt DateTime @updatedAt
                     
                     something Boolean
+                }
+            `,
+        },
+        {
+            it: 'includes-a-list-field',
+            schema: /* Prisma */ `
+                model User {
+                    id        String   @id @default(uuid())
+                    createdAt DateTime @default(now())
+                    updatedAt DateTime @updatedAt
+
+                    posts Post[]
+                }
+
+                model Post {
+                    id        String   @id @default(uuid())
+                    createdAt DateTime @default(now())
+                    updatedAt DateTime @updatedAt
+
+                    user   User   @relation(fields: [userId], references: [id])
+                    userId String
                 }
             `,
         },

@@ -9,7 +9,7 @@ import {
     readConfigFile,
     sys,
 } from 'typescript';
-import {packageDir} from '../util/file-paths';
+import {packageDir} from '../../../util/file-paths';
 
 /**
  * With the given file paths, compiles each TypeScript file into ESM JavaScript (with the `.mjs`

@@ -19,11 +19,12 @@ import {
     deduplicateNamedBlocks,
 } from '../builders/graphql-builder/graphql-builder';
 import {buildAllResolverBlocks} from '../builders/resolver-builder/resolver-builder';
-import {buildSchemaTs} from './build-schema-ts';
-import {compileTs} from './compile-ts';
 import {GeneratedGraphql} from './generation/generated-graphql';
 import {generateGraphqlModel} from './generation/model/generate-model';
 import {parseDmmfModel} from './generation/model/parse-dmmf-model';
+import {buildModelsTs} from './generation/typescript/build-models-ts';
+import {buildSchemaTs} from './generation/typescript/build-schema-ts';
+import {compileTs} from './generation/typescript/compile-ts';
 import {GeneratorOptions, defaultGeneratorOptions} from './generator-options';
 
 /**
@@ -48,6 +49,7 @@ export type GraphqlOutputs = {
     resolversTs: string;
     schema: string;
     schemaTs: string;
+    modelsTs: string;
 };
 
 /**
@@ -60,6 +62,7 @@ export const graphqlOutputFileNames: GraphqlOutputs = {
     resolversTs: 'resolvers.ts',
     schema: 'schema.graphql',
     schemaTs: 'schema.ts',
+    modelsTs: 'models.ts',
 };
 
 /**
@@ -120,11 +123,13 @@ export async function generateGraphqlOutputs(
     await writeFile(join(notCommittedDir, 'temp.graphql'), schemaString);
 
     const schemaTs = options.generateSchemaTs ? await buildSchemaTs(schemaString) : '';
+    const modelsTs = options.generateModelsTs ? buildModelsTs(prismaModels) : '';
 
     return {
         resolversTs,
         schema: schemaString,
         schemaTs,
+        modelsTs,
     };
 }
 

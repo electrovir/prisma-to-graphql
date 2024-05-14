@@ -1,4 +1,5 @@
 import {FieldDefinitionNode, GraphQLSchema, Kind, TypeNode} from 'graphql';
+import JSON5 from 'json5';
 import {ResolverParams, SchemaOperationParams} from './graphql-operations';
 
 /**
@@ -55,7 +56,7 @@ export function plugin(schema: GraphQLSchema) {
 
     return [
         defaultGenerationOutput,
-        JSON.stringify(fieldsTree, null, 4),
+        JSON5.stringify(fieldsTree, null, 4),
         ';',
     ].join('');
 }

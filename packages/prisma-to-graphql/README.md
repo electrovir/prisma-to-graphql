@@ -137,3 +137,12 @@ The default output is `node_modules/.prisma/graphql`, right next to the default 
             generateSchemaTs = "false"
         }
         ```
+-   `generateModelsTs`: set to true or false to enable or disable generation of TypeScript files with the model field names and types (`models.ts`). This file is not necessary for the generated resolvers to function, but it is necessary for [`@prisma-to-graphql/crud-auth`](https://www.npmjs.com/package/@prisma-to-graphql/crud-auth) to function.
+    -   default: `"true"`
+    -   example:
+        ```prisma
+        generator graphql {
+            provider         = "prisma-to-graphql"
+            generateModelsTs = "false"
+        }
+        ```

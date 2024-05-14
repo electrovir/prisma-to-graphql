@@ -1,5 +1,3 @@
-export * from './build-schema-ts';
-export * from './compile-ts';
 export * from './generate';
 export * from './generation/filter-inputs/prisma-filter-props';
 export * from './generation/filter-inputs/prisma-filters';
@@ -13,5 +11,7 @@ export * from './generation/resolver-generator';
 export * from './generation/resolver-generators/model-find-many-resolver';
 export * from './generation/resolver-generators/model-mutation-resolver';
 export * from './generation/resolver-generators/model-resolver-io';
+export * from './generation/typescript/build-schema-ts';
+export * from './generation/typescript/compile-ts';
 export * from './generator';
 export * from './generator-options';
