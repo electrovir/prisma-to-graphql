@@ -34,7 +34,6 @@ export enum ResolverBodyVarNames {
     context = 'context',
     graphqlArgs = 'graphqlArgs',
     parentValue = 'parentValue',
-    prismaClient = 'context.prismaClient',
     resolveInfo = 'resolveInfo',
     runPrismaResolver = 'runPrismaResolver',
 }
@@ -63,7 +62,7 @@ export const resolverInputVarTypes: Record<
 > = {
     [ResolverBodyVarNames.parentValue]: 'unknown',
     [ResolverBodyVarNames.graphqlArgs]: 'unknown',
-    [ResolverBodyVarNames.context]: '{prismaClient: unknown}',
+    [ResolverBodyVarNames.context]: 'unknown',
     [ResolverBodyVarNames.resolveInfo]: 'GraphQLResolveInfo',
 };
 

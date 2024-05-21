@@ -26,6 +26,18 @@ async function main(prismaClient: PrismaClient) {
         where: {id: ''},
     });
 
+    prismaClient.user.findMany({
+        where: {
+            posts: {
+                some: {
+                    title: {
+                        contains: 'derp',
+                    },
+                },
+            },
+        },
+    });
+
     await prismaClient.user.create({
         data: {
             email: '',
@@ -46,3 +58,5 @@ async function main(prismaClient: PrismaClient) {
 }
 
 main(new PrismaClient());
+
+Object.values;

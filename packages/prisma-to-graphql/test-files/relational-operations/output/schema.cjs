@@ -31,46 +31,46 @@ var UserSettings_DistinctInput;
     UserSettings_DistinctInput["updatedAt"] = "updatedAt";
 })(UserSettings_DistinctInput || (exports.UserSettings_DistinctInput = UserSettings_DistinctInput = {}));
 exports.operationParams = {
-    "Mutation": {
-        "Users": {
-            "args": {
-                "create": "User_CreateInput",
-                "update": "User_UpdateInput",
-                "upsert": "User_UpsertInput"
+    Mutation: {
+        Users: {
+            args: {
+                create: 'User_CreateInput',
+                update: 'User_UpdateInput',
+                upsert: 'User_UpsertInput',
             },
-            "output": "User_QueryOutput!"
+            output: 'User_QueryOutput!',
         },
-        "UserSettings": {
-            "args": {
-                "create": "UserSettings_CreateInput",
-                "update": "UserSettings_UpdateInput",
-                "upsert": "UserSettings_UpsertInput"
+        UserSettings: {
+            args: {
+                create: 'UserSettings_CreateInput',
+                update: 'UserSettings_UpdateInput',
+                upsert: 'UserSettings_UpsertInput',
             },
-            "output": "UserSettings_QueryOutput!"
-        }
+            output: 'UserSettings_QueryOutput!',
+        },
     },
-    "Query": {
-        "Users": {
-            "args": {
-                "where": "User_WhereInput!",
-                "orderBy": "[User_OrderByInput!]",
-                "cursor": "User_WhereUnfilteredUniqueInput",
-                "distinct": "[User_DistinctInput!]",
-                "take": "Int",
-                "skip": "Int"
+    Query: {
+        Users: {
+            args: {
+                where: 'User_WhereInput!',
+                orderBy: '[User_OrderByInput!]',
+                cursor: 'User_WhereUnfilteredUniqueInput',
+                distinct: '[User_DistinctInput!]',
+                take: 'Int',
+                skip: 'Int',
             },
-            "output": "User_QueryOutput!"
+            output: 'User_QueryOutput!',
         },
-        "UserSettings": {
-            "args": {
-                "where": "UserSettings_WhereInput!",
-                "orderBy": "[UserSettings_OrderByInput!]",
-                "cursor": "UserSettings_WhereUnfilteredUniqueInput",
-                "distinct": "[UserSettings_DistinctInput!]",
-                "take": "Int",
-                "skip": "Int"
+        UserSettings: {
+            args: {
+                where: 'UserSettings_WhereInput!',
+                orderBy: '[UserSettings_OrderByInput!]',
+                cursor: 'UserSettings_WhereUnfilteredUniqueInput',
+                distinct: '[UserSettings_DistinctInput!]',
+                take: 'Int',
+                skip: 'Int',
             },
-            "output": "UserSettings_QueryOutput!"
-        }
-    }
+            output: 'UserSettings_QueryOutput!',
+        },
+    },
 };

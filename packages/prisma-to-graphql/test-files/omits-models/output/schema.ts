@@ -345,27 +345,27 @@ export type Resolvers<ContextType = any> = {
 import type {SchemaOperationParams} from '@prisma-to-graphql/graphql-codegen-operation-params';
 
 export const operationParams: Readonly<SchemaOperationParams> = {
-    "Mutation": {
-        "Users": {
-            "args": {
-                "create": "User_CreateInput",
-                "update": "User_UpdateInput",
-                "upsert": "User_UpsertInput"
+    Mutation: {
+        Users: {
+            args: {
+                create: 'User_CreateInput',
+                update: 'User_UpdateInput',
+                upsert: 'User_UpsertInput',
             },
-            "output": "User_QueryOutput!"
-        }
+            output: 'User_QueryOutput!',
+        },
     },
-    "Query": {
-        "Users": {
-            "args": {
-                "where": "User_WhereInput!",
-                "orderBy": "[User_OrderByInput!]",
-                "cursor": "User_WhereUnfilteredUniqueInput",
-                "distinct": "[User_DistinctInput!]",
-                "take": "Int",
-                "skip": "Int"
+    Query: {
+        Users: {
+            args: {
+                where: 'User_WhereInput!',
+                orderBy: '[User_OrderByInput!]',
+                cursor: 'User_WhereUnfilteredUniqueInput',
+                distinct: '[User_DistinctInput!]',
+                take: 'Int',
+                skip: 'Int',
             },
-            "output": "User_QueryOutput!"
-        }
-    }
+            output: 'User_QueryOutput!',
+        },
+    },
 };

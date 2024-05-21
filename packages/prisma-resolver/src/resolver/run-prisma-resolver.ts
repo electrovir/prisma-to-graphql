@@ -1,4 +1,4 @@
-import {PickDeep, capitalizeFirstLetter, typedArrayIncludes} from '@augment-vir/common';
+import {AnyObject, PickDeep, capitalizeFirstLetter, typedArrayIncludes} from '@augment-vir/common';
 import {
     OperationType,
     allValidOperationTypes,
@@ -12,7 +12,12 @@ import {
 } from 'graphql';
 import {parseItemSelection} from '../util/parse-selection';
 import {runPrismaMutationOperation} from './mutations/prisma-mutation-operation';
-import {PrismaResolver, PrismaResolverInputs, PrismaResolverOutput} from './prisma-resolver';
+import {
+    PrismaResolver,
+    PrismaResolverInputs,
+    PrismaResolverOutput,
+    extractResolverContext,
+} from './prisma-resolver';
 import {runPrismaQueryOperations} from './queries/prisma-query-operation';
 
 const resolvers: Readonly<Record<OperationType, PrismaResolver>> = {
@@ -27,7 +32,7 @@ const resolvers: Readonly<Record<OperationType, PrismaResolver>> = {
  * @category Main
  */
 export async function runPrismaResolver(
-    prismaClient: any,
+    context: AnyObject,
     prismaModelName: string,
     graphqlArgs: any,
     resolveInfo: Readonly<Pick<GraphQLResolveInfo, 'fieldNodes' | 'fieldName' | 'operation'>>,
@@ -44,13 +49,14 @@ export async function runPrismaResolver(
 
         const resolverInputs: Readonly<PrismaResolverInputs> = {
             graphqlArgs,
-            prismaClient,
+            context: extractResolverContext(context),
             prismaModelName,
             selection,
         };
 
         return await resolver(resolverInputs);
     } catch (error) {
+        console.error('failed with args', {context, prismaModelName, graphqlArgs});
         console.error(error);
         throw error;
     }

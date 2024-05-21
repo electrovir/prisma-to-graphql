@@ -174,6 +174,6 @@ export type Resolvers<ContextType = any> = {
 import type {SchemaOperationParams} from '@prisma-to-graphql/graphql-codegen-operation-params';
 
 export const operationParams: Readonly<SchemaOperationParams> = {
-    "Mutation": {},
-    "Query": {}
+    Mutation: {},
+    Query: {},
 };

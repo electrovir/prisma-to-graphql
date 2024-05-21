@@ -36,7 +36,7 @@ export function buildPrismaResolverBlock(
     options: Readonly<ResolverBuilderOptions>,
 ): ResolverBuilderOutput {
     const args = [
-        ResolverBodyVarNames.prismaClient,
+        ResolverBodyVarNames.context,
         wrapString({value: block.prismaModelName, wrapper: options.quote}),
         ResolverBodyVarNames.graphqlArgs,
         ResolverBodyVarNames.resolveInfo,

@@ -1,5 +1,6 @@
 import {isObject} from '@augment-vir/common';
 import {GraphQLError} from 'graphql';
+import {combineWhere} from '../../operation-scope/combine-where';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
 
 /**
@@ -18,28 +19,30 @@ import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
  * @category Operations
  */
 export async function runPrismaQueryOperations({
-    prismaClient,
+    context: {models, operationScope, prismaClient},
     prismaModelName,
     graphqlArgs,
     selection,
 }: Readonly<PrismaResolverInputs>): Promise<PrismaResolverOutput> {
-    const whereArg = graphqlArgs.where;
+    const queryWhere = graphqlArgs.where;
 
-    if (!whereArg) {
+    if (!queryWhere) {
         throw new GraphQLError("Missing valid 'where' input.");
     } else if (!selection.select.total && !selection.select.items) {
         throw new GraphQLError("Neither 'total' or 'items' where selected: there's nothing to do.");
     }
 
+    const finalWhere = combineWhere(queryWhere, prismaModelName, models, operationScope);
+
     const total = selection.select.total
         ? await prismaClient[prismaModelName].count({
-              where: whereArg,
+              where: finalWhere,
           })
         : 0;
 
     const items = isObject(selection.select.items)
         ? await prismaClient[prismaModelName].findMany({
-              where: whereArg,
+              where: finalWhere,
               select: selection.select.items.select,
               orderBy: graphqlArgs.orderBy,
               take: graphqlArgs.take,

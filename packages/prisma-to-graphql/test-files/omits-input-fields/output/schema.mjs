@@ -18,27 +18,27 @@ export var User_DistinctInput;
     User_DistinctInput["firstName"] = "firstName";
 })(User_DistinctInput || (User_DistinctInput = {}));
 export const operationParams = {
-    "Mutation": {
-        "Users": {
-            "args": {
-                "create": "User_CreateInput",
-                "update": "User_UpdateInput",
-                "upsert": "User_UpsertInput"
+    Mutation: {
+        Users: {
+            args: {
+                create: 'User_CreateInput',
+                update: 'User_UpdateInput',
+                upsert: 'User_UpsertInput',
             },
-            "output": "User_QueryOutput!"
-        }
+            output: 'User_QueryOutput!',
+        },
     },
-    "Query": {
-        "Users": {
-            "args": {
-                "where": "User_WhereInput!",
-                "orderBy": "[User_OrderByInput!]",
-                "cursor": "User_WhereUnfilteredUniqueInput",
-                "distinct": "[User_DistinctInput!]",
-                "take": "Int",
-                "skip": "Int"
+    Query: {
+        Users: {
+            args: {
+                where: 'User_WhereInput!',
+                orderBy: '[User_OrderByInput!]',
+                cursor: 'User_WhereUnfilteredUniqueInput',
+                distinct: '[User_DistinctInput!]',
+                take: 'Int',
+                skip: 'Int',
             },
-            "output": "User_QueryOutput!"
-        }
-    }
+            output: 'User_QueryOutput!',
+        },
+    },
 };

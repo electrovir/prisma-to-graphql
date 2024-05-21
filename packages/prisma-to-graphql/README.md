@@ -28,6 +28,7 @@ To use the generated outputs in a GraphQL server, import the generated resolvers
 
 ```typescript
 import {resolvers} from '.prisma/graphql/resolvers';
+import {models} from '.prisma/graphql/models';
 import {PrismaClient} from '@prisma/client';
 import {createSchema, createYoga} from 'graphql-yoga';
 import {readFile} from 'node:fs/promises';
@@ -50,11 +51,18 @@ async function startServer() {
 
     const yoga = createYoga({
         schema,
-        /**
-         * Inserting `prismaClient` into your GraphQL server's context is required for
-         * `prisma-to-graphql`'s generated resolvers to function.
-         */
-        context: {prismaClient},
+        context: {
+            /**
+             * Inserting `prismaClient` into your GraphQL server's context is required for
+             * `prisma-to-graphql`'s generated resolvers to function.
+             */
+            prismaClient,
+            /**
+             * Inserting `models` is optional but is needed for the also optional `operationScope`
+             * to work.
+             */
+            models,
+        },
     });
 
     /**
@@ -71,6 +79,33 @@ startServer();
 ```
 
 This example starts a [Yoga](https://the-guild.dev/graphql/yoga-server) GraphQL server but any valid GraphQL server implementation will work.
+
+### Operation Scope
+
+Provide a context object of `operationScope` to your GraphQL server to scope all operations for specific models. For example, you can restrict all queries for a specific user to just that user:
+
+```typescript
+const yogaServer = createYoga({
+    schema,
+    context({request}): ResolverContext<PrismaClient> {
+        const userId = getUserIdFromRequest(request);
+
+        const context: ResolverContext<PrismaClient> = {
+            prismaClient,
+            models,
+            operationScope: {
+                where: {
+                    User: {
+                        id: userId,
+                    },
+                },
+            },
+        };
+
+        return context;
+    },
+});
+```
 
 # Usage Details
 

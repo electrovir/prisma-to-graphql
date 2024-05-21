@@ -4,16 +4,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolvers = void 0;
 const prisma_resolver_1 = require("@prisma-to-graphql/prisma-resolver");
 async function Query_Users(parentValue, graphqlArgs, context, resolveInfo) {
-    return await (0, prisma_resolver_1.runPrismaResolver)(context.prismaClient, 'User', graphqlArgs, resolveInfo);
+    return await (0, prisma_resolver_1.runPrismaResolver)(context, 'User', graphqlArgs, resolveInfo);
 }
 async function Mutation_Users(parentValue, graphqlArgs, context, resolveInfo) {
-    return await (0, prisma_resolver_1.runPrismaResolver)(context.prismaClient, 'User', graphqlArgs, resolveInfo);
+    return await (0, prisma_resolver_1.runPrismaResolver)(context, 'User', graphqlArgs, resolveInfo);
 }
 async function Query_Posts(parentValue, graphqlArgs, context, resolveInfo) {
-    return await (0, prisma_resolver_1.runPrismaResolver)(context.prismaClient, 'Post', graphqlArgs, resolveInfo);
+    return await (0, prisma_resolver_1.runPrismaResolver)(context, 'Post', graphqlArgs, resolveInfo);
 }
 async function Mutation_Posts(parentValue, graphqlArgs, context, resolveInfo) {
-    return await (0, prisma_resolver_1.runPrismaResolver)(context.prismaClient, 'Post', graphqlArgs, resolveInfo);
+    return await (0, prisma_resolver_1.runPrismaResolver)(context, 'Post', graphqlArgs, resolveInfo);
 }
 exports.resolvers = {
     Mutation: {

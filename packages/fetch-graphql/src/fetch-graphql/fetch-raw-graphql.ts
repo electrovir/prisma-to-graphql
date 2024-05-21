@@ -1,4 +1,4 @@
-import {combineErrors} from '@augment-vir/common';
+import {combineErrors, mergeDeep} from '@augment-vir/common';
 import {hasProperty, isRunTimeType} from 'run-time-assertions';
 import {JsonObject, JsonValue} from 'type-fest';
 import {FetchGraphqlResponseError} from './fetch-graphql-response.error';
@@ -38,15 +38,19 @@ export async function fetchRawGraphql(
         throw new Error('No URL provided for fetching GraphQL.');
     }
 
-    const requestInit: RequestInit = {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
+    const requestInit = mergeDeep<RequestInit>(
+        {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         },
-        ...options.fetchOptions,
-        /** `body` cannot be overwritten by `options`. */
-        body: JSON.stringify(graphql),
-    };
+        options.fetchOptions || {},
+        {
+            /** `body` cannot be overwritten by `fetchOptions`. */
+            body: JSON.stringify(graphql),
+        },
+    );
 
     /* istanbul ignore next: not going to use real fetch in tests */
     const response = await (options.customFetch || fetch)(url, requestInit);

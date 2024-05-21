@@ -29,6 +29,15 @@ model User {
 
     settings UserSettings?
     posts    UserPost[]
+    regions  Region[]
+}
+
+model Region {
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    regionName String @id
+    users      User[]
 }
 
 model UserPost {

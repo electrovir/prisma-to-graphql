@@ -25,46 +25,46 @@ var Post_DistinctInput;
     Post_DistinctInput["updatedAt"] = "updatedAt";
 })(Post_DistinctInput || (exports.Post_DistinctInput = Post_DistinctInput = {}));
 exports.operationParams = {
-    "Mutation": {
-        "Users": {
-            "args": {
-                "create": "User_CreateInput",
-                "update": "User_UpdateInput",
-                "upsert": "User_UpsertInput"
+    Mutation: {
+        Users: {
+            args: {
+                create: 'User_CreateInput',
+                update: 'User_UpdateInput',
+                upsert: 'User_UpsertInput',
             },
-            "output": "User_QueryOutput!"
+            output: 'User_QueryOutput!',
         },
-        "Posts": {
-            "args": {
-                "create": "Post_CreateInput",
-                "update": "Post_UpdateInput",
-                "upsert": "Post_UpsertInput"
+        Posts: {
+            args: {
+                create: 'Post_CreateInput',
+                update: 'Post_UpdateInput',
+                upsert: 'Post_UpsertInput',
             },
-            "output": "Post_QueryOutput!"
-        }
+            output: 'Post_QueryOutput!',
+        },
     },
-    "Query": {
-        "Users": {
-            "args": {
-                "where": "User_WhereInput!",
-                "orderBy": "[User_OrderByInput!]",
-                "cursor": "User_WhereUnfilteredUniqueInput",
-                "distinct": "[User_DistinctInput!]",
-                "take": "Int",
-                "skip": "Int"
+    Query: {
+        Users: {
+            args: {
+                where: 'User_WhereInput!',
+                orderBy: '[User_OrderByInput!]',
+                cursor: 'User_WhereUnfilteredUniqueInput',
+                distinct: '[User_DistinctInput!]',
+                take: 'Int',
+                skip: 'Int',
             },
-            "output": "User_QueryOutput!"
+            output: 'User_QueryOutput!',
         },
-        "Posts": {
-            "args": {
-                "where": "Post_WhereInput!",
-                "orderBy": "[Post_OrderByInput!]",
-                "cursor": "Post_WhereUnfilteredUniqueInput",
-                "distinct": "[Post_DistinctInput!]",
-                "take": "Int",
-                "skip": "Int"
+        Posts: {
+            args: {
+                where: 'Post_WhereInput!',
+                orderBy: '[Post_OrderByInput!]',
+                cursor: 'Post_WhereUnfilteredUniqueInput',
+                distinct: '[Post_DistinctInput!]',
+                take: 'Int',
+                skip: 'Int',
             },
-            "output": "Post_QueryOutput!"
-        }
-    }
+            output: 'Post_QueryOutput!',
+        },
+    },
 };

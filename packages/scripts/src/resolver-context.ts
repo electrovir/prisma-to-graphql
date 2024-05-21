@@ -1,0 +1,1 @@
+../../prisma-resolver/src/operation-scope/resolver-context.ts

@@ -1,3 +1,8 @@
+// @ts-ignore: this won't be generated until tests run at least once
+import type {PrismaClient} from '.prisma';
+// @ts-ignore: this won't be generated until tests run at least once
+import type {Resolvers} from '.prisma/graphql/schema';
+
 import {
     ArrayElement,
     MaybePromise,
@@ -6,25 +11,22 @@ import {
     createDeferredPromiseWrapper,
     ensureErrorAndPrependMessage,
     isUuid,
+    omitObjectKeys,
     waitUntilTruthy,
 } from '@augment-vir/common';
 import {
     GraphqlFetcher,
+    ResolverOutput,
     createGraphqlFetcher,
     fetchRawGraphql,
 } from '@prisma-to-graphql/fetch-graphql';
+import {graphqlServerHeaders} from '@prisma-to-graphql/scripts/src/start-graphql-server';
 import {assert} from 'chai';
 import {createUtcFullDate} from 'date-vir';
 import {Server} from 'node:http';
-import {assertRunTimeType, assertThrows, assertTypeOf} from 'run-time-assertions';
+import {assertDefined, assertRunTimeType, assertThrows, assertTypeOf} from 'run-time-assertions';
 import {buildUrl, joinUrlParts} from 'url-vir';
 import {setupFullServer} from './full-run-time.test-helper';
-
-// @ts-ignore: this won't be generated until tests run at least once
-import type {PrismaClient} from '.prisma';
-// @ts-ignore: this won't be generated until tests run at least once
-import type {Resolvers} from '.prisma/graphql/schema';
-import {ResolverOutput} from '@prisma-to-graphql/fetch-graphql';
 
 type GraphqlTestCase = {
     it: string;
@@ -1065,9 +1067,11 @@ const testCases: GraphqlTestCase[] = [
     {
         it: 'fails to read hidden output fields',
         async test({fetchGraphql, serverUrl}) {
+            // @ts-ignore this will fail until the test is run once
             type UsersOutput = ArrayElement<ResolverOutput<Resolvers, 'Query', 'Users'>['items']>;
 
             assertTypeOf<UsersOutput>().toHaveProperty('email');
+            // @ts-ignore this will fail until the test is run once
             assertTypeOf<UsersOutput>().not.toHaveProperty('password');
 
             await assertThrows(
@@ -1099,7 +1103,7 @@ const testCases: GraphqlTestCase[] = [
                         },
                     );
 
-                    // @ts-expect-error: this field is hidden
+                    // @ts-ignore: this field is hidden, but it won't be an error until the test is run once
                     graphqlResult.Users.items[0]!.password;
                 },
                 {
@@ -1177,6 +1181,207 @@ const testCases: GraphqlTestCase[] = [
                     email: 'yolo4@example.com',
                 },
             ]);
+        },
+    },
+    {
+        it: 'scopes data with lots of entries',
+        async test({serverUrl, fetchGraphql}) {
+            const query = {
+                Users: {
+                    args: {
+                        where: {
+                            role: {
+                                equals: 'user',
+                            },
+                        },
+                        orderBy: [
+                            {
+                                firstName: {
+                                    sort: 'asc',
+                                    nulls: 'first',
+                                },
+                            },
+                        ],
+                    },
+                    select: {
+                        total: true,
+                        items: {
+                            id: true,
+                            firstName: true,
+                            lastName: true,
+                        },
+                    },
+                },
+                UserSettings: {
+                    args: {
+                        where: {
+                            user: {
+                                role: {equals: 'user'},
+                            },
+                        },
+                        orderBy: [
+                            {
+                                user: {
+                                    firstName: {
+                                        sort: 'asc',
+                                        nulls: 'first',
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    select: {
+                        items: {
+                            id: true,
+                            user: {
+                                firstName: true,
+                                lastName: true,
+                            },
+                        },
+                        total: true,
+                    },
+                },
+            } as const;
+
+            const resultsWithoutScope = await fetchGraphql(
+                {
+                    operationName: 'non-scoped user stuff',
+                    operationType: 'Query',
+                    url: joinUrlParts(serverUrl, 'graphql'),
+                },
+                query,
+            );
+
+            /** Omit ids for equality checking because they are randomly generated. */
+            const resultsWithoutScopeNoIds = {
+                ...resultsWithoutScope,
+                Users: {
+                    ...resultsWithoutScope.Users,
+                    items: resultsWithoutScope.Users.items.map((user) =>
+                        omitObjectKeys(user, ['id']),
+                    ),
+                },
+                UserSettings: {
+                    ...resultsWithoutScope.UserSettings,
+                    items: resultsWithoutScope.UserSettings.items.map((user) =>
+                        omitObjectKeys(user, ['id']),
+                    ),
+                },
+            };
+
+            assert.deepStrictEqual(resultsWithoutScopeNoIds, {
+                Users: {
+                    items: [
+                        {
+                            firstName: 'Derp',
+                            lastName: 'Doo',
+                        },
+                        {
+                            firstName: 'No',
+                            lastName: 'Settings',
+                        },
+                        {
+                            firstName: 'Super',
+                            lastName: 'Mega',
+                        },
+                        {
+                            firstName: 'Zebra',
+                            lastName: 'Proton',
+                        },
+                    ],
+                    total: 4,
+                },
+                UserSettings: {
+                    items: [
+                        {
+                            user: {
+                                firstName: 'Derp',
+                                lastName: 'Doo',
+                            },
+                        },
+                        {
+                            user: {
+                                firstName: 'Super',
+                                lastName: 'Mega',
+                            },
+                        },
+                        {
+                            user: {
+                                firstName: 'Zebra',
+                                lastName: 'Proton',
+                            },
+                        },
+                    ],
+                    total: 3,
+                },
+            });
+
+            const scopedUserId = resultsWithoutScope.Users.items[0]?.id;
+
+            assertDefined(scopedUserId, 'failed to find scoped user id');
+
+            const resultsWithScope = await fetchGraphql(
+                {
+                    operationName: 'non-scoped user stuff',
+                    operationType: 'Query',
+                    url: joinUrlParts(serverUrl, 'graphql'),
+                    options: {
+                        fetchOptions: {
+                            headers: {
+                                [graphqlServerHeaders.userId]: scopedUserId,
+                            },
+                        },
+                    },
+                },
+                query,
+            );
+
+            /** Omit ids for equality checking because they are randomly generated. */
+            const resultsWithScopeNoIds = {
+                ...resultsWithScope,
+                Users: {
+                    ...resultsWithScope.Users,
+                    items: resultsWithScope.Users.items.map((user) => omitObjectKeys(user, ['id'])),
+                },
+                UserSettings: {
+                    ...resultsWithScope.UserSettings,
+                    items: resultsWithScope.UserSettings.items.map((user) =>
+                        omitObjectKeys(user, ['id']),
+                    ),
+                },
+            };
+
+            assert.deepStrictEqual(resultsWithScopeNoIds, {
+                Users: {
+                    items: [
+                        {
+                            firstName: 'Derp',
+                            lastName: 'Doo',
+                        },
+                    ],
+                    total: 1,
+                },
+                UserSettings: {
+                    items: [
+                        {
+                            user: {
+                                firstName: 'Derp',
+                                lastName: 'Doo',
+                            },
+                        },
+                    ],
+                    total: 1,
+                },
+            });
+
+            assert.notStrictEqual(
+                resultsWithoutScope.UserSettings.total,
+                resultsWithScopeNoIds.UserSettings.total,
+            );
+            assert.notStrictEqual(
+                resultsWithoutScope.Users.total,
+                resultsWithScopeNoIds.Users.total,
+            );
         },
     },
 ];

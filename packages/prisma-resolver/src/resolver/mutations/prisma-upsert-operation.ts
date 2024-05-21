@@ -1,6 +1,7 @@
 import {AnyObject, extractErrorMessage, filterObject, isObject} from '@augment-vir/common';
 import {GraphQLError} from 'graphql';
 import {isPrimitive, isRunTimeType} from 'run-time-assertions';
+import {combineWhere} from '../../operation-scope/combine-where';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
 
 /**
@@ -29,11 +30,11 @@ import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
  */
 export async function runUpsert({
     graphqlArgs,
-    prismaClient,
+    context: {models, operationScope, prismaClient},
     prismaModelName,
     selection,
 }: Readonly<
-    Pick<PrismaResolverInputs, 'graphqlArgs' | 'prismaClient' | 'prismaModelName' | 'selection'>
+    Pick<PrismaResolverInputs, 'graphqlArgs' | 'context' | 'prismaModelName' | 'selection'>
 >): Promise<PrismaResolverOutput> {
     try {
         const upsertData = graphqlArgs.upsert?.data;
@@ -45,8 +46,10 @@ export async function runUpsert({
             throw new GraphQLError("Missing valid 'upsert.where' input.");
         }
 
+        const finalWhere = combineWhere(upsertWhere, prismaModelName, models, operationScope);
+
         const updatedEntry = await prismaClient[prismaModelName].upsert({
-            where: upsertWhere,
+            where: finalWhere,
             create: createCreateData({upsertData, upsertWhere}),
             update: upsertData,
             select: isObject(selection.select.items) ? selection.select.items.select : undefined,

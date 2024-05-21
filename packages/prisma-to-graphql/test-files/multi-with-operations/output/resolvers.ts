@@ -3,20 +3,20 @@
 import {GraphQLResolveInfo} from 'graphql';
 import {runPrismaResolver} from '@prisma-to-graphql/prisma-resolver';
 
-async function Query_Users(parentValue: unknown, graphqlArgs: unknown, context: {prismaClient: unknown}, resolveInfo: GraphQLResolveInfo) {
-    return await runPrismaResolver(context.prismaClient, 'User', graphqlArgs, resolveInfo);
+async function Query_Users(parentValue: unknown, graphqlArgs: unknown, context: unknown, resolveInfo: GraphQLResolveInfo) {
+    return await runPrismaResolver(context, 'User', graphqlArgs, resolveInfo);
 }
 
-async function Mutation_Users(parentValue: unknown, graphqlArgs: unknown, context: {prismaClient: unknown}, resolveInfo: GraphQLResolveInfo) {
-    return await runPrismaResolver(context.prismaClient, 'User', graphqlArgs, resolveInfo);
+async function Mutation_Users(parentValue: unknown, graphqlArgs: unknown, context: unknown, resolveInfo: GraphQLResolveInfo) {
+    return await runPrismaResolver(context, 'User', graphqlArgs, resolveInfo);
 }
 
-async function Query_Companies(parentValue: unknown, graphqlArgs: unknown, context: {prismaClient: unknown}, resolveInfo: GraphQLResolveInfo) {
-    return await runPrismaResolver(context.prismaClient, 'Company', graphqlArgs, resolveInfo);
+async function Query_Companies(parentValue: unknown, graphqlArgs: unknown, context: unknown, resolveInfo: GraphQLResolveInfo) {
+    return await runPrismaResolver(context, 'Company', graphqlArgs, resolveInfo);
 }
 
-async function Mutation_Companies(parentValue: unknown, graphqlArgs: unknown, context: {prismaClient: unknown}, resolveInfo: GraphQLResolveInfo) {
-    return await runPrismaResolver(context.prismaClient, 'Company', graphqlArgs, resolveInfo);
+async function Mutation_Companies(parentValue: unknown, graphqlArgs: unknown, context: unknown, resolveInfo: GraphQLResolveInfo) {
+    return await runPrismaResolver(context, 'Company', graphqlArgs, resolveInfo);
 }
 
 export const resolvers = {

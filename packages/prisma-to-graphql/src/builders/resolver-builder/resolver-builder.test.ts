@@ -39,7 +39,7 @@ describe(buildPrismaResolverBlock.name, () => {
                 defaultResolverBuilderOptions,
             ],
             expect: {
-                body: "return await runPrismaResolver(context.prismaClient, 'User', graphqlArgs, resolveInfo);",
+                body: "return await runPrismaResolver(context, 'User', graphqlArgs, resolveInfo);",
             },
         },
     ]);
@@ -53,7 +53,7 @@ describe(buildResolverFunctionSignature.name, () => {
                 resolverName: 'myResolver',
                 operationType: 'Mutation',
             },
-            expect: 'async function Mutation_myResolver(parentValue: unknown, graphqlArgs: unknown, context: {prismaClient: unknown}, resolveInfo: GraphQLResolveInfo) {',
+            expect: 'async function Mutation_myResolver(parentValue: unknown, graphqlArgs: unknown, context: unknown, resolveInfo: GraphQLResolveInfo) {',
         },
     ]);
 });
@@ -89,7 +89,7 @@ describe(buildResolverBlock.name, () => {
             ],
             expect: {
                 resolver:
-                    "async function Query_MyResolver(parentValue: unknown, graphqlArgs: unknown, context: {prismaClient: unknown}, resolveInfo: GraphQLResolveInfo) {\n    return await runPrismaResolver(context.prismaClient, 'User', graphqlArgs, resolveInfo);\n}",
+                    "async function Query_MyResolver(parentValue: unknown, graphqlArgs: unknown, context: unknown, resolveInfo: GraphQLResolveInfo) {\n    return await runPrismaResolver(context, 'User', graphqlArgs, resolveInfo);\n}",
                 operationType: 'Query',
             },
         },
@@ -106,7 +106,7 @@ describe(buildResolverBlock.name, () => {
             ],
             expect: {
                 resolver:
-                    'async function Mutation_MyResolver2(parentValue: unknown, graphqlArgs: unknown, context: {prismaClient: unknown}, resolveInfo: GraphQLResolveInfo) {}',
+                    'async function Mutation_MyResolver2(parentValue: unknown, graphqlArgs: unknown, context: unknown, resolveInfo: GraphQLResolveInfo) {}',
                 operationType: 'Mutation',
             },
         },
@@ -161,11 +161,11 @@ describe(buildAllResolverBlocks.name, () => {
 import {GraphQLResolveInfo} from 'graphql';
 import {runPrismaResolver} from '@prisma-to-graphql/prisma-resolver';
 
-async function Query_MyResolver(parentValue: unknown, graphqlArgs: unknown, context: {prismaClient: unknown}, resolveInfo: GraphQLResolveInfo) {
-    return await runPrismaResolver(context.prismaClient, 'User', graphqlArgs, resolveInfo);
+async function Query_MyResolver(parentValue: unknown, graphqlArgs: unknown, context: unknown, resolveInfo: GraphQLResolveInfo) {
+    return await runPrismaResolver(context, 'User', graphqlArgs, resolveInfo);
 }
 
-async function Mutation_MyResolver2(parentValue: unknown, graphqlArgs: unknown, context: {prismaClient: unknown}, resolveInfo: GraphQLResolveInfo) {}
+async function Mutation_MyResolver2(parentValue: unknown, graphqlArgs: unknown, context: unknown, resolveInfo: GraphQLResolveInfo) {}
 
 export const resolvers = {
     Mutation: {
@@ -195,8 +195,8 @@ export const resolvers = {
 import {GraphQLResolveInfo} from 'graphql';
 import {runPrismaResolver} from '@prisma-to-graphql/prisma-resolver';
 
-async function Query_MyResolver(parentValue: unknown, graphqlArgs: unknown, context: {prismaClient: unknown}, resolveInfo: GraphQLResolveInfo) {
-    return await runPrismaResolver(context.prismaClient, 'User', graphqlArgs, resolveInfo);
+async function Query_MyResolver(parentValue: unknown, graphqlArgs: unknown, context: unknown, resolveInfo: GraphQLResolveInfo) {
+    return await runPrismaResolver(context, 'User', graphqlArgs, resolveInfo);
 }
 
 export const resolvers = {

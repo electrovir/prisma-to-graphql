@@ -1,5 +1,4 @@
-import {notCommittedDir, packageDirs} from '@prisma-to-graphql/scripts/src/paths';
-import {setupTestPrismaDb} from '@prisma-to-graphql/scripts/src/setup-prisma';
+import {notCommittedDir, packageDirs, setupTestPrismaDb} from '@prisma-to-graphql/scripts';
 import {rm} from 'node:fs/promises';
 import {join} from 'node:path';
 

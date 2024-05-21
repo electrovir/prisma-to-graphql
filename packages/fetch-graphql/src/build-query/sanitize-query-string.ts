@@ -7,5 +7,5 @@ import {collapseWhiteSpace} from '@augment-vir/common';
  * @category Internal Query Builders
  */
 export function sanitizeQueryString(input: string): string {
-    return collapseWhiteSpace(input).replace(/ /g, '_');
+    return collapseWhiteSpace(input).replace(/ |\-/g, '_');
 }

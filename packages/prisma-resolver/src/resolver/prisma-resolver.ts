@@ -1,4 +1,6 @@
 import {TypedFunction} from '@augment-vir/common';
+import {assertDefined} from 'run-time-assertions';
+import {OperationScope, ResolverContext} from '../operation-scope/resolver-context';
 import {Selection} from '../util/parse-selection';
 
 /**
@@ -14,7 +16,7 @@ export type PrismaResolverOutput = {total: number; items: unknown[]};
  * @category Types
  */
 export type PrismaResolverInputs = {
-    prismaClient: any;
+    context: ResolverContext;
     prismaModelName: string;
     graphqlArgs: any;
     selection: Selection;
@@ -28,3 +30,14 @@ export type PrismaResolver = TypedFunction<
     Readonly<PrismaResolverInputs>,
     Promise<PrismaResolverOutput>
 >;
+
+export function extractResolverContext(context: any): ResolverContext {
+    const prismaClient = context.prismaClient;
+    assertDefined(prismaClient, "'prismaClient' is missing from context");
+
+    return {
+        prismaClient,
+        models: context.models,
+        operationScope: context.operationScope as OperationScope,
+    };
+}

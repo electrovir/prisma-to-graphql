@@ -113,7 +113,7 @@ const testCases: Readonly<TestCases> = [
                                 data: Object.values(seedData),
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -168,7 +168,7 @@ const testCases: Readonly<TestCases> = [
                                 data: [seedData.withId],
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -198,7 +198,7 @@ const testCases: Readonly<TestCases> = [
                                 data: ['invalid data'],
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -223,7 +223,7 @@ const testCases: Readonly<TestCases> = [
                                 ],
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -244,7 +244,7 @@ const testCases: Readonly<TestCases> = [
                         graphqlArgs: {
                             create: {},
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {},
@@ -274,7 +274,7 @@ const testCases: Readonly<TestCases> = [
                                 },
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                     });
                 },
@@ -294,7 +294,7 @@ const testCases: Readonly<TestCases> = [
                                 },
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                     });
                 },
@@ -313,7 +313,7 @@ const testCases: Readonly<TestCases> = [
                                 },
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                     });
                 },
@@ -328,7 +328,6 @@ const testCases: Readonly<TestCases> = [
                 it: 'does not calculate total if not selected',
                 async test({prismaClient}) {
                     return await runPrismaQueryOperations({
-                        prismaClient,
                         graphqlArgs: {
                             where: {
                                 role: {
@@ -336,6 +335,7 @@ const testCases: Readonly<TestCases> = [
                                 },
                             },
                         },
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -376,8 +376,8 @@ const testCases: Readonly<TestCases> = [
                 it: 'rejects missing where',
                 async test({prismaClient}) {
                     return await runPrismaQueryOperations({
-                        prismaClient,
                         graphqlArgs: {},
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -400,7 +400,6 @@ const testCases: Readonly<TestCases> = [
                 it: 'does not return query items if not selected',
                 async test({prismaClient}) {
                     return await runPrismaQueryOperations({
-                        prismaClient,
                         graphqlArgs: {
                             where: {
                                 role: {
@@ -408,6 +407,7 @@ const testCases: Readonly<TestCases> = [
                                 },
                             },
                         },
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -425,7 +425,6 @@ const testCases: Readonly<TestCases> = [
                 it: 'calculates total when selected',
                 async test({prismaClient}) {
                     return await runPrismaQueryOperations({
-                        prismaClient,
                         graphqlArgs: {
                             where: {
                                 role: {
@@ -433,6 +432,7 @@ const testCases: Readonly<TestCases> = [
                                 },
                             },
                         },
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -485,7 +485,7 @@ const testCases: Readonly<TestCases> = [
                                 },
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -526,7 +526,7 @@ const testCases: Readonly<TestCases> = [
                                 },
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -567,7 +567,7 @@ const testCases: Readonly<TestCases> = [
                                 where: {},
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -595,7 +595,7 @@ const testCases: Readonly<TestCases> = [
                                 where: {},
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -623,7 +623,7 @@ const testCases: Readonly<TestCases> = [
                                 data: {},
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -656,7 +656,7 @@ const testCases: Readonly<TestCases> = [
                                 },
                             },
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -680,7 +680,7 @@ const testCases: Readonly<TestCases> = [
                 async test({prismaClient}) {
                     return runPrismaMutationOperation({
                         graphqlArgs: {},
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {select: {}},
                     });
@@ -694,7 +694,7 @@ const testCases: Readonly<TestCases> = [
                         graphqlArgs: {
                             upsert: {},
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {select: {}},
                     });
@@ -708,7 +708,7 @@ const testCases: Readonly<TestCases> = [
                         graphqlArgs: {
                             create: {},
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {select: {}},
                     });
@@ -722,7 +722,7 @@ const testCases: Readonly<TestCases> = [
                         graphqlArgs: {
                             update: {},
                         },
-                        prismaClient,
+                        context: {prismaClient},
                         prismaModelName: 'User',
                         selection: {select: {}},
                     });

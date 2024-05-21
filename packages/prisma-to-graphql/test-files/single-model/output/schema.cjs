@@ -3,6 +3,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.operationParams = void 0;
 exports.operationParams = {
-    "Mutation": {},
-    "Query": {}
+    Mutation: {},
+    Query: {},
 };

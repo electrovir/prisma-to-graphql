@@ -31,7 +31,7 @@
         "@prisma-to-graphql/graphql-codegen-operation-params": ">=1",
         "graphql": "^16.8.1",
         "mock-vir": "^1.0.0",
-        "run-time-assertions": "^1.2.0",
+        "run-time-assertions": "^1.5.0",
         "type-fest": "^4.18.2"
     },
     "devDependencies": {

@@ -1,5 +1,6 @@
 import {GraphQLError} from 'graphql';
 import {isRunTimeType} from 'run-time-assertions';
+import {combineWhere} from '../../operation-scope/combine-where';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
 
 /**
@@ -24,10 +25,10 @@ import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
  */
 export async function runUpdate({
     graphqlArgs,
-    prismaClient,
+    context: {prismaClient, models, operationScope},
     prismaModelName,
 }: Readonly<
-    Pick<PrismaResolverInputs, 'graphqlArgs' | 'prismaClient' | 'prismaModelName'>
+    Pick<PrismaResolverInputs, 'graphqlArgs' | 'context' | 'prismaModelName'>
 >): Promise<PrismaResolverOutput> {
     const updateData = graphqlArgs.update?.data;
     const updateWhere = graphqlArgs.update?.where;
@@ -38,8 +39,10 @@ export async function runUpdate({
         throw new GraphQLError("Missing valid 'update.where' input.");
     }
 
+    const finalWhere = combineWhere(updateWhere, prismaModelName, models, operationScope);
+
     const updateOutput: {count: number} = await prismaClient[prismaModelName].updateMany({
-        where: updateWhere,
+        where: finalWhere,
         data: updateData,
     });
 

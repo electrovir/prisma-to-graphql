@@ -22,12 +22,10 @@ import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
  */
 export async function runCreate({
     graphqlArgs,
-    prismaClient,
+    context: {prismaClient},
     prismaModelName,
     selection,
-}: Readonly<
-    Pick<PrismaResolverInputs, 'graphqlArgs' | 'prismaClient' | 'prismaModelName' | 'selection'>
->): Promise<PrismaResolverOutput> {
+}: Readonly<PrismaResolverInputs>): Promise<PrismaResolverOutput> {
     const createData = graphqlArgs.create?.data;
 
     if (!isRunTimeType(createData, 'array')) {
