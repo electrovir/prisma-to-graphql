@@ -15,12 +15,13 @@
         "docs": "mono-vir for-each-async npm run docs",
         "format": "virmator format",
         "publish": "virmator publish \"npm run compile && npm run test:all\"",
-        "test": "mono-vir for-each-async npm run test",
+        "test": "npm run compile && npm run test:uncompiled",
         "test:all": "npm run compile && concurrently --colors --kill-others-on-fail -c auto --names tests,spelling,format,deps \"mono-vir for-each-async npm run test:all\" \"npm run test:spelling\" \"npm run test:format\" \"npm run test:deps\"",
         "test:deps": "virmator deps check",
         "test:format": "virmator format check",
         "test:spelling": "virmator spellcheck",
-        "test:types": "npm run compile"
+        "test:types": "npm run compile",
+        "test:uncompiled": "mono-vir for-each npm run test"
     },
     "devDependencies": {
         "cspell": "^8.8.1",

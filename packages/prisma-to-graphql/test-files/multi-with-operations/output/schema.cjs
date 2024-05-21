@@ -53,7 +53,7 @@ exports.operationParams = {
     Query: {
         Users: {
             args: {
-                where: 'User_WhereInput!',
+                where: 'User_WhereInput',
                 orderBy: '[User_OrderByInput!]',
                 cursor: 'User_WhereUnfilteredUniqueInput',
                 distinct: '[User_DistinctInput!]',
@@ -64,7 +64,7 @@ exports.operationParams = {
         },
         Companies: {
             args: {
-                where: 'Company_WhereInput!',
+                where: 'Company_WhereInput',
                 orderBy: '[Company_OrderByInput!]',
                 cursor: 'Company_WhereUnfilteredUniqueInput',
                 distinct: '[Company_DistinctInput!]',

@@ -8,7 +8,5 @@
 -   add plugin that allows per-field limitations
     -   like a limit on string field length
 -   test using boolean fields in where clauses (AND, OR, NOT, etc.)
--   attach operation scope to create and update resolvers
-    -   meaning, all created items are bound to the user that created them
 
 # in progress

@@ -21,9 +21,6 @@ export type MakeEmpty<T extends {
 export type Incremental<T> = T | {
     [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
 };
-export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
-    [P in K]-?: NonNullable<T[P]>;
-};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
     ID: {
@@ -70,7 +67,7 @@ export type Query = {
     readonly Companies: Company_QueryOutput;
 };
 export type Query_UsersArgs = {
-    where: User_WhereInput;
+    where?: InputMaybe<User_WhereInput>;
     orderBy?: InputMaybe<ReadonlyArray<User_OrderByInput>>;
     cursor?: InputMaybe<User_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<User_DistinctInput>>;
@@ -78,7 +75,7 @@ export type Query_UsersArgs = {
     skip?: InputMaybe<Scalars['Int']['input']>;
 };
 export type Query_CompaniesArgs = {
-    where: Company_WhereInput;
+    where?: InputMaybe<Company_WhereInput>;
     orderBy?: InputMaybe<ReadonlyArray<Company_OrderByInput>>;
     cursor?: InputMaybe<Company_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<Company_DistinctInput>>;
@@ -407,8 +404,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
     Companies?: Resolver<ResolversTypes['Company_QueryOutput'], ParentType, ContextType, Partial<Mutation_CompaniesArgs>>;
 };
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-    Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, RequireFields<Query_UsersArgs, 'where'>>;
-    Companies?: Resolver<ResolversTypes['Company_QueryOutput'], ParentType, ContextType, RequireFields<Query_CompaniesArgs, 'where'>>;
+    Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, Partial<Query_UsersArgs>>;
+    Companies?: Resolver<ResolversTypes['Company_QueryOutput'], ParentType, ContextType, Partial<Query_CompaniesArgs>>;
 };
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
     name: 'DateTime';

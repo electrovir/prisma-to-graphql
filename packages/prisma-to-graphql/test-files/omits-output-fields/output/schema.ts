@@ -9,7 +9,6 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -37,7 +36,7 @@ export type Query = {
 
 
 export type Query_UsersArgs = {
-  where: User_WhereInput;
+  where?: InputMaybe<User_WhereInput>;
   orderBy?: InputMaybe<ReadonlyArray<User_OrderByInput>>;
   cursor?: InputMaybe<User_WhereUnfilteredUniqueInput>;
   distinct?: InputMaybe<ReadonlyArray<User_DistinctInput>>;
@@ -312,7 +311,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, RequireFields<Query_UsersArgs, 'where'>>;
+  Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, Partial<Query_UsersArgs>>;
 };
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
@@ -365,7 +364,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
     Query: {
         Users: {
             args: {
-                where: 'User_WhereInput!',
+                where: 'User_WhereInput',
                 orderBy: '[User_OrderByInput!]',
                 cursor: 'User_WhereUnfilteredUniqueInput',
                 distinct: '[User_DistinctInput!]',

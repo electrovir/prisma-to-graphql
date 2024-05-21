@@ -3,10 +3,10 @@
  * GraphQL servers.
  */
 
-import {PartialAndUndefined} from '@augment-vir/common';
+import {AnyObject, PartialAndUndefined} from '@augment-vir/common';
 import {JsonPrimitive} from 'type-fest';
 
-export type ResolverContext<PrismaClient = any> = {
+export type ResolverContext<PrismaClient = AnyObject> = {
     prismaClient: PrismaClient;
     models?: ModelMap | undefined;
     operationScope?: OperationScope | undefined;

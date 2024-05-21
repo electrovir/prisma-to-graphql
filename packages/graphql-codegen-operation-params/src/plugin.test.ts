@@ -38,8 +38,8 @@ describe(plugin.name, () => {
             `,
             expect: `
             {
-                "Mutation": {},
-                "Query": {}
+                Mutation: {},
+                Query: {},
             }`,
         },
         {
@@ -56,13 +56,13 @@ describe(plugin.name, () => {
             `,
             expect: `
             {
-                "Mutation": {},
-                "Query": {
-                    "getStuff": {
-                        "args": {},
-                        "output": "FakeUser"
-                    }
-                }
+                Mutation: {},
+                Query: {
+                    getStuff: {
+                        args: {},
+                        output: 'FakeUser',
+                    },
+                },
             }`,
         },
         {
@@ -79,16 +79,16 @@ describe(plugin.name, () => {
             `,
             expect: `
             {
-                "Mutation": {},
-                "Query": {
-                    "getStuff": {
-                        "args": {
-                            "something": "String",
-                            "somethingElse": "Int"
+                Mutation: {},
+                Query: {
+                    getStuff: {
+                        args: {
+                            something: 'String',
+                            somethingElse: 'Int',
                         },
-                        "output": "FakeUser"
-                    }
-                }
+                        output: 'FakeUser',
+                    },
+                },
             }`,
         },
         {
@@ -107,26 +107,26 @@ describe(plugin.name, () => {
             `,
             expect: `
             {
-                "Mutation": {},
-                "Query": {
-                    "getStuff": {
-                        "args": {},
-                        "output": "FakeUser"
+                Mutation: {},
+                Query: {
+                    getStuff: {
+                        args: {},
+                        output: 'FakeUser',
                     },
-                    "getStuff2": {
-                        "args": {
-                            "something": "String!",
-                            "somethingElse": "Int"
+                    getStuff2: {
+                        args: {
+                            something: 'String!',
+                            somethingElse: 'Int',
                         },
-                        "output": "FakeUser!"
+                        output: 'FakeUser!',
                     },
-                    "getStuff3": {
-                        "args": {
-                            "init": "FakeUser"
+                    getStuff3: {
+                        args: {
+                            init: 'FakeUser',
                         },
-                        "output": "Boolean"
-                    }
-                }
+                        output: 'Boolean',
+                    },
+                },
             }`,
         },
     ]);

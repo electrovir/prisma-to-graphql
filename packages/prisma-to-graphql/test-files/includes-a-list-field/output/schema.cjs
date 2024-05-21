@@ -46,7 +46,7 @@ exports.operationParams = {
     Query: {
         Users: {
             args: {
-                where: 'User_WhereInput!',
+                where: 'User_WhereInput',
                 orderBy: '[User_OrderByInput!]',
                 cursor: 'User_WhereUnfilteredUniqueInput',
                 distinct: '[User_DistinctInput!]',
@@ -57,7 +57,7 @@ exports.operationParams = {
         },
         Posts: {
             args: {
-                where: 'Post_WhereInput!',
+                where: 'Post_WhereInput',
                 orderBy: '[Post_OrderByInput!]',
                 cursor: 'Post_WhereUnfilteredUniqueInput',
                 distinct: '[Post_DistinctInput!]',

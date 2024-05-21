@@ -326,7 +326,7 @@ export const modelFindManyOperation: ResolverGenerator = {
                     type: 'property',
                     name: 'where',
                     value: queryInputBlocks.where.name,
-                    required: true,
+                    required: false,
                 },
                 {
                     type: 'property',

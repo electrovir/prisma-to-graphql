@@ -34,7 +34,7 @@ exports.operationParams = {
     Query: {
         Users: {
             args: {
-                where: 'User_WhereInput!',
+                where: 'User_WhereInput',
                 orderBy: '[User_OrderByInput!]',
                 cursor: 'User_WhereUnfilteredUniqueInput',
                 distinct: '[User_DistinctInput!]',

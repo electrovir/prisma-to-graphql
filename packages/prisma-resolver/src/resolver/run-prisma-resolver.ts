@@ -1,4 +1,4 @@
-import {AnyObject, PickDeep, capitalizeFirstLetter, typedArrayIncludes} from '@augment-vir/common';
+import {PickDeep, capitalizeFirstLetter, typedArrayIncludes} from '@augment-vir/common';
 import {
     OperationType,
     allValidOperationTypes,
@@ -10,6 +10,7 @@ import {
     OperationDefinitionNode,
     SelectionSetNode,
 } from 'graphql';
+import {ResolverContext} from '../operation-scope/resolver-context';
 import {parseItemSelection} from '../util/parse-selection';
 import {runPrismaMutationOperation} from './mutations/prisma-mutation-operation';
 import {
@@ -32,7 +33,7 @@ const resolvers: Readonly<Record<OperationType, PrismaResolver>> = {
  * @category Main
  */
 export async function runPrismaResolver(
-    context: AnyObject,
+    context: ResolverContext,
     prismaModelName: string,
     graphqlArgs: any,
     resolveInfo: Readonly<Pick<GraphQLResolveInfo, 'fieldNodes' | 'fieldName' | 'operation'>>,

@@ -49,7 +49,7 @@ export const operationParams = {
     Query: {
         Users: {
             args: {
-                where: 'User_WhereInput!',
+                where: 'User_WhereInput',
                 orderBy: '[User_OrderByInput!]',
                 cursor: 'User_WhereUnfilteredUniqueInput',
                 distinct: '[User_DistinctInput!]',
@@ -60,7 +60,7 @@ export const operationParams = {
         },
         UserSettings: {
             args: {
-                where: 'UserSettings_WhereInput!',
+                where: 'UserSettings_WhereInput',
                 orderBy: '[UserSettings_OrderByInput!]',
                 cursor: 'UserSettings_WhereUnfilteredUniqueInput',
                 distinct: '[UserSettings_DistinctInput!]',

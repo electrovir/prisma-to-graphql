@@ -738,7 +738,7 @@ const testCases: Readonly<TestCases> = [
                 it: 'executes a query',
                 async test({prismaClient}) {
                     return await runPrismaResolver(
-                        prismaClient,
+                        {prismaClient},
                         'User',
                         {
                             where: {
@@ -798,7 +798,7 @@ const testCases: Readonly<TestCases> = [
                 it: 'fails on a subscription',
                 async test({prismaClient}) {
                     return await runPrismaResolver(
-                        prismaClient,
+                        {prismaClient},
                         'User',
                         {},
                         {
@@ -849,7 +849,7 @@ const testCases: Readonly<TestCases> = [
                 it: 'rejects empty selection',
                 async test({prismaClient}) {
                     return await runPrismaResolver(
-                        prismaClient,
+                        {prismaClient},
                         'User',
                         {
                             where: {
