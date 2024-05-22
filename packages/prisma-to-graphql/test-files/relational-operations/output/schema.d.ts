@@ -130,6 +130,9 @@ export type User_QueryOutput = {
     readonly total: Scalars['Int']['output'];
     readonly items: ReadonlyArray<User>;
 };
+export type OrderByCount = {
+    readonly _count?: InputMaybe<SortOrder | `${SortOrder}`>;
+};
 export type User_WhereInput = {
     readonly AND?: InputMaybe<ReadonlyArray<User_WhereInput>>;
     readonly OR?: InputMaybe<ReadonlyArray<User_WhereInput>>;
@@ -194,6 +197,11 @@ export type DateTimeFilterInput = {
     readonly gt?: InputMaybe<Scalars['DateTime']['input']>;
     readonly gte?: InputMaybe<Scalars['DateTime']['input']>;
     readonly not?: InputMaybe<DateTimeFilterInput>;
+};
+export type User_WhereManyInput = {
+    readonly every?: InputMaybe<User_WhereInput>;
+    readonly none?: InputMaybe<User_WhereInput>;
+    readonly some?: InputMaybe<User_WhereInput>;
 };
 export type User_CreateInput = {
     readonly data: ReadonlyArray<User_CreateDataInput>;
@@ -301,6 +309,11 @@ export type UserSettings_WhereUnfilteredUniqueInput = {
     readonly updatedAt?: InputMaybe<DateTimeFilterInput>;
     readonly user?: InputMaybe<User_WhereInput>;
 };
+export type UserSettings_WhereManyInput = {
+    readonly every?: InputMaybe<UserSettings_WhereInput>;
+    readonly none?: InputMaybe<UserSettings_WhereInput>;
+    readonly some?: InputMaybe<UserSettings_WhereInput>;
+};
 export type UserSettings_CreateInput = {
     readonly data: ReadonlyArray<UserSettings_CreateDataInput>;
 };
@@ -390,11 +403,13 @@ export type ResolversTypes = {
     String: ResolverTypeWrapper<Scalars['String']['output']>;
     SortOrderWithNulls: SortOrderWithNulls;
     User_QueryOutput: ResolverTypeWrapper<User_QueryOutput>;
+    OrderByCount: OrderByCount;
     User_WhereInput: User_WhereInput;
     User_OrderByInput: User_OrderByInput;
     User_WhereUnfilteredUniqueInput: User_WhereUnfilteredUniqueInput;
     StringFilterInput: StringFilterInput;
     DateTimeFilterInput: DateTimeFilterInput;
+    User_WhereManyInput: User_WhereManyInput;
     User_CreateInput: User_CreateInput;
     User_UpdateInput: User_UpdateInput;
     User_UpsertInput: User_UpsertInput;
@@ -410,6 +425,7 @@ export type ResolversTypes = {
     UserSettings_WhereInput: UserSettings_WhereInput;
     UserSettings_OrderByInput: UserSettings_OrderByInput;
     UserSettings_WhereUnfilteredUniqueInput: UserSettings_WhereUnfilteredUniqueInput;
+    UserSettings_WhereManyInput: UserSettings_WhereManyInput;
     UserSettings_CreateInput: UserSettings_CreateInput;
     UserSettings_UpdateInput: UserSettings_UpdateInput;
     UserSettings_UpsertInput: UserSettings_UpsertInput;
@@ -433,11 +449,13 @@ export type ResolversParentTypes = {
     String: Scalars['String']['output'];
     SortOrderWithNulls: SortOrderWithNulls;
     User_QueryOutput: User_QueryOutput;
+    OrderByCount: OrderByCount;
     User_WhereInput: User_WhereInput;
     User_OrderByInput: User_OrderByInput;
     User_WhereUnfilteredUniqueInput: User_WhereUnfilteredUniqueInput;
     StringFilterInput: StringFilterInput;
     DateTimeFilterInput: DateTimeFilterInput;
+    User_WhereManyInput: User_WhereManyInput;
     User_CreateInput: User_CreateInput;
     User_UpdateInput: User_UpdateInput;
     User_UpsertInput: User_UpsertInput;
@@ -453,6 +471,7 @@ export type ResolversParentTypes = {
     UserSettings_WhereInput: UserSettings_WhereInput;
     UserSettings_OrderByInput: UserSettings_OrderByInput;
     UserSettings_WhereUnfilteredUniqueInput: UserSettings_WhereUnfilteredUniqueInput;
+    UserSettings_WhereManyInput: UserSettings_WhereManyInput;
     UserSettings_CreateInput: UserSettings_CreateInput;
     UserSettings_UpdateInput: UserSettings_UpdateInput;
     UserSettings_UpsertInput: UserSettings_UpsertInput;

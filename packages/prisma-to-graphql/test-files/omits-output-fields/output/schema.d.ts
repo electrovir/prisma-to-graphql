@@ -101,6 +101,9 @@ export type User_QueryOutput = {
     readonly total: Scalars['Int']['output'];
     readonly items: ReadonlyArray<User>;
 };
+export type OrderByCount = {
+    readonly _count?: InputMaybe<SortOrder | `${SortOrder}`>;
+};
 export type User_WhereInput = {
     readonly AND?: InputMaybe<ReadonlyArray<User_WhereInput>>;
     readonly OR?: InputMaybe<ReadonlyArray<User_WhereInput>>;
@@ -153,6 +156,11 @@ export type DateTimeFilterInput = {
     readonly gt?: InputMaybe<Scalars['DateTime']['input']>;
     readonly gte?: InputMaybe<Scalars['DateTime']['input']>;
     readonly not?: InputMaybe<DateTimeFilterInput>;
+};
+export type User_WhereManyInput = {
+    readonly every?: InputMaybe<User_WhereInput>;
+    readonly none?: InputMaybe<User_WhereInput>;
+    readonly some?: InputMaybe<User_WhereInput>;
 };
 export type User_CreateInput = {
     readonly data: ReadonlyArray<User_CreateDataInput>;
@@ -229,11 +237,13 @@ export type ResolversTypes = {
     String: ResolverTypeWrapper<Scalars['String']['output']>;
     SortOrderWithNulls: SortOrderWithNulls;
     User_QueryOutput: ResolverTypeWrapper<User_QueryOutput>;
+    OrderByCount: OrderByCount;
     User_WhereInput: User_WhereInput;
     User_OrderByInput: User_OrderByInput;
     User_WhereUnfilteredUniqueInput: User_WhereUnfilteredUniqueInput;
     StringFilterInput: StringFilterInput;
     DateTimeFilterInput: DateTimeFilterInput;
+    User_WhereManyInput: User_WhereManyInput;
     User_CreateInput: User_CreateInput;
     User_UpdateInput: User_UpdateInput;
     User_UpsertInput: User_UpsertInput;
@@ -253,11 +263,13 @@ export type ResolversParentTypes = {
     String: Scalars['String']['output'];
     SortOrderWithNulls: SortOrderWithNulls;
     User_QueryOutput: User_QueryOutput;
+    OrderByCount: OrderByCount;
     User_WhereInput: User_WhereInput;
     User_OrderByInput: User_OrderByInput;
     User_WhereUnfilteredUniqueInput: User_WhereUnfilteredUniqueInput;
     StringFilterInput: StringFilterInput;
     DateTimeFilterInput: DateTimeFilterInput;
+    User_WhereManyInput: User_WhereManyInput;
     User_CreateInput: User_CreateInput;
     User_UpdateInput: User_UpdateInput;
     User_UpsertInput: User_UpsertInput;

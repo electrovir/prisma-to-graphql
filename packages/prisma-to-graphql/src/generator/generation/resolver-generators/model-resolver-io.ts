@@ -24,7 +24,7 @@ export function createResolverInputName({
  * @category Prisma Generator
  */
 export type ResolverInputNames = {
-    Query: 'where' | 'orderBy' | 'distinct';
+    Query: 'where' | 'orderBy' | 'distinct' | 'whereMany';
     Mutation:
         | 'create'
         | 'createData'

@@ -2,8 +2,14 @@ import {assertDefined} from 'run-time-assertions';
 import {ModelMap, OperationScope} from './resolver-context';
 import {expandModelScope} from './where-scope';
 
+/**
+ * Combines operation scope and Prisma where into a single Prisma where clause.
+ *
+ * @category Internals
+ */
 export function combineWhere(
-    userWhere: unknown,
+    /** The where provided by the query. */
+    queryWhere: unknown,
     modelUnderQuery: string,
     models: Readonly<ModelMap> | undefined,
     operationScope: Readonly<OperationScope> | undefined,
@@ -11,7 +17,7 @@ export function combineWhere(
     const whereScope = operationScope?.where;
 
     if (!whereScope) {
-        return userWhere;
+        return queryWhere;
     }
 
     assertDefined(
@@ -19,10 +25,20 @@ export function combineWhere(
         'Missing `models` GraphQL context variable, needed to use the `operationScope` context variable.',
     );
 
-    return {
-        AND: [
-            userWhere,
-            expandModelScope(modelUnderQuery, models, whereScope),
-        ],
-    };
+    const expandedWhereScope = expandModelScope(modelUnderQuery, models, whereScope);
+
+    if (!queryWhere && expandedWhereScope) {
+        return expandedWhereScope;
+    } else if (queryWhere && !expandedWhereScope) {
+        return queryWhere;
+    } else if (queryWhere && expandedWhereScope) {
+        return {
+            AND: [
+                queryWhere,
+                expandedWhereScope,
+            ],
+        };
+    } else {
+        return {};
+    }
 }

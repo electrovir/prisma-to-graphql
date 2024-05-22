@@ -26,6 +26,29 @@ const seedData: {user: Parameters<PrismaClient['user']['create']>[0]['data'][]} 
                     },
                 },
             },
+            posts: {
+                create: [
+                    {
+                        body: 'this is my post',
+                        title: 'this is my title',
+                    },
+                    {
+                        body: 'this is my post 2',
+                        title: 'this is my title 2',
+                    },
+                    {
+                        body: 'this is my post 3',
+                        title: 'this is my title 3',
+                    },
+                ],
+            },
+            regions: {
+                create: [
+                    {
+                        regionName: 'West Coast',
+                    },
+                ],
+            },
         },
         {
             email: 'test2@example.com',
@@ -39,6 +62,22 @@ const seedData: {user: Parameters<PrismaClient['user']['create']>[0]['data'][]} 
                     canViewReports: false,
                     receivesMarketingEmails: true,
                 },
+            },
+            posts: {
+                create: [
+                    {
+                        body: 'this is my post',
+                        title: 'this is my title',
+                    },
+                    {
+                        body: 'this is my post 2',
+                        title: 'this is my title 2',
+                    },
+                    {
+                        body: 'this is my post 3',
+                        title: 'this is my title 3',
+                    },
+                ],
             },
         },
         {
@@ -54,6 +93,36 @@ const seedData: {user: Parameters<PrismaClient['user']['create']>[0]['data'][]} 
                     receivesMarketingEmails: false,
                 },
             },
+            posts: {
+                create: [
+                    {
+                        body: 'this is my post',
+                        title: 'this is my title',
+                    },
+                    {
+                        body: 'this is my post 2',
+                        title: 'this is my title 2',
+                    },
+                    {
+                        body: 'this is my post 3',
+                        title: 'this is my title 3',
+                    },
+                    {
+                        body: 'this is my post 4',
+                        title: 'unique title name',
+                    },
+                ],
+            },
+            regions: {
+                create: [
+                    {
+                        regionName: 'USA',
+                    },
+                    {
+                        regionName: 'East Coast',
+                    },
+                ],
+            },
         },
         {
             email: 'test3@example.com',
@@ -68,6 +137,32 @@ const seedData: {user: Parameters<PrismaClient['user']['create']>[0]['data'][]} 
                     receivesMarketingEmails: false,
                 },
             },
+            posts: {
+                create: [
+                    {
+                        body: 'this is my post',
+                        title: 'this is my title',
+                    },
+                    {
+                        body: 'this is my post 2',
+                        title: 'this is my title 2',
+                    },
+                    {
+                        body: 'this is my post 3',
+                        title: 'this is my title 3',
+                    },
+                ],
+            },
+            regions: {
+                connect: [
+                    {
+                        regionName: 'USA',
+                    },
+                    {
+                        regionName: 'West Coast',
+                    },
+                ],
+            },
         },
         {
             email: 'test3@example.com',
@@ -76,6 +171,33 @@ const seedData: {user: Parameters<PrismaClient['user']['create']>[0]['data'][]} 
             lastName: 'Settings',
             phoneNumber: '1234567890',
             role: 'user',
+            posts: {
+                create: [
+                    {
+                        body: 'this is my post',
+                        title: 'this is my title',
+                    },
+                    {
+                        body: 'this is my post 2',
+                        title: 'this is my title 2',
+                    },
+                    {
+                        body: 'this is my post 3',
+                        title: 'this is my title 3',
+                    },
+                    {
+                        body: 'this is my post 4',
+                        title: 'unique title name',
+                    },
+                ],
+            },
+            regions: {
+                connect: [
+                    {
+                        regionName: 'USA',
+                    },
+                ],
+            },
         },
     ],
 };

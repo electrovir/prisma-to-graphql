@@ -28,11 +28,48 @@ async function main(prismaClient: PrismaClient) {
 
     prismaClient.user.findMany({
         where: {
-            posts: {
-                some: {
-                    title: {
-                        contains: 'derp',
+            firstName: 'Zebra',
+        },
+        select: {
+            regions: {
+                select: {
+                    users: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                        },
                     },
+                },
+            },
+        },
+    });
+
+    prismaClient.region.findMany({
+        select: {
+            users: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                },
+                where: {
+                    role: 'user',
+                },
+            },
+        },
+    });
+
+    await prismaClient.userSettings.findMany({
+        where: {
+            user: {
+                role: 'user',
+            },
+        },
+        select: {
+            id: true,
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
                 },
             },
         },

@@ -1,5 +1,5 @@
 import {PartialAndUndefined, PropertyValueType, RequiredAndNotNullBy} from '@augment-vir/common';
-import {EmptyObject, IsNever, OmitIndexSignature} from 'type-fest';
+import {EmptyObject, HasRequiredKeys, IsNever, OmitIndexSignature} from 'type-fest';
 import {
     AvailableOperationTypes,
     AvailableResolverNames,
@@ -53,6 +53,24 @@ export type BaseGraphqlOperations = Partial<{
 }>;
 
 /**
+ * The `args` portion of a {@link GraphqlOperation}.
+ *
+ * @category Internal Type Transforms
+ */
+export type GraphqlOperationArgs<
+    Resolvers extends Readonly<BaseResolvers>,
+    OperationType extends AvailableOperationTypes<Resolvers>,
+    ResolverName extends AvailableResolverNames<Resolvers, OperationType>,
+> =
+    IsNever<ResolverInputs<Resolvers, OperationType, ResolverName>> extends true
+        ? {args?: never}
+        : EmptyObject extends ResolverInputs<Resolvers, OperationType, ResolverName>
+          ? {args?: never}
+          : HasRequiredKeys<ResolverInputs<Resolvers, OperationType, ResolverName>> extends true
+            ? {args: ResolverInputs<Resolvers, OperationType, ResolverName>}
+            : {args?: ResolverInputs<Resolvers, OperationType, ResolverName>};
+
+/**
  * An individual operation's allowed types with the given Resolvers, Operation type, and resolver
  * name.
  *
@@ -63,11 +81,7 @@ export type GraphqlOperation<
     OperationType extends AvailableOperationTypes<Resolvers>,
     ResolverName extends AvailableResolverNames<Resolvers, OperationType>,
 > = PartialAndUndefined<{alias: string}> &
-    (IsNever<ResolverInputs<Resolvers, OperationType, ResolverName>> extends true
-        ? {args?: never}
-        : EmptyObject extends ResolverInputs<Resolvers, OperationType, ResolverName>
-          ? {args?: never}
-          : {args: ResolverInputs<Resolvers, OperationType, ResolverName>}) &
+    GraphqlOperationArgs<Resolvers, OperationType, ResolverName> &
     (IsNever<
         AvailableSelectionSet<ResolverOutput<Resolvers, OperationType, ResolverName>, true>
     > extends true

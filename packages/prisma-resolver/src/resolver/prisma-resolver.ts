@@ -31,6 +31,11 @@ export type PrismaResolver = TypedFunction<
     Promise<PrismaResolverOutput>
 >;
 
+/**
+ * Extracts the resolver context from the given GraphQL context object.
+ *
+ * @category Internals
+ */
 export function extractResolverContext(context: any): ResolverContext {
     const prismaClient = context.prismaClient;
     assertDefined(prismaClient, "'prismaClient' is missing from context");

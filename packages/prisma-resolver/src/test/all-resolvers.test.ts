@@ -4,6 +4,7 @@ import {assert} from 'chai';
 import {Kind, OperationTypeNode} from 'graphql';
 import {assertThrows} from 'run-time-assertions';
 import {RequireExactlyOne} from 'type-fest';
+import {generatedModels} from '../operation-scope/generated-models.mock';
 import {runCreate} from '../resolver/mutations/prisma-create-operation';
 import {runPrismaMutationOperation} from '../resolver/mutations/prisma-mutation-operation';
 import {runUpdate} from '../resolver/mutations/prisma-update-operation';
@@ -46,6 +47,13 @@ const seedData = {
                     },
                 },
             },
+        },
+        regions: {
+            create: [
+                {
+                    regionName: 'Fake',
+                },
+            ],
         },
     },
     withId: {
@@ -284,7 +292,7 @@ const testCases: Readonly<TestCases> = [
                 },
             },
             {
-                it: 'rejects missing where',
+                it: 'rejects missing where for update',
                 async test({prismaClient}) {
                     return await runUpdate({
                         graphqlArgs: {
@@ -373,11 +381,21 @@ const testCases: Readonly<TestCases> = [
                 },
             },
             {
-                it: 'rejects missing where',
+                it: 'handles missing where',
                 async test({prismaClient}) {
                     return await runPrismaQueryOperations({
                         graphqlArgs: {},
-                        context: {prismaClient},
+                        context: {
+                            prismaClient,
+                            models: generatedModels,
+                            operationScope: {
+                                where: {
+                                    User: {
+                                        firstName: {equals: 'Basic'},
+                                    },
+                                },
+                            },
+                        },
                         prismaModelName: 'User',
                         selection: {
                             select: {
@@ -394,7 +412,163 @@ const testCases: Readonly<TestCases> = [
                         },
                     });
                 },
-                throws: "Missing valid 'where' input.",
+                expect: {
+                    items: [
+                        {
+                            email: 'basic@example.com',
+                            firstName: 'Basic',
+                            lastName: 'McGee',
+                            phoneNumber: 'invalid number',
+                            role: 'user',
+                        },
+                    ],
+                    total: 0,
+                },
+            },
+            {
+                it: 'handles irrelevant operation scope',
+                async test({prismaClient}) {
+                    return await runPrismaQueryOperations({
+                        graphqlArgs: {},
+                        context: {
+                            prismaClient,
+                            models: generatedModels,
+                            operationScope: {
+                                where: {
+                                    User: {},
+                                },
+                            },
+                        },
+                        prismaModelName: 'Region',
+                        selection: {
+                            select: {
+                                items: {
+                                    select: {
+                                        regionName: true,
+                                        users: {
+                                            select: {
+                                                firstName: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    });
+                },
+                expect: {
+                    items: [
+                        {
+                            regionName: 'Fake',
+                            users: [
+                                {
+                                    firstName: 'Basic',
+                                },
+                            ],
+                        },
+                    ],
+                    total: 0,
+                },
+            },
+            {
+                it: 'handles irrelevant operation scope with a where',
+                async test({prismaClient}) {
+                    return await runPrismaQueryOperations({
+                        graphqlArgs: {
+                            where: {
+                                regionName: {equals: 'Fake'},
+                            },
+                        },
+                        context: {
+                            prismaClient,
+                            models: generatedModels,
+                            operationScope: {
+                                where: {
+                                    User: {},
+                                },
+                            },
+                        },
+                        prismaModelName: 'Region',
+                        selection: {
+                            select: {
+                                items: {
+                                    select: {
+                                        regionName: true,
+                                        users: {
+                                            select: {
+                                                firstName: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    });
+                },
+                expect: {
+                    items: [
+                        {
+                            regionName: 'Fake',
+                            users: [
+                                {
+                                    firstName: 'Basic',
+                                },
+                            ],
+                        },
+                    ],
+                    total: 0,
+                },
+            },
+            {
+                it: 'handles relevant operation scope with a where',
+                async test({prismaClient}) {
+                    return await runPrismaQueryOperations({
+                        graphqlArgs: {
+                            where: {
+                                regionName: {equals: 'Fake'},
+                            },
+                        },
+                        context: {
+                            prismaClient,
+                            models: generatedModels,
+                            operationScope: {
+                                where: {
+                                    User: {
+                                        firstName: {equals: 'Basic'},
+                                    },
+                                },
+                            },
+                        },
+                        prismaModelName: 'Region',
+                        selection: {
+                            select: {
+                                items: {
+                                    select: {
+                                        regionName: true,
+                                        users: {
+                                            select: {
+                                                firstName: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    });
+                },
+                expect: {
+                    items: [
+                        {
+                            regionName: 'Fake',
+                            users: [
+                                {
+                                    firstName: 'Basic',
+                                },
+                            ],
+                        },
+                    ],
+                    total: 0,
+                },
             },
             {
                 it: 'does not return query items if not selected',

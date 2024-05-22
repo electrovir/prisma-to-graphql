@@ -1,5 +1,5 @@
 import {itCases} from '@augment-vir/chai';
-import {generatedModelMap} from './generated-models.mock';
+import {generatedModels} from './generated-models.mock';
 import {expandModelScope} from './where-scope';
 
 describe(expandModelScope.name, () => {
@@ -8,7 +8,7 @@ describe(expandModelScope.name, () => {
             it: 'generates nothing if there is no model scope',
             inputs: [
                 'User',
-                generatedModelMap,
+                generatedModels,
                 {},
             ],
             expect: undefined,
@@ -17,7 +17,7 @@ describe(expandModelScope.name, () => {
             it: 'generates nested where',
             inputs: [
                 'User',
-                generatedModelMap,
+                generatedModels,
                 {
                     UserStats: {
                         likes: {
@@ -37,10 +37,50 @@ describe(expandModelScope.name, () => {
             },
         },
         {
+            it: 'generates nested where',
+            inputs: [
+                'User',
+                generatedModels,
+                {
+                    UserPost: {
+                        title: {
+                            contains: 'unique',
+                        },
+                    },
+                },
+            ],
+            expect: {
+                posts: {
+                    some: {
+                        title: {
+                            contains: 'unique',
+                        },
+                    },
+                },
+            },
+        },
+        {
+            it: 'fails on a field named AND',
+            inputs: [
+                'User',
+                {
+                    User: {
+                        AND: {
+                            isList: false,
+                            type: 'String',
+                            isRelation: true,
+                        },
+                    },
+                },
+                {},
+            ],
+            throws: Error,
+        },
+        {
             it: 'generates multiple wheres',
             inputs: [
                 'User',
-                generatedModelMap,
+                generatedModels,
                 {
                     User: {
                         id: {
@@ -79,7 +119,7 @@ describe(expandModelScope.name, () => {
             it: 'combines duplicate wheres',
             inputs: [
                 'User',
-                generatedModelMap,
+                generatedModels,
                 {
                     User: {
                         id: {

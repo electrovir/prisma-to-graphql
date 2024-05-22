@@ -1,17 +1,16 @@
 import {ArrayElement} from '@augment-vir/common';
 import {assertTypeOf} from 'run-time-assertions';
 import {
-    BooleanFilterInput,
-    DateTimeFilterInput,
+    InputMaybe,
     Resolvers,
-    UserSettings_WhereInput,
     UserSettings_WhereUnfilteredUniqueInput,
-    UserStats_WhereInput,
-    User_WhereInput,
+    UserSettings_Without_User_CreateInput,
+    UserSettings_Without_User_CreateOrConnectInput,
 } from '../../my-generated-schema-outputs';
 import {
     BaseGraphqlOperations,
     FlattenedOperations,
+    GraphqlOperation,
     GraphqlOperations,
     OperationWithKey,
     ResolverOutputWithSelection,
@@ -146,95 +145,48 @@ describe('FlattenedOperations', () => {
 });
 
 describe('GraphqlOperations', () => {
+    it('allows missing args if none are required', () => {
+        assertTypeOf({
+            select: {
+                total: true,
+            },
+        }).toMatchTypeOf<GraphqlOperation<Resolvers, 'Query', 'Users'>>();
+    });
+
     it('has proper types', () => {
         assertTypeOf<
             NonNullable<
                 ArrayElement<
                     NonNullable<
-                        Exclude<
-                            Required<GraphqlOperations<Resolvers, 'Mutation'>>['Users'],
-                            any[]
-                        >['args']['create']
+                        NonNullable<
+                            Exclude<
+                                Required<GraphqlOperations<Resolvers, 'Mutation'>>['Users'],
+                                any[]
+                            >['args']
+                        >['create']
                     >['data']
                 >['settings']
             >
         >().toEqualTypeOf<
             Readonly<{
-                create?:
-                    | Readonly<{
-                          stats?:
-                              | Readonly<{
-                                    id?: string | null | undefined;
-                                    createdAt?: string | Date | null | undefined;
-                                    updatedAt?: string | Date | null | undefined;
-
-                                    dislikes: number;
-                                    likes: number;
-                                    views: number;
-                                }>
-                              | null
-                              | undefined;
-
-                          id?: string | null | undefined;
-                          createdAt?: string | Date | null | undefined;
-                          updatedAt?: string | Date | null | undefined;
-
-                          canViewReports?: boolean | null | undefined;
-                          receivesMarketingEmails?: boolean | null | undefined;
-                      }>
-                    | null
-                    | undefined;
-                connect?:
-                    | Readonly<{
-                          AND?: ReadonlyArray<UserSettings_WhereInput> | undefined | null;
-                          OR?: ReadonlyArray<UserSettings_WhereInput> | undefined | null;
-                          NOT?: ReadonlyArray<UserSettings_WhereInput> | undefined | null;
-                          canViewReports?: BooleanFilterInput | undefined | null;
-                          receivesMarketingEmails?: BooleanFilterInput | undefined | null;
-                          createdAt?: DateTimeFilterInput | null | undefined;
-                          updatedAt?: DateTimeFilterInput | null | undefined;
-                          id?: string | null | undefined;
-                          stats?: UserStats_WhereInput | null | undefined;
-                          user?: User_WhereInput | null | undefined;
-                      }>
-                    | null
-                    | undefined;
-                connectOrCreate?:
-                    | Readonly<{
-                          connect: UserSettings_WhereUnfilteredUniqueInput;
-                          create: Readonly<{
-                              id?: string | null | undefined;
-                              createdAt?: string | Date | null | undefined;
-                              updatedAt?: string | Date | null | undefined;
-                              receivesMarketingEmails?: boolean | null | undefined;
-                              canViewReports?: boolean | null | undefined;
-                              stats?:
-                                  | Readonly<{
-                                        id?: string | null | undefined;
-                                        createdAt?: string | Date | null | undefined;
-                                        updatedAt?: string | Date | null | undefined;
-                                        likes: number | null | undefined;
-                                        dislikes: number | null | undefined;
-                                        views: number | null | undefined;
-                                    }>
-                                  | null
-                                  | undefined;
-                          }>;
-                      }>
-                    | null
-                    | undefined;
+                create?: UserSettings_Without_User_CreateInput | null | undefined;
+                connect?: UserSettings_WhereUnfilteredUniqueInput | null | undefined;
+                connectOrCreate?: UserSettings_Without_User_CreateOrConnectInput | null | undefined;
             }>
         >();
+
         assertTypeOf<
             Pick<
                 NonNullable<
                     NonNullable<
                         ArrayElement<
                             NonNullable<
-                                Exclude<
-                                    Required<GraphqlOperations<Resolvers, 'Mutation'>>['Users'],
-                                    any[]
-                                >['args']['create']
+                                NonNullable<
+                                    Exclude<
+                                        Required<GraphqlOperations<Resolvers, 'Mutation'>>['Users'],
+                                        any[]
+                                    >['args']
+                                >['create']
                             >['data']
                         >['settings']
                     >['connectOrCreate']
@@ -243,7 +195,7 @@ describe('GraphqlOperations', () => {
             >
         >().toEqualTypeOf<
             Readonly<{
-                connect: UserSettings_WhereUnfilteredUniqueInput;
+                connect: ReadonlyArray<InputMaybe<UserSettings_WhereUnfilteredUniqueInput>>;
             }>
         >();
     });

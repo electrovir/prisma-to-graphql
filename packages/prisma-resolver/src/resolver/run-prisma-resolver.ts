@@ -1,4 +1,9 @@
-import {PickDeep, capitalizeFirstLetter, typedArrayIncludes} from '@augment-vir/common';
+import {
+    PickDeep,
+    capitalizeFirstLetter,
+    pickObjectKeys,
+    typedArrayIncludes,
+} from '@augment-vir/common';
 import {
     OperationType,
     allValidOperationTypes,
@@ -57,7 +62,17 @@ export async function runPrismaResolver(
 
         return await resolver(resolverInputs);
     } catch (error) {
-        console.error('failed with args', {context, prismaModelName, graphqlArgs});
+        console.error('failed with args', {
+            context: {
+                ...pickObjectKeys(context, [
+                    'models',
+                    'operationScope',
+                ]),
+                prismaClientIncluded: !!context.prismaClient,
+            },
+            prismaModelName,
+            graphqlArgs,
+        });
         console.error(error);
         throw error;
     }

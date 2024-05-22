@@ -1,3 +1,4 @@
+export * from './operation-scope/combine-select';
 export * from './operation-scope/combine-where';
 export * from './operation-scope/resolver-context';
 export * from './operation-scope/where-scope';

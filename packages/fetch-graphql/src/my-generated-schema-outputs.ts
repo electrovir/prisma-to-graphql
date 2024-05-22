@@ -11,7 +11,6 @@ export type MakeEmpty<T extends {[key: string]: unknown}, K extends keyof T> = {
 export type Incremental<T> =
     | T
     | {[P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never};
-export type RequireFields<T, K extends keyof T> = Omit<T, K> & {[P in K]-?: NonNullable<T[P]>};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
     ID: {input: string; output: string};
@@ -24,6 +23,8 @@ export type Scalars = {
 
 export type Mutation = {
     readonly Users: User_QueryOutput;
+    readonly Regions: Region_QueryOutput;
+    readonly UserPosts: UserPost_QueryOutput;
     readonly UserSettings: UserSettings_QueryOutput;
     readonly UserStats: UserStats_QueryOutput;
 };
@@ -32,6 +33,18 @@ export type Mutation_UsersArgs = {
     create?: InputMaybe<User_CreateInput>;
     update?: InputMaybe<User_UpdateInput>;
     upsert?: InputMaybe<User_UpsertInput>;
+};
+
+export type Mutation_RegionsArgs = {
+    create?: InputMaybe<Region_CreateInput>;
+    update?: InputMaybe<Region_UpdateInput>;
+    upsert?: InputMaybe<Region_UpsertInput>;
+};
+
+export type Mutation_UserPostsArgs = {
+    create?: InputMaybe<UserPost_CreateInput>;
+    update?: InputMaybe<UserPost_UpdateInput>;
+    upsert?: InputMaybe<UserPost_UpsertInput>;
 };
 
 export type Mutation_UserSettingsArgs = {
@@ -48,12 +61,14 @@ export type Mutation_UserStatsArgs = {
 
 export type Query = {
     readonly Users: User_QueryOutput;
+    readonly Regions: Region_QueryOutput;
+    readonly UserPosts: UserPost_QueryOutput;
     readonly UserSettings: UserSettings_QueryOutput;
     readonly UserStats: UserStats_QueryOutput;
 };
 
 export type Query_UsersArgs = {
-    where: User_WhereInput;
+    where?: InputMaybe<User_WhereInput>;
     orderBy?: InputMaybe<ReadonlyArray<User_OrderByInput>>;
     cursor?: InputMaybe<User_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<User_DistinctInput>>;
@@ -61,8 +76,26 @@ export type Query_UsersArgs = {
     skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type Query_RegionsArgs = {
+    where?: InputMaybe<Region_WhereInput>;
+    orderBy?: InputMaybe<ReadonlyArray<Region_OrderByInput>>;
+    cursor?: InputMaybe<Region_WhereUnfilteredUniqueInput>;
+    distinct?: InputMaybe<ReadonlyArray<Region_DistinctInput>>;
+    take?: InputMaybe<Scalars['Int']['input']>;
+    skip?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Query_UserPostsArgs = {
+    where?: InputMaybe<UserPost_WhereInput>;
+    orderBy?: InputMaybe<ReadonlyArray<UserPost_OrderByInput>>;
+    cursor?: InputMaybe<UserPost_WhereUnfilteredUniqueInput>;
+    distinct?: InputMaybe<ReadonlyArray<UserPost_DistinctInput>>;
+    take?: InputMaybe<Scalars['Int']['input']>;
+    skip?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type Query_UserSettingsArgs = {
-    where: UserSettings_WhereInput;
+    where?: InputMaybe<UserSettings_WhereInput>;
     orderBy?: InputMaybe<ReadonlyArray<UserSettings_OrderByInput>>;
     cursor?: InputMaybe<UserSettings_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<UserSettings_DistinctInput>>;
@@ -71,7 +104,7 @@ export type Query_UserSettingsArgs = {
 };
 
 export type Query_UserStatsArgs = {
-    where: UserStats_WhereInput;
+    where?: InputMaybe<UserStats_WhereInput>;
     orderBy?: InputMaybe<ReadonlyArray<UserStats_OrderByInput>>;
     cursor?: InputMaybe<UserStats_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<UserStats_DistinctInput>>;
@@ -101,6 +134,20 @@ export enum User_DistinctInput {
     phoneNumber = 'phoneNumber',
 }
 
+export enum Region_DistinctInput {
+    createdAt = 'createdAt',
+    updatedAt = 'updatedAt',
+    regionName = 'regionName',
+}
+
+export enum UserPost_DistinctInput {
+    id = 'id',
+    createdAt = 'createdAt',
+    updatedAt = 'updatedAt',
+    title = 'title',
+    body = 'body',
+}
+
 export enum UserSettings_DistinctInput {
     id = 'id',
     createdAt = 'createdAt',
@@ -120,6 +167,8 @@ export enum UserStats_DistinctInput {
 
 export type _AllModels = {
     readonly User?: Maybe<User>;
+    readonly Region?: Maybe<Region>;
+    readonly UserPost?: Maybe<UserPost>;
     readonly UserSettings?: Maybe<UserSettings>;
     readonly UserStats?: Maybe<UserStats>;
 };
@@ -129,12 +178,13 @@ export type User = {
     readonly createdAt: Scalars['DateTime']['output'];
     readonly updatedAt: Scalars['DateTime']['output'];
     readonly email: Scalars['String']['output'];
-    readonly password: Scalars['String']['output'];
     readonly firstName?: Maybe<Scalars['String']['output']>;
     readonly lastName?: Maybe<Scalars['String']['output']>;
     readonly role?: Maybe<Scalars['String']['output']>;
     readonly phoneNumber?: Maybe<Scalars['String']['output']>;
     readonly settings?: Maybe<UserSettings>;
+    readonly posts: ReadonlyArray<Maybe<UserPost>>;
+    readonly regions: ReadonlyArray<Maybe<Region>>;
 };
 
 export type SortOrderWithNulls = {
@@ -145,6 +195,10 @@ export type SortOrderWithNulls = {
 export type User_QueryOutput = {
     readonly total: Scalars['Int']['output'];
     readonly items: ReadonlyArray<User>;
+};
+
+export type OrderByCount = {
+    readonly _count?: InputMaybe<SortOrder | `${SortOrder}`>;
 };
 
 export type User_WhereInput = {
@@ -161,6 +215,8 @@ export type User_WhereInput = {
     readonly role?: InputMaybe<StringFilterInput>;
     readonly phoneNumber?: InputMaybe<StringFilterInput>;
     readonly settings?: InputMaybe<UserSettings_WhereInput>;
+    readonly posts?: InputMaybe<UserPost_WhereManyInput>;
+    readonly regions?: InputMaybe<Region_WhereManyInput>;
 };
 
 export type User_OrderByInput = {
@@ -174,6 +230,8 @@ export type User_OrderByInput = {
     readonly role?: InputMaybe<SortOrderWithNulls>;
     readonly phoneNumber?: InputMaybe<SortOrderWithNulls>;
     readonly settings?: InputMaybe<UserSettings_OrderByInput>;
+    readonly posts?: InputMaybe<OrderByCount>;
+    readonly regions?: InputMaybe<OrderByCount>;
 };
 
 export type User_WhereUnfilteredUniqueInput = {
@@ -190,6 +248,8 @@ export type User_WhereUnfilteredUniqueInput = {
     readonly role?: InputMaybe<StringFilterInput>;
     readonly phoneNumber?: InputMaybe<StringFilterInput>;
     readonly settings?: InputMaybe<UserSettings_WhereInput>;
+    readonly posts?: InputMaybe<UserPost_WhereManyInput>;
+    readonly regions?: InputMaybe<Region_WhereManyInput>;
 };
 
 export type StringFilterInput = {
@@ -217,6 +277,12 @@ export type DateTimeFilterInput = {
     readonly not?: InputMaybe<DateTimeFilterInput>;
 };
 
+export type User_WhereManyInput = {
+    readonly every?: InputMaybe<User_WhereInput>;
+    readonly none?: InputMaybe<User_WhereInput>;
+    readonly some?: InputMaybe<User_WhereInput>;
+};
+
 export type User_CreateInput = {
     readonly data: ReadonlyArray<User_CreateDataInput>;
 };
@@ -242,6 +308,8 @@ export type User_WhereRequiredProvidedUniqueInput = {
     readonly role?: InputMaybe<StringFilterInput>;
     readonly phoneNumber?: InputMaybe<StringFilterInput>;
     readonly settings?: InputMaybe<UserSettings_WhereInput>;
+    readonly posts?: InputMaybe<UserPost_WhereInput>;
+    readonly regions?: InputMaybe<Region_WhereInput>;
 };
 
 export type User_CreateDataInput = {
@@ -255,6 +323,8 @@ export type User_CreateDataInput = {
     readonly role?: InputMaybe<Scalars['String']['input']>;
     readonly phoneNumber?: InputMaybe<Scalars['String']['input']>;
     readonly settings?: InputMaybe<UserSettings_Without_User_ConnectionInput>;
+    readonly posts?: InputMaybe<UserPost_Without_User_ConnectionManyInput>;
+    readonly regions?: InputMaybe<Region_Without_User_ConnectionManyInput>;
 };
 
 export type User_UpdateDataInput = {
@@ -268,11 +338,13 @@ export type User_UpdateDataInput = {
     readonly role?: InputMaybe<Scalars['String']['input']>;
     readonly phoneNumber?: InputMaybe<Scalars['String']['input']>;
     readonly settings?: InputMaybe<UserSettings_Without_User_ConnectionInput>;
+    readonly posts?: InputMaybe<UserPost_Without_User_ConnectionInput>;
+    readonly regions?: InputMaybe<Region_Without_User_ConnectionInput>;
 };
 
 export type User_Without_UserSettings_CreateOrConnectInput = {
-    readonly connect: User_WhereUnfilteredUniqueInput;
-    readonly create: User_Without_UserSettings_CreateInput;
+    readonly connect: ReadonlyArray<InputMaybe<User_WhereUnfilteredUniqueInput>>;
+    readonly create: ReadonlyArray<InputMaybe<User_Without_UserSettings_CreateInput>>;
 };
 
 export type User_Without_UserSettings_CreateInput = {
@@ -285,12 +357,304 @@ export type User_Without_UserSettings_CreateInput = {
     readonly lastName?: InputMaybe<Scalars['String']['input']>;
     readonly role?: InputMaybe<Scalars['String']['input']>;
     readonly phoneNumber?: InputMaybe<Scalars['String']['input']>;
+    readonly posts?: InputMaybe<UserPost_Without_User_ConnectionManyInput>;
+    readonly regions?: InputMaybe<Region_Without_User_ConnectionManyInput>;
+};
+
+export type User_Without_UserSettings_ConnectionManyInput = {
+    readonly create?: InputMaybe<ReadonlyArray<InputMaybe<User_Without_UserSettings_CreateInput>>>;
+    readonly connectOrCreate?: InputMaybe<User_Without_UserSettings_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<ReadonlyArray<InputMaybe<User_WhereUnfilteredUniqueInput>>>;
 };
 
 export type User_Without_UserSettings_ConnectionInput = {
     readonly create?: InputMaybe<User_Without_UserSettings_CreateInput>;
     readonly connectOrCreate?: InputMaybe<User_Without_UserSettings_CreateOrConnectInput>;
     readonly connect?: InputMaybe<User_WhereUnfilteredUniqueInput>;
+};
+
+export type User_Without_UserPost_CreateOrConnectInput = {
+    readonly connect: ReadonlyArray<InputMaybe<User_WhereUnfilteredUniqueInput>>;
+    readonly create: ReadonlyArray<InputMaybe<User_Without_UserPost_CreateInput>>;
+};
+
+export type User_Without_UserPost_CreateInput = {
+    readonly id?: InputMaybe<Scalars['String']['input']>;
+    readonly createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly email: Scalars['String']['input'];
+    readonly password: Scalars['String']['input'];
+    readonly firstName?: InputMaybe<Scalars['String']['input']>;
+    readonly lastName?: InputMaybe<Scalars['String']['input']>;
+    readonly role?: InputMaybe<Scalars['String']['input']>;
+    readonly phoneNumber?: InputMaybe<Scalars['String']['input']>;
+    readonly settings?: InputMaybe<UserSettings_Without_User_ConnectionInput>;
+    readonly regions?: InputMaybe<Region_Without_User_ConnectionManyInput>;
+};
+
+export type User_Without_UserPost_ConnectionManyInput = {
+    readonly create?: InputMaybe<ReadonlyArray<InputMaybe<User_Without_UserPost_CreateInput>>>;
+    readonly connectOrCreate?: InputMaybe<User_Without_UserPost_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<ReadonlyArray<InputMaybe<User_WhereUnfilteredUniqueInput>>>;
+};
+
+export type User_Without_UserPost_ConnectionInput = {
+    readonly create?: InputMaybe<User_Without_UserPost_CreateInput>;
+    readonly connectOrCreate?: InputMaybe<User_Without_UserPost_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<User_WhereUnfilteredUniqueInput>;
+};
+
+export type User_Without_Region_CreateOrConnectInput = {
+    readonly connect: ReadonlyArray<InputMaybe<User_WhereUnfilteredUniqueInput>>;
+    readonly create: ReadonlyArray<InputMaybe<User_Without_Region_CreateInput>>;
+};
+
+export type User_Without_Region_CreateInput = {
+    readonly id?: InputMaybe<Scalars['String']['input']>;
+    readonly createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly email: Scalars['String']['input'];
+    readonly password: Scalars['String']['input'];
+    readonly firstName?: InputMaybe<Scalars['String']['input']>;
+    readonly lastName?: InputMaybe<Scalars['String']['input']>;
+    readonly role?: InputMaybe<Scalars['String']['input']>;
+    readonly phoneNumber?: InputMaybe<Scalars['String']['input']>;
+    readonly settings?: InputMaybe<UserSettings_Without_User_ConnectionInput>;
+    readonly posts?: InputMaybe<UserPost_Without_User_ConnectionManyInput>;
+};
+
+export type User_Without_Region_ConnectionManyInput = {
+    readonly create?: InputMaybe<ReadonlyArray<InputMaybe<User_Without_Region_CreateInput>>>;
+    readonly connectOrCreate?: InputMaybe<User_Without_Region_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<ReadonlyArray<InputMaybe<User_WhereUnfilteredUniqueInput>>>;
+};
+
+export type User_Without_Region_ConnectionInput = {
+    readonly create?: InputMaybe<User_Without_Region_CreateInput>;
+    readonly connectOrCreate?: InputMaybe<User_Without_Region_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<User_WhereUnfilteredUniqueInput>;
+};
+
+export type Region = {
+    readonly createdAt: Scalars['DateTime']['output'];
+    readonly updatedAt: Scalars['DateTime']['output'];
+    readonly regionName: Scalars['String']['output'];
+    readonly users: ReadonlyArray<Maybe<User>>;
+};
+
+export type Region_QueryOutput = {
+    readonly total: Scalars['Int']['output'];
+    readonly items: ReadonlyArray<Region>;
+};
+
+export type Region_WhereInput = {
+    readonly AND?: InputMaybe<ReadonlyArray<Region_WhereInput>>;
+    readonly OR?: InputMaybe<ReadonlyArray<Region_WhereInput>>;
+    readonly NOT?: InputMaybe<ReadonlyArray<Region_WhereInput>>;
+    readonly createdAt?: InputMaybe<DateTimeFilterInput>;
+    readonly updatedAt?: InputMaybe<DateTimeFilterInput>;
+    readonly regionName?: InputMaybe<StringFilterInput>;
+    readonly users?: InputMaybe<User_WhereManyInput>;
+};
+
+export type Region_OrderByInput = {
+    readonly createdAt?: InputMaybe<SortOrder | `${SortOrder}`>;
+    readonly updatedAt?: InputMaybe<SortOrder | `${SortOrder}`>;
+    readonly regionName?: InputMaybe<SortOrder | `${SortOrder}`>;
+    readonly users?: InputMaybe<OrderByCount>;
+};
+
+export type Region_WhereUnfilteredUniqueInput = {
+    readonly AND?: InputMaybe<ReadonlyArray<Region_WhereInput>>;
+    readonly OR?: InputMaybe<ReadonlyArray<Region_WhereInput>>;
+    readonly NOT?: InputMaybe<ReadonlyArray<Region_WhereInput>>;
+    readonly createdAt?: InputMaybe<DateTimeFilterInput>;
+    readonly updatedAt?: InputMaybe<DateTimeFilterInput>;
+    readonly regionName?: InputMaybe<Scalars['String']['input']>;
+    readonly users?: InputMaybe<User_WhereManyInput>;
+};
+
+export type Region_WhereManyInput = {
+    readonly every?: InputMaybe<Region_WhereInput>;
+    readonly none?: InputMaybe<Region_WhereInput>;
+    readonly some?: InputMaybe<Region_WhereInput>;
+};
+
+export type Region_CreateInput = {
+    readonly data: ReadonlyArray<Region_CreateDataInput>;
+};
+
+export type Region_UpdateInput = {
+    readonly data: Region_UpdateDataInput;
+    readonly where: Region_WhereUnfilteredUniqueInput;
+};
+
+export type Region_UpsertInput = {
+    readonly data: Region_UpdateDataInput;
+    readonly where: Region_WhereRequiredProvidedUniqueInput;
+};
+
+export type Region_WhereRequiredProvidedUniqueInput = {
+    readonly createdAt?: InputMaybe<DateTimeFilterInput>;
+    readonly updatedAt?: InputMaybe<DateTimeFilterInput>;
+    readonly regionName: Scalars['String']['input'];
+    readonly users?: InputMaybe<User_WhereInput>;
+};
+
+export type Region_CreateDataInput = {
+    readonly createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly regionName: Scalars['String']['input'];
+    readonly users?: InputMaybe<User_Without_Region_ConnectionManyInput>;
+};
+
+export type Region_UpdateDataInput = {
+    readonly createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly regionName?: InputMaybe<Scalars['String']['input']>;
+    readonly users?: InputMaybe<User_Without_Region_ConnectionInput>;
+};
+
+export type Region_Without_User_CreateOrConnectInput = {
+    readonly connect: ReadonlyArray<InputMaybe<Region_WhereUnfilteredUniqueInput>>;
+    readonly create: ReadonlyArray<InputMaybe<Region_Without_User_CreateInput>>;
+};
+
+export type Region_Without_User_CreateInput = {
+    readonly createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly regionName: Scalars['String']['input'];
+};
+
+export type Region_Without_User_ConnectionManyInput = {
+    readonly create?: InputMaybe<ReadonlyArray<InputMaybe<Region_Without_User_CreateInput>>>;
+    readonly connectOrCreate?: InputMaybe<Region_Without_User_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<ReadonlyArray<InputMaybe<Region_WhereUnfilteredUniqueInput>>>;
+};
+
+export type Region_Without_User_ConnectionInput = {
+    readonly create?: InputMaybe<Region_Without_User_CreateInput>;
+    readonly connectOrCreate?: InputMaybe<Region_Without_User_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<Region_WhereUnfilteredUniqueInput>;
+};
+
+export type UserPost = {
+    readonly id: Scalars['String']['output'];
+    readonly createdAt: Scalars['DateTime']['output'];
+    readonly updatedAt: Scalars['DateTime']['output'];
+    readonly title: Scalars['String']['output'];
+    readonly body: Scalars['String']['output'];
+    readonly user: User;
+};
+
+export type UserPost_QueryOutput = {
+    readonly total: Scalars['Int']['output'];
+    readonly items: ReadonlyArray<UserPost>;
+};
+
+export type UserPost_WhereInput = {
+    readonly AND?: InputMaybe<ReadonlyArray<UserPost_WhereInput>>;
+    readonly OR?: InputMaybe<ReadonlyArray<UserPost_WhereInput>>;
+    readonly NOT?: InputMaybe<ReadonlyArray<UserPost_WhereInput>>;
+    readonly id?: InputMaybe<StringFilterInput>;
+    readonly createdAt?: InputMaybe<DateTimeFilterInput>;
+    readonly updatedAt?: InputMaybe<DateTimeFilterInput>;
+    readonly title?: InputMaybe<StringFilterInput>;
+    readonly body?: InputMaybe<StringFilterInput>;
+    readonly user?: InputMaybe<User_WhereInput>;
+};
+
+export type UserPost_OrderByInput = {
+    readonly id?: InputMaybe<SortOrder | `${SortOrder}`>;
+    readonly createdAt?: InputMaybe<SortOrder | `${SortOrder}`>;
+    readonly updatedAt?: InputMaybe<SortOrder | `${SortOrder}`>;
+    readonly title?: InputMaybe<SortOrder | `${SortOrder}`>;
+    readonly body?: InputMaybe<SortOrder | `${SortOrder}`>;
+    readonly user?: InputMaybe<User_OrderByInput>;
+};
+
+export type UserPost_WhereUnfilteredUniqueInput = {
+    readonly AND?: InputMaybe<ReadonlyArray<UserPost_WhereInput>>;
+    readonly OR?: InputMaybe<ReadonlyArray<UserPost_WhereInput>>;
+    readonly NOT?: InputMaybe<ReadonlyArray<UserPost_WhereInput>>;
+    readonly id?: InputMaybe<Scalars['String']['input']>;
+    readonly createdAt?: InputMaybe<DateTimeFilterInput>;
+    readonly updatedAt?: InputMaybe<DateTimeFilterInput>;
+    readonly title?: InputMaybe<StringFilterInput>;
+    readonly body?: InputMaybe<StringFilterInput>;
+    readonly user?: InputMaybe<User_WhereInput>;
+};
+
+export type UserPost_WhereManyInput = {
+    readonly every?: InputMaybe<UserPost_WhereInput>;
+    readonly none?: InputMaybe<UserPost_WhereInput>;
+    readonly some?: InputMaybe<UserPost_WhereInput>;
+};
+
+export type UserPost_CreateInput = {
+    readonly data: ReadonlyArray<UserPost_CreateDataInput>;
+};
+
+export type UserPost_UpdateInput = {
+    readonly data: UserPost_UpdateDataInput;
+    readonly where: UserPost_WhereUnfilteredUniqueInput;
+};
+
+export type UserPost_UpsertInput = {
+    readonly data: UserPost_UpdateDataInput;
+    readonly where: UserPost_WhereRequiredProvidedUniqueInput;
+};
+
+export type UserPost_WhereRequiredProvidedUniqueInput = {
+    readonly id: Scalars['String']['input'];
+    readonly createdAt?: InputMaybe<DateTimeFilterInput>;
+    readonly updatedAt?: InputMaybe<DateTimeFilterInput>;
+    readonly title?: InputMaybe<StringFilterInput>;
+    readonly body?: InputMaybe<StringFilterInput>;
+    readonly user?: InputMaybe<User_WhereInput>;
+};
+
+export type UserPost_CreateDataInput = {
+    readonly id?: InputMaybe<Scalars['String']['input']>;
+    readonly createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly title: Scalars['String']['input'];
+    readonly body: Scalars['String']['input'];
+    readonly user: User_Without_UserPost_ConnectionInput;
+};
+
+export type UserPost_UpdateDataInput = {
+    readonly id?: InputMaybe<Scalars['String']['input']>;
+    readonly createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly title?: InputMaybe<Scalars['String']['input']>;
+    readonly body?: InputMaybe<Scalars['String']['input']>;
+    readonly user?: InputMaybe<User_Without_UserPost_ConnectionInput>;
+};
+
+export type UserPost_Without_User_CreateOrConnectInput = {
+    readonly connect: ReadonlyArray<InputMaybe<UserPost_WhereUnfilteredUniqueInput>>;
+    readonly create: ReadonlyArray<InputMaybe<UserPost_Without_User_CreateInput>>;
+};
+
+export type UserPost_Without_User_CreateInput = {
+    readonly id?: InputMaybe<Scalars['String']['input']>;
+    readonly createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+    readonly title: Scalars['String']['input'];
+    readonly body: Scalars['String']['input'];
+};
+
+export type UserPost_Without_User_ConnectionManyInput = {
+    readonly create?: InputMaybe<ReadonlyArray<InputMaybe<UserPost_Without_User_CreateInput>>>;
+    readonly connectOrCreate?: InputMaybe<UserPost_Without_User_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<ReadonlyArray<InputMaybe<UserPost_WhereUnfilteredUniqueInput>>>;
+};
+
+export type UserPost_Without_User_ConnectionInput = {
+    readonly create?: InputMaybe<UserPost_Without_User_CreateInput>;
+    readonly connectOrCreate?: InputMaybe<UserPost_Without_User_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<UserPost_WhereUnfilteredUniqueInput>;
 };
 
 export type UserSettings = {
@@ -349,6 +713,12 @@ export type BooleanFilterInput = {
     readonly not?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type UserSettings_WhereManyInput = {
+    readonly every?: InputMaybe<UserSettings_WhereInput>;
+    readonly none?: InputMaybe<UserSettings_WhereInput>;
+    readonly some?: InputMaybe<UserSettings_WhereInput>;
+};
+
 export type UserSettings_CreateInput = {
     readonly data: ReadonlyArray<UserSettings_CreateDataInput>;
 };
@@ -394,8 +764,8 @@ export type UserSettings_UpdateDataInput = {
 };
 
 export type UserSettings_Without_UserStats_CreateOrConnectInput = {
-    readonly connect: UserSettings_WhereUnfilteredUniqueInput;
-    readonly create: UserSettings_Without_UserStats_CreateInput;
+    readonly connect: ReadonlyArray<InputMaybe<UserSettings_WhereUnfilteredUniqueInput>>;
+    readonly create: ReadonlyArray<InputMaybe<UserSettings_Without_UserStats_CreateInput>>;
 };
 
 export type UserSettings_Without_UserStats_CreateInput = {
@@ -404,7 +774,17 @@ export type UserSettings_Without_UserStats_CreateInput = {
     readonly updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
     readonly receivesMarketingEmails?: InputMaybe<Scalars['Boolean']['input']>;
     readonly canViewReports?: InputMaybe<Scalars['Boolean']['input']>;
-    readonly user: User_Without_UserSettings_CreateInput;
+    readonly user: User_Without_UserSettings_ConnectionInput;
+};
+
+export type UserSettings_Without_UserStats_ConnectionManyInput = {
+    readonly create?: InputMaybe<
+        ReadonlyArray<InputMaybe<UserSettings_Without_UserStats_CreateInput>>
+    >;
+    readonly connectOrCreate?: InputMaybe<UserSettings_Without_UserStats_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<
+        ReadonlyArray<InputMaybe<UserSettings_WhereUnfilteredUniqueInput>>
+    >;
 };
 
 export type UserSettings_Without_UserStats_ConnectionInput = {
@@ -414,8 +794,8 @@ export type UserSettings_Without_UserStats_ConnectionInput = {
 };
 
 export type UserSettings_Without_User_CreateOrConnectInput = {
-    readonly connect: UserSettings_WhereUnfilteredUniqueInput;
-    readonly create: UserSettings_Without_User_CreateInput;
+    readonly connect: ReadonlyArray<InputMaybe<UserSettings_WhereUnfilteredUniqueInput>>;
+    readonly create: ReadonlyArray<InputMaybe<UserSettings_Without_User_CreateInput>>;
 };
 
 export type UserSettings_Without_User_CreateInput = {
@@ -424,7 +804,15 @@ export type UserSettings_Without_User_CreateInput = {
     readonly updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
     readonly receivesMarketingEmails?: InputMaybe<Scalars['Boolean']['input']>;
     readonly canViewReports?: InputMaybe<Scalars['Boolean']['input']>;
-    readonly stats?: InputMaybe<UserStats_Without_UserSettings_CreateInput>;
+    readonly stats?: InputMaybe<UserStats_Without_UserSettings_ConnectionInput>;
+};
+
+export type UserSettings_Without_User_ConnectionManyInput = {
+    readonly create?: InputMaybe<ReadonlyArray<InputMaybe<UserSettings_Without_User_CreateInput>>>;
+    readonly connectOrCreate?: InputMaybe<UserSettings_Without_User_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<
+        ReadonlyArray<InputMaybe<UserSettings_WhereUnfilteredUniqueInput>>
+    >;
 };
 
 export type UserSettings_Without_User_ConnectionInput = {
@@ -495,6 +883,12 @@ export type IntFilterInput = {
     readonly not?: InputMaybe<IntFilterInput>;
 };
 
+export type UserStats_WhereManyInput = {
+    readonly every?: InputMaybe<UserStats_WhereInput>;
+    readonly none?: InputMaybe<UserStats_WhereInput>;
+    readonly some?: InputMaybe<UserStats_WhereInput>;
+};
+
 export type UserStats_CreateInput = {
     readonly data: ReadonlyArray<UserStats_CreateDataInput>;
 };
@@ -540,8 +934,8 @@ export type UserStats_UpdateDataInput = {
 };
 
 export type UserStats_Without_UserSettings_CreateOrConnectInput = {
-    readonly connect: UserStats_WhereUnfilteredUniqueInput;
-    readonly create: UserStats_Without_UserSettings_CreateInput;
+    readonly connect: ReadonlyArray<InputMaybe<UserStats_WhereUnfilteredUniqueInput>>;
+    readonly create: ReadonlyArray<InputMaybe<UserStats_Without_UserSettings_CreateInput>>;
 };
 
 export type UserStats_Without_UserSettings_CreateInput = {
@@ -551,6 +945,14 @@ export type UserStats_Without_UserSettings_CreateInput = {
     readonly likes: Scalars['Int']['input'];
     readonly dislikes: Scalars['Int']['input'];
     readonly views: Scalars['Int']['input'];
+};
+
+export type UserStats_Without_UserSettings_ConnectionManyInput = {
+    readonly create?: InputMaybe<
+        ReadonlyArray<InputMaybe<UserStats_Without_UserSettings_CreateInput>>
+    >;
+    readonly connectOrCreate?: InputMaybe<UserStats_Without_UserSettings_CreateOrConnectInput>;
+    readonly connect?: InputMaybe<ReadonlyArray<InputMaybe<UserStats_WhereUnfilteredUniqueInput>>>;
 };
 
 export type UserStats_Without_UserSettings_ConnectionInput = {
@@ -650,6 +1052,8 @@ export type ResolversTypes = {
     SortOrder: SortOrder;
     NullsOrder: NullsOrder;
     User_DistinctInput: User_DistinctInput;
+    Region_DistinctInput: Region_DistinctInput;
+    UserPost_DistinctInput: UserPost_DistinctInput;
     UserSettings_DistinctInput: UserSettings_DistinctInput;
     UserStats_DistinctInput: UserStats_DistinctInput;
     _AllModels: ResolverTypeWrapper<_AllModels>;
@@ -657,11 +1061,13 @@ export type ResolversTypes = {
     String: ResolverTypeWrapper<Scalars['String']['output']>;
     SortOrderWithNulls: SortOrderWithNulls;
     User_QueryOutput: ResolverTypeWrapper<User_QueryOutput>;
+    OrderByCount: OrderByCount;
     User_WhereInput: User_WhereInput;
     User_OrderByInput: User_OrderByInput;
     User_WhereUnfilteredUniqueInput: User_WhereUnfilteredUniqueInput;
     StringFilterInput: StringFilterInput;
     DateTimeFilterInput: DateTimeFilterInput;
+    User_WhereManyInput: User_WhereManyInput;
     User_CreateInput: User_CreateInput;
     User_UpdateInput: User_UpdateInput;
     User_UpsertInput: User_UpsertInput;
@@ -670,7 +1076,48 @@ export type ResolversTypes = {
     User_UpdateDataInput: User_UpdateDataInput;
     User_Without_UserSettings_CreateOrConnectInput: User_Without_UserSettings_CreateOrConnectInput;
     User_Without_UserSettings_CreateInput: User_Without_UserSettings_CreateInput;
+    User_Without_UserSettings_ConnectionManyInput: User_Without_UserSettings_ConnectionManyInput;
     User_Without_UserSettings_ConnectionInput: User_Without_UserSettings_ConnectionInput;
+    User_Without_UserPost_CreateOrConnectInput: User_Without_UserPost_CreateOrConnectInput;
+    User_Without_UserPost_CreateInput: User_Without_UserPost_CreateInput;
+    User_Without_UserPost_ConnectionManyInput: User_Without_UserPost_ConnectionManyInput;
+    User_Without_UserPost_ConnectionInput: User_Without_UserPost_ConnectionInput;
+    User_Without_Region_CreateOrConnectInput: User_Without_Region_CreateOrConnectInput;
+    User_Without_Region_CreateInput: User_Without_Region_CreateInput;
+    User_Without_Region_ConnectionManyInput: User_Without_Region_ConnectionManyInput;
+    User_Without_Region_ConnectionInput: User_Without_Region_ConnectionInput;
+    Region: ResolverTypeWrapper<Region>;
+    Region_QueryOutput: ResolverTypeWrapper<Region_QueryOutput>;
+    Region_WhereInput: Region_WhereInput;
+    Region_OrderByInput: Region_OrderByInput;
+    Region_WhereUnfilteredUniqueInput: Region_WhereUnfilteredUniqueInput;
+    Region_WhereManyInput: Region_WhereManyInput;
+    Region_CreateInput: Region_CreateInput;
+    Region_UpdateInput: Region_UpdateInput;
+    Region_UpsertInput: Region_UpsertInput;
+    Region_WhereRequiredProvidedUniqueInput: Region_WhereRequiredProvidedUniqueInput;
+    Region_CreateDataInput: Region_CreateDataInput;
+    Region_UpdateDataInput: Region_UpdateDataInput;
+    Region_Without_User_CreateOrConnectInput: Region_Without_User_CreateOrConnectInput;
+    Region_Without_User_CreateInput: Region_Without_User_CreateInput;
+    Region_Without_User_ConnectionManyInput: Region_Without_User_ConnectionManyInput;
+    Region_Without_User_ConnectionInput: Region_Without_User_ConnectionInput;
+    UserPost: ResolverTypeWrapper<UserPost>;
+    UserPost_QueryOutput: ResolverTypeWrapper<UserPost_QueryOutput>;
+    UserPost_WhereInput: UserPost_WhereInput;
+    UserPost_OrderByInput: UserPost_OrderByInput;
+    UserPost_WhereUnfilteredUniqueInput: UserPost_WhereUnfilteredUniqueInput;
+    UserPost_WhereManyInput: UserPost_WhereManyInput;
+    UserPost_CreateInput: UserPost_CreateInput;
+    UserPost_UpdateInput: UserPost_UpdateInput;
+    UserPost_UpsertInput: UserPost_UpsertInput;
+    UserPost_WhereRequiredProvidedUniqueInput: UserPost_WhereRequiredProvidedUniqueInput;
+    UserPost_CreateDataInput: UserPost_CreateDataInput;
+    UserPost_UpdateDataInput: UserPost_UpdateDataInput;
+    UserPost_Without_User_CreateOrConnectInput: UserPost_Without_User_CreateOrConnectInput;
+    UserPost_Without_User_CreateInput: UserPost_Without_User_CreateInput;
+    UserPost_Without_User_ConnectionManyInput: UserPost_Without_User_ConnectionManyInput;
+    UserPost_Without_User_ConnectionInput: UserPost_Without_User_ConnectionInput;
     UserSettings: ResolverTypeWrapper<UserSettings>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
     UserSettings_QueryOutput: ResolverTypeWrapper<UserSettings_QueryOutput>;
@@ -678,6 +1125,7 @@ export type ResolversTypes = {
     UserSettings_OrderByInput: UserSettings_OrderByInput;
     UserSettings_WhereUnfilteredUniqueInput: UserSettings_WhereUnfilteredUniqueInput;
     BooleanFilterInput: BooleanFilterInput;
+    UserSettings_WhereManyInput: UserSettings_WhereManyInput;
     UserSettings_CreateInput: UserSettings_CreateInput;
     UserSettings_UpdateInput: UserSettings_UpdateInput;
     UserSettings_UpsertInput: UserSettings_UpsertInput;
@@ -686,9 +1134,11 @@ export type ResolversTypes = {
     UserSettings_UpdateDataInput: UserSettings_UpdateDataInput;
     UserSettings_Without_UserStats_CreateOrConnectInput: UserSettings_Without_UserStats_CreateOrConnectInput;
     UserSettings_Without_UserStats_CreateInput: UserSettings_Without_UserStats_CreateInput;
+    UserSettings_Without_UserStats_ConnectionManyInput: UserSettings_Without_UserStats_ConnectionManyInput;
     UserSettings_Without_UserStats_ConnectionInput: UserSettings_Without_UserStats_ConnectionInput;
     UserSettings_Without_User_CreateOrConnectInput: UserSettings_Without_User_CreateOrConnectInput;
     UserSettings_Without_User_CreateInput: UserSettings_Without_User_CreateInput;
+    UserSettings_Without_User_ConnectionManyInput: UserSettings_Without_User_ConnectionManyInput;
     UserSettings_Without_User_ConnectionInput: UserSettings_Without_User_ConnectionInput;
     UserStats: ResolverTypeWrapper<UserStats>;
     UserStats_QueryOutput: ResolverTypeWrapper<UserStats_QueryOutput>;
@@ -696,6 +1146,7 @@ export type ResolversTypes = {
     UserStats_OrderByInput: UserStats_OrderByInput;
     UserStats_WhereUnfilteredUniqueInput: UserStats_WhereUnfilteredUniqueInput;
     IntFilterInput: IntFilterInput;
+    UserStats_WhereManyInput: UserStats_WhereManyInput;
     UserStats_CreateInput: UserStats_CreateInput;
     UserStats_UpdateInput: UserStats_UpdateInput;
     UserStats_UpsertInput: UserStats_UpsertInput;
@@ -704,6 +1155,7 @@ export type ResolversTypes = {
     UserStats_UpdateDataInput: UserStats_UpdateDataInput;
     UserStats_Without_UserSettings_CreateOrConnectInput: UserStats_Without_UserSettings_CreateOrConnectInput;
     UserStats_Without_UserSettings_CreateInput: UserStats_Without_UserSettings_CreateInput;
+    UserStats_Without_UserSettings_ConnectionManyInput: UserStats_Without_UserSettings_ConnectionManyInput;
     UserStats_Without_UserSettings_ConnectionInput: UserStats_Without_UserSettings_ConnectionInput;
 };
 
@@ -718,11 +1170,13 @@ export type ResolversParentTypes = {
     String: Scalars['String']['output'];
     SortOrderWithNulls: SortOrderWithNulls;
     User_QueryOutput: User_QueryOutput;
+    OrderByCount: OrderByCount;
     User_WhereInput: User_WhereInput;
     User_OrderByInput: User_OrderByInput;
     User_WhereUnfilteredUniqueInput: User_WhereUnfilteredUniqueInput;
     StringFilterInput: StringFilterInput;
     DateTimeFilterInput: DateTimeFilterInput;
+    User_WhereManyInput: User_WhereManyInput;
     User_CreateInput: User_CreateInput;
     User_UpdateInput: User_UpdateInput;
     User_UpsertInput: User_UpsertInput;
@@ -731,7 +1185,48 @@ export type ResolversParentTypes = {
     User_UpdateDataInput: User_UpdateDataInput;
     User_Without_UserSettings_CreateOrConnectInput: User_Without_UserSettings_CreateOrConnectInput;
     User_Without_UserSettings_CreateInput: User_Without_UserSettings_CreateInput;
+    User_Without_UserSettings_ConnectionManyInput: User_Without_UserSettings_ConnectionManyInput;
     User_Without_UserSettings_ConnectionInput: User_Without_UserSettings_ConnectionInput;
+    User_Without_UserPost_CreateOrConnectInput: User_Without_UserPost_CreateOrConnectInput;
+    User_Without_UserPost_CreateInput: User_Without_UserPost_CreateInput;
+    User_Without_UserPost_ConnectionManyInput: User_Without_UserPost_ConnectionManyInput;
+    User_Without_UserPost_ConnectionInput: User_Without_UserPost_ConnectionInput;
+    User_Without_Region_CreateOrConnectInput: User_Without_Region_CreateOrConnectInput;
+    User_Without_Region_CreateInput: User_Without_Region_CreateInput;
+    User_Without_Region_ConnectionManyInput: User_Without_Region_ConnectionManyInput;
+    User_Without_Region_ConnectionInput: User_Without_Region_ConnectionInput;
+    Region: Region;
+    Region_QueryOutput: Region_QueryOutput;
+    Region_WhereInput: Region_WhereInput;
+    Region_OrderByInput: Region_OrderByInput;
+    Region_WhereUnfilteredUniqueInput: Region_WhereUnfilteredUniqueInput;
+    Region_WhereManyInput: Region_WhereManyInput;
+    Region_CreateInput: Region_CreateInput;
+    Region_UpdateInput: Region_UpdateInput;
+    Region_UpsertInput: Region_UpsertInput;
+    Region_WhereRequiredProvidedUniqueInput: Region_WhereRequiredProvidedUniqueInput;
+    Region_CreateDataInput: Region_CreateDataInput;
+    Region_UpdateDataInput: Region_UpdateDataInput;
+    Region_Without_User_CreateOrConnectInput: Region_Without_User_CreateOrConnectInput;
+    Region_Without_User_CreateInput: Region_Without_User_CreateInput;
+    Region_Without_User_ConnectionManyInput: Region_Without_User_ConnectionManyInput;
+    Region_Without_User_ConnectionInput: Region_Without_User_ConnectionInput;
+    UserPost: UserPost;
+    UserPost_QueryOutput: UserPost_QueryOutput;
+    UserPost_WhereInput: UserPost_WhereInput;
+    UserPost_OrderByInput: UserPost_OrderByInput;
+    UserPost_WhereUnfilteredUniqueInput: UserPost_WhereUnfilteredUniqueInput;
+    UserPost_WhereManyInput: UserPost_WhereManyInput;
+    UserPost_CreateInput: UserPost_CreateInput;
+    UserPost_UpdateInput: UserPost_UpdateInput;
+    UserPost_UpsertInput: UserPost_UpsertInput;
+    UserPost_WhereRequiredProvidedUniqueInput: UserPost_WhereRequiredProvidedUniqueInput;
+    UserPost_CreateDataInput: UserPost_CreateDataInput;
+    UserPost_UpdateDataInput: UserPost_UpdateDataInput;
+    UserPost_Without_User_CreateOrConnectInput: UserPost_Without_User_CreateOrConnectInput;
+    UserPost_Without_User_CreateInput: UserPost_Without_User_CreateInput;
+    UserPost_Without_User_ConnectionManyInput: UserPost_Without_User_ConnectionManyInput;
+    UserPost_Without_User_ConnectionInput: UserPost_Without_User_ConnectionInput;
     UserSettings: UserSettings;
     Boolean: Scalars['Boolean']['output'];
     UserSettings_QueryOutput: UserSettings_QueryOutput;
@@ -739,6 +1234,7 @@ export type ResolversParentTypes = {
     UserSettings_OrderByInput: UserSettings_OrderByInput;
     UserSettings_WhereUnfilteredUniqueInput: UserSettings_WhereUnfilteredUniqueInput;
     BooleanFilterInput: BooleanFilterInput;
+    UserSettings_WhereManyInput: UserSettings_WhereManyInput;
     UserSettings_CreateInput: UserSettings_CreateInput;
     UserSettings_UpdateInput: UserSettings_UpdateInput;
     UserSettings_UpsertInput: UserSettings_UpsertInput;
@@ -747,9 +1243,11 @@ export type ResolversParentTypes = {
     UserSettings_UpdateDataInput: UserSettings_UpdateDataInput;
     UserSettings_Without_UserStats_CreateOrConnectInput: UserSettings_Without_UserStats_CreateOrConnectInput;
     UserSettings_Without_UserStats_CreateInput: UserSettings_Without_UserStats_CreateInput;
+    UserSettings_Without_UserStats_ConnectionManyInput: UserSettings_Without_UserStats_ConnectionManyInput;
     UserSettings_Without_UserStats_ConnectionInput: UserSettings_Without_UserStats_ConnectionInput;
     UserSettings_Without_User_CreateOrConnectInput: UserSettings_Without_User_CreateOrConnectInput;
     UserSettings_Without_User_CreateInput: UserSettings_Without_User_CreateInput;
+    UserSettings_Without_User_ConnectionManyInput: UserSettings_Without_User_ConnectionManyInput;
     UserSettings_Without_User_ConnectionInput: UserSettings_Without_User_ConnectionInput;
     UserStats: UserStats;
     UserStats_QueryOutput: UserStats_QueryOutput;
@@ -757,6 +1255,7 @@ export type ResolversParentTypes = {
     UserStats_OrderByInput: UserStats_OrderByInput;
     UserStats_WhereUnfilteredUniqueInput: UserStats_WhereUnfilteredUniqueInput;
     IntFilterInput: IntFilterInput;
+    UserStats_WhereManyInput: UserStats_WhereManyInput;
     UserStats_CreateInput: UserStats_CreateInput;
     UserStats_UpdateInput: UserStats_UpdateInput;
     UserStats_UpsertInput: UserStats_UpsertInput;
@@ -765,6 +1264,7 @@ export type ResolversParentTypes = {
     UserStats_UpdateDataInput: UserStats_UpdateDataInput;
     UserStats_Without_UserSettings_CreateOrConnectInput: UserStats_Without_UserSettings_CreateOrConnectInput;
     UserStats_Without_UserSettings_CreateInput: UserStats_Without_UserSettings_CreateInput;
+    UserStats_Without_UserSettings_ConnectionManyInput: UserStats_Without_UserSettings_ConnectionManyInput;
     UserStats_Without_UserSettings_ConnectionInput: UserStats_Without_UserSettings_ConnectionInput;
 };
 
@@ -777,6 +1277,18 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         Partial<Mutation_UsersArgs>
+    >;
+    Regions?: Resolver<
+        ResolversTypes['Region_QueryOutput'],
+        ParentType,
+        ContextType,
+        Partial<Mutation_RegionsArgs>
+    >;
+    UserPosts?: Resolver<
+        ResolversTypes['UserPost_QueryOutput'],
+        ParentType,
+        ContextType,
+        Partial<Mutation_UserPostsArgs>
     >;
     UserSettings?: Resolver<
         ResolversTypes['UserSettings_QueryOutput'],
@@ -800,19 +1312,31 @@ export type QueryResolvers<
         ResolversTypes['User_QueryOutput'],
         ParentType,
         ContextType,
-        RequireFields<Query_UsersArgs, 'where'>
+        Partial<Query_UsersArgs>
+    >;
+    Regions?: Resolver<
+        ResolversTypes['Region_QueryOutput'],
+        ParentType,
+        ContextType,
+        Partial<Query_RegionsArgs>
+    >;
+    UserPosts?: Resolver<
+        ResolversTypes['UserPost_QueryOutput'],
+        ParentType,
+        ContextType,
+        Partial<Query_UserPostsArgs>
     >;
     UserSettings?: Resolver<
         ResolversTypes['UserSettings_QueryOutput'],
         ParentType,
         ContextType,
-        RequireFields<Query_UserSettingsArgs, 'where'>
+        Partial<Query_UserSettingsArgs>
     >;
     UserStats?: Resolver<
         ResolversTypes['UserStats_QueryOutput'],
         ParentType,
         ContextType,
-        RequireFields<Query_UserStatsArgs, 'where'>
+        Partial<Query_UserStatsArgs>
     >;
 };
 
@@ -826,6 +1350,8 @@ export type _AllModelsResolvers<
     ParentType extends ResolversParentTypes['_AllModels'] = ResolversParentTypes['_AllModels'],
 > = {
     User?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+    Region?: Resolver<Maybe<ResolversTypes['Region']>, ParentType, ContextType>;
+    UserPost?: Resolver<Maybe<ResolversTypes['UserPost']>, ParentType, ContextType>;
     UserSettings?: Resolver<Maybe<ResolversTypes['UserSettings']>, ParentType, ContextType>;
     UserStats?: Resolver<Maybe<ResolversTypes['UserStats']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -839,12 +1365,13 @@ export type UserResolvers<
     createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
     updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
     email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-    password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     settings?: Resolver<Maybe<ResolversTypes['UserSettings']>, ParentType, ContextType>;
+    posts?: Resolver<ReadonlyArray<Maybe<ResolversTypes['UserPost']>>, ParentType, ContextType>;
+    regions?: Resolver<ReadonlyArray<Maybe<ResolversTypes['Region']>>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -855,6 +1382,50 @@ export type User_QueryOutputResolvers<
 > = {
     total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
     items?: Resolver<ReadonlyArray<ResolversTypes['User']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RegionResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['Region'] = ResolversParentTypes['Region'],
+> = {
+    createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+    updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+    regionName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    users?: Resolver<ReadonlyArray<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Region_QueryOutputResolvers<
+    ContextType = any,
+    ParentType extends
+        ResolversParentTypes['Region_QueryOutput'] = ResolversParentTypes['Region_QueryOutput'],
+> = {
+    total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    items?: Resolver<ReadonlyArray<ResolversTypes['Region']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserPostResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['UserPost'] = ResolversParentTypes['UserPost'],
+> = {
+    id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+    updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+    title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    body?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserPost_QueryOutputResolvers<
+    ContextType = any,
+    ParentType extends
+        ResolversParentTypes['UserPost_QueryOutput'] = ResolversParentTypes['UserPost_QueryOutput'],
+> = {
+    total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    items?: Resolver<ReadonlyArray<ResolversTypes['UserPost']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -913,6 +1484,10 @@ export type Resolvers<ContextType = any> = {
     _AllModels?: _AllModelsResolvers<ContextType>;
     User?: UserResolvers<ContextType>;
     User_QueryOutput?: User_QueryOutputResolvers<ContextType>;
+    Region?: RegionResolvers<ContextType>;
+    Region_QueryOutput?: Region_QueryOutputResolvers<ContextType>;
+    UserPost?: UserPostResolvers<ContextType>;
+    UserPost_QueryOutput?: UserPost_QueryOutputResolvers<ContextType>;
     UserSettings?: UserSettingsResolvers<ContextType>;
     UserSettings_QueryOutput?: UserSettings_QueryOutputResolvers<ContextType>;
     UserStats?: UserStatsResolvers<ContextType>;
@@ -930,6 +1505,22 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 upsert: 'User_UpsertInput',
             },
             output: 'User_QueryOutput!',
+        },
+        Regions: {
+            args: {
+                create: 'Region_CreateInput',
+                update: 'Region_UpdateInput',
+                upsert: 'Region_UpsertInput',
+            },
+            output: 'Region_QueryOutput!',
+        },
+        UserPosts: {
+            args: {
+                create: 'UserPost_CreateInput',
+                update: 'UserPost_UpdateInput',
+                upsert: 'UserPost_UpsertInput',
+            },
+            output: 'UserPost_QueryOutput!',
         },
         UserSettings: {
             args: {
@@ -951,7 +1542,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
     Query: {
         Users: {
             args: {
-                where: 'User_WhereInput!',
+                where: 'User_WhereInput',
                 orderBy: '[User_OrderByInput!]',
                 cursor: 'User_WhereUnfilteredUniqueInput',
                 distinct: '[User_DistinctInput!]',
@@ -960,9 +1551,31 @@ export const operationParams: Readonly<SchemaOperationParams> = {
             },
             output: 'User_QueryOutput!',
         },
+        Regions: {
+            args: {
+                where: 'Region_WhereInput',
+                orderBy: '[Region_OrderByInput!]',
+                cursor: 'Region_WhereUnfilteredUniqueInput',
+                distinct: '[Region_DistinctInput!]',
+                take: 'Int',
+                skip: 'Int',
+            },
+            output: 'Region_QueryOutput!',
+        },
+        UserPosts: {
+            args: {
+                where: 'UserPost_WhereInput',
+                orderBy: '[UserPost_OrderByInput!]',
+                cursor: 'UserPost_WhereUnfilteredUniqueInput',
+                distinct: '[UserPost_DistinctInput!]',
+                take: 'Int',
+                skip: 'Int',
+            },
+            output: 'UserPost_QueryOutput!',
+        },
         UserSettings: {
             args: {
-                where: 'UserSettings_WhereInput!',
+                where: 'UserSettings_WhereInput',
                 orderBy: '[UserSettings_OrderByInput!]',
                 cursor: 'UserSettings_WhereUnfilteredUniqueInput',
                 distinct: '[UserSettings_DistinctInput!]',
@@ -973,7 +1586,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
         },
         UserStats: {
             args: {
-                where: 'UserStats_WhereInput!',
+                where: 'UserStats_WhereInput',
                 orderBy: '[UserStats_OrderByInput!]',
                 cursor: 'UserStats_WhereUnfilteredUniqueInput',
                 distinct: '[UserStats_DistinctInput!]',

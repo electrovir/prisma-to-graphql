@@ -15,6 +15,19 @@ const sortOrderBlock: GraphqlBlockByType<'enum'> = {
     ],
 };
 
+const orderByCountBlock: GraphqlBlockByType<'input'> = {
+    type: 'input',
+    name: 'OrderByCount',
+    props: [
+        {
+            type: 'property',
+            name: '_count',
+            value: sortOrderBlock.name,
+            required: false,
+        },
+    ],
+};
+
 const nullsOrderBlock: GraphqlBlockByType<'enum'> = {
     type: 'enum',
     name: 'NullsOrder',
@@ -43,6 +56,48 @@ const sortOrderWithNullsBlock: GraphqlBlockByType<'input'> = {
         },
     ],
 };
+
+/**
+ * Creates a `where` block used for querying an array relation.
+ *
+ * @category Prisma Generator
+ */
+export function createWhereManyInputBlock(
+    prismaModel: Readonly<PrismaModel>,
+): GraphqlBlockByType<'input'> {
+    const whereInputName = createResolverInputName({
+        modelName: prismaModel.modelName,
+        inputName: 'where',
+    });
+
+    return {
+        type: 'input',
+        name: createResolverInputName({
+            modelName: prismaModel.modelName,
+            inputName: 'whereMany',
+        }),
+        props: [
+            {
+                type: 'property',
+                name: 'every',
+                value: whereInputName,
+                required: false,
+            },
+            {
+                type: 'property',
+                name: 'none',
+                value: whereInputName,
+                required: false,
+            },
+            {
+                type: 'property',
+                name: 'some',
+                value: whereInputName,
+                required: false,
+            },
+        ],
+    };
+}
 
 /**
  * Creates a `where` GraphQL input block that matches Prisma's expected `where` inputs.
@@ -86,7 +141,17 @@ export function createWhereInputBlock(
                         return undefined;
                     }
 
-                    if (field.relationName) {
+                    if (field.isList) {
+                        return {
+                            type: 'property',
+                            name: field.name,
+                            value: createResolverInputName({
+                                modelName: field.type,
+                                inputName: 'whereMany',
+                            }),
+                            required: false,
+                        };
+                    } else if (field.relationName) {
                         return {
                             type: 'property',
                             name: field.name,
@@ -128,8 +193,14 @@ function createQueryInputBlocks(prismaModel: Readonly<PrismaModel>) {
             (field): GraphqlBlockByType<'property'> | undefined => {
                 if (field.hideIn?.inputs) {
                     return undefined;
-                }
-                if (field.relationName) {
+                } else if (field.isList) {
+                    return {
+                        type: 'property',
+                        name: field.name,
+                        value: orderByCountBlock.name,
+                        required: false,
+                    };
+                } else if (field.relationName) {
                     return {
                         type: 'property',
                         name: field.name,
@@ -223,9 +294,17 @@ export function createWhereUnfilteredUniqueInputBlock(
                 (field): GraphqlBlockByType<'property'> | undefined => {
                     if (field.hideIn?.inputs) {
                         return undefined;
-                    }
-
-                    if (field.relationName) {
+                    } else if (field.isList) {
+                        return {
+                            type: 'property',
+                            name: field.name,
+                            value: createResolverInputName({
+                                modelName: field.type,
+                                inputName: 'whereMany',
+                            }),
+                            required: false,
+                        };
+                    } else if (field.relationName) {
                         return {
                             type: 'property',
                             name: field.name,
@@ -378,8 +457,10 @@ export const modelFindManyOperation: ResolverGenerator = {
                 sortOrderWithNullsBlock,
                 nullsOrderBlock,
                 outputTypeBlock,
+                orderByCountBlock,
                 ...Object.values(queryInputBlocks),
                 ...propFiltersNeeded,
+                createWhereManyInputBlock(prismaModel),
             ],
             resolvers: [
                 {

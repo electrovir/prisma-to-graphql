@@ -63,6 +63,10 @@ type User_QueryOutput {
     items: [User!]!
 }
 
+input OrderByCount {
+    _count: SortOrder
+}
+
 input User_WhereInput {
     AND: [User_WhereInput!]
     OR: [User_WhereInput!]
@@ -116,6 +120,12 @@ input DateTimeFilterInput {
     gt: DateTime
     gte: DateTime
     not: DateTimeFilterInput
+}
+
+input User_WhereManyInput {
+    every: User_WhereInput
+    none: User_WhereInput
+    some: User_WhereInput
 }
 
 input User_CreateInput {

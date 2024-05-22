@@ -92,6 +92,10 @@ type User_QueryOutput {
     items: [User!]!
 }
 
+input OrderByCount {
+    _count: SortOrder
+}
+
 input User_WhereInput {
     AND: [User_WhereInput!]
     OR: [User_WhereInput!]
@@ -157,6 +161,12 @@ input DateTimeFilterInput {
     gt: DateTime
     gte: DateTime
     not: DateTimeFilterInput
+}
+
+input User_WhereManyInput {
+    every: User_WhereInput
+    none: User_WhereInput
+    some: User_WhereInput
 }
 
 input User_CreateInput {
@@ -248,6 +258,12 @@ input Company_WhereUnfilteredUniqueInput {
     createdAt: DateTimeFilterInput
     updatedAt: DateTimeFilterInput
     name: StringFilterInput
+}
+
+input Company_WhereManyInput {
+    every: Company_WhereInput
+    none: Company_WhereInput
+    some: Company_WhereInput
 }
 
 input Company_CreateInput {

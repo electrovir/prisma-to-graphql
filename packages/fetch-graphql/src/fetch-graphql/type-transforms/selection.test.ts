@@ -1,4 +1,4 @@
-import {PartialAndUndefined} from '@augment-vir/common';
+import {PartialAndUndefined, RequiredAndNotNull} from '@augment-vir/common';
 import {createMockVir} from 'mock-vir';
 import {assertTypeOf} from 'run-time-assertions';
 import {Maybe, Resolvers} from '../../my-generated-schema-outputs';
@@ -182,7 +182,6 @@ describe('AvailableSelectionSet', () => {
                             id: boolean;
                             createdAt: boolean;
                             email: boolean;
-                            password: boolean;
                             firstName: boolean;
                             lastName: boolean;
                             phoneNumber: boolean;
@@ -196,10 +195,33 @@ describe('AvailableSelectionSet', () => {
                                 >['settings']
                             >;
                             updatedAt: boolean;
+                            regions: Readonly<
+                                NonNullable<
+                                    AvailableSelectionSet<
+                                        ResolverOutput<Resolvers, 'Query', 'Users'>,
+                                        true
+                                    >['items']
+                                >['regions']
+                            >;
+                            posts: Readonly<
+                                NonNullable<
+                                    AvailableSelectionSet<
+                                        ResolverOutput<Resolvers, 'Query', 'Users'>,
+                                        true
+                                    >['items']
+                                >['posts']
+                            >;
                         }>
                     >;
                 }>
             >
         >();
+
+        type doesNotHavePassword = keyof RequiredAndNotNull<
+            NonNullable<
+                AvailableSelectionSet<ResolverOutput<Resolvers, 'Query', 'Users'>, true>['items']
+            >
+            // @ts-expect-error: this should not have a password key
+        >['password'];
     });
 });

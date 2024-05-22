@@ -19,5 +19,6 @@ export const typeDocConfig: Partial<TypeDocOptions> = {
         'Main',
         'Types',
         'Operations',
+        'Internals',
     ],
 };

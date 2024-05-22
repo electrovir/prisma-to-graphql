@@ -14,6 +14,7 @@ import {
     omitObjectKeys,
     waitUntilTruthy,
 } from '@augment-vir/common';
+import {log} from '@augment-vir/node-js';
 import {
     GraphqlFetcher,
     ResolverOutput,
@@ -30,6 +31,11 @@ import {setupFullServer} from './full-run-time.test-helper';
 
 type GraphqlTestCase = {
     it: string;
+    /**
+     * Do not support `only` or `force` as each test is sequential and depends on the results of the
+     * previous tests.
+     */
+    // only?: true;
     test: (params: {
         serverUrl: string;
         fetchGraphql: GraphqlFetcher<Resolvers>;
@@ -1384,6 +1390,266 @@ const testCases: GraphqlTestCase[] = [
             );
         },
     },
+    {
+        it: 'allows querying by a many field',
+        async test({serverUrl, fetchGraphql}) {
+            const uniquePostUsers = await fetchGraphql(
+                {
+                    operationName: 'many field where',
+                    operationType: 'Query',
+                    url: joinUrlParts(serverUrl, 'graphql'),
+                },
+                {
+                    Users: {
+                        args: {
+                            where: {
+                                posts: {
+                                    some: {
+                                        title: {
+                                            contains: 'unique',
+                                        },
+                                    },
+                                },
+                            },
+                            orderBy: [
+                                {
+                                    firstName: {
+                                        sort: 'asc',
+                                    },
+                                },
+                            ],
+                        },
+                        select: {
+                            items: {
+                                firstName: true,
+                                lastName: true,
+                                posts: {
+                                    title: true,
+                                    body: true,
+                                },
+                            },
+                            total: true,
+                        },
+                    },
+                },
+            );
+
+            assert.deepStrictEqual(uniquePostUsers, {
+                Users: {
+                    total: 2,
+                    items: [
+                        {
+                            firstName: 'Derp',
+                            lastName: 'Doo',
+                            posts: [
+                                {
+                                    body: 'this is my post',
+                                    title: 'this is my title',
+                                },
+                                {
+                                    body: 'this is my post 2',
+                                    title: 'this is my title 2',
+                                },
+                                {
+                                    body: 'this is my post 3',
+                                    title: 'this is my title 3',
+                                },
+                                {
+                                    body: 'this is my post 4',
+                                    title: 'unique title name',
+                                },
+                            ],
+                        },
+                        {
+                            firstName: 'No',
+                            lastName: 'Settings',
+                            posts: [
+                                {
+                                    body: 'this is my post',
+                                    title: 'this is my title',
+                                },
+                                {
+                                    body: 'this is my post 2',
+                                    title: 'this is my title 2',
+                                },
+                                {
+                                    body: 'this is my post 3',
+                                    title: 'this is my title 3',
+                                },
+                                {
+                                    body: 'this is my post 4',
+                                    title: 'unique title name',
+                                },
+                            ],
+                        },
+                    ],
+                },
+            });
+        },
+    },
+    {
+        it: 'supports operation scope by a many field',
+        async test({serverUrl, fetchGraphql}) {
+            const uniquePostUsers = await fetchGraphql(
+                {
+                    operationName: 'scoped many where',
+                    operationType: 'Query',
+                    url: joinUrlParts(serverUrl, 'graphql'),
+                    options: {
+                        fetchOptions: {
+                            headers: {
+                                [graphqlServerHeaders.setOperationScope]: JSON.stringify({
+                                    where: {
+                                        UserPost: {
+                                            title: {
+                                                contains: 'unique',
+                                            },
+                                        },
+                                    },
+                                }),
+                            },
+                        },
+                    },
+                },
+                {
+                    Users: {
+                        args: {
+                            orderBy: [
+                                {
+                                    firstName: {
+                                        sort: 'asc',
+                                    },
+                                },
+                            ],
+                        },
+                        select: {
+                            items: {
+                                firstName: true,
+                                lastName: true,
+                                posts: {
+                                    title: true,
+                                    body: true,
+                                },
+                            },
+                            total: true,
+                        },
+                    },
+                },
+            );
+
+            assert.deepStrictEqual(uniquePostUsers, {
+                Users: {
+                    total: 2,
+                    items: [
+                        {
+                            firstName: 'Derp',
+                            lastName: 'Doo',
+                            posts: [
+                                {
+                                    body: 'this is my post 4',
+                                    title: 'unique title name',
+                                },
+                            ],
+                        },
+                        {
+                            firstName: 'No',
+                            lastName: 'Settings',
+                            posts: [
+                                {
+                                    body: 'this is my post 4',
+                                    title: 'unique title name',
+                                },
+                            ],
+                        },
+                    ],
+                },
+            });
+        },
+    },
+    {
+        it: 'scopes deeply nested operations',
+        async test({serverUrl, fetchGraphql}) {
+            const uniquePostUsers = await fetchGraphql(
+                {
+                    operationName: 'nested scope',
+                    operationType: 'Query',
+                    url: joinUrlParts(serverUrl, 'graphql'),
+                    options: {
+                        fetchOptions: {
+                            headers: {
+                                [graphqlServerHeaders.setOperationScope]: JSON.stringify({
+                                    where: {
+                                        User: {
+                                            firstName: {equals: 'Zebra'},
+                                        },
+                                    },
+                                }),
+                            },
+                        },
+                    },
+                },
+                {
+                    Users: {
+                        args: {
+                            orderBy: [
+                                {
+                                    firstName: {
+                                        sort: 'asc',
+                                    },
+                                },
+                            ],
+                        },
+                        select: {
+                            items: {
+                                firstName: true,
+                                lastName: true,
+                                regions: {
+                                    regionName: true,
+                                    users: {
+                                        firstName: true,
+                                        lastName: true,
+                                    },
+                                },
+                            },
+                            total: true,
+                        },
+                    },
+                },
+            );
+
+            assert.deepStrictEqual(uniquePostUsers, {
+                Users: {
+                    total: 1,
+                    items: [
+                        {
+                            firstName: 'Zebra',
+                            lastName: 'Proton',
+                            regions: [
+                                {
+                                    regionName: 'USA',
+                                    users: [
+                                        {
+                                            firstName: 'Zebra',
+                                            lastName: 'Proton',
+                                        },
+                                    ],
+                                },
+                                {
+                                    regionName: 'West Coast',
+                                    users: [
+                                        {
+                                            firstName: 'Zebra',
+                                            lastName: 'Proton',
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            });
+        },
+    },
 ];
 
 async function runTests(testCases: ReadonlyArray<Readonly<GraphqlTestCase>>) {
@@ -1406,8 +1672,15 @@ async function runTests(testCases: ReadonlyArray<Readonly<GraphqlTestCase>>) {
 
         const fetchGraphql = createGraphqlFetcher<Resolvers>(operationParams);
 
+        const itNames = new Set<string>();
+
         await awaitedForEach(testCases, async (testCase) => {
+            if (itNames.has(testCase.it)) {
+                throw new Error(`Duplicate it name: '${testCase.it}'`);
+            }
+            itNames.add(testCase.it);
             try {
+                log.faint(testCase.it);
                 await testCase.test({
                     serverUrl,
                     fetchGraphql,

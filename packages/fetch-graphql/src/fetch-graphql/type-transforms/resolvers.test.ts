@@ -48,10 +48,10 @@ describe('ResolverInputs', () => {
 describe('AvailableResolverNames', () => {
     it('has correct types', () => {
         assertTypeOf<AvailableResolverNames<Resolvers, 'Mutation'>>().toEqualTypeOf<
-            'Users' | 'UserSettings' | 'UserStats'
+            'Users' | 'UserSettings' | 'UserStats' | 'Regions' | 'UserPosts'
         >();
         assertTypeOf<AvailableResolverNames<Resolvers, 'Query'>>().toEqualTypeOf<
-            'Users' | 'UserSettings' | 'UserStats'
+            'Users' | 'UserSettings' | 'UserStats' | 'Regions' | 'UserPosts'
         >();
     });
 

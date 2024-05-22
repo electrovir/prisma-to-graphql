@@ -8,7 +8,11 @@ import {GeneratedGraphql} from '../generated-graphql';
 import {GenerationOptions} from '../generation-options';
 import {PrismaField, PrismaModel} from '../model/prisma-model';
 import {ResolverGenerator} from '../resolver-generator';
-import {createOutputTypeBlock, createWhereInputBlock} from './model-find-many-resolver';
+import {
+    createOutputTypeBlock,
+    createWhereInputBlock,
+    createWhereManyInputBlock,
+} from './model-find-many-resolver';
 import {createResolverInputName, createWithoutRelationInputName} from './model-resolver-io';
 
 function isFieldRequired(field: Readonly<PrismaField>): boolean {
@@ -482,6 +486,7 @@ export const modelMutationOperation: ResolverGenerator = {
             topLevelNamedGraphqlBlocks: [
                 ...Object.values(argBlocks).flat(),
                 ...createNestedCreateInputBlocks(prismaModel),
+                createWhereManyInputBlock(prismaModel),
             ],
             resolvers: [
                 {
