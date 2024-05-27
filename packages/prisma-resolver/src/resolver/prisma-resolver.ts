@@ -1,6 +1,6 @@
 import {TypedFunction} from '@augment-vir/common';
 import {assertDefined} from 'run-time-assertions';
-import {OperationScope, ResolverContext} from '../operation-scope/resolver-context';
+import {ModelMap, OperationScope, ResolverContext} from '../operation-scope/resolver-context';
 import {Selection} from '../util/parse-selection';
 
 /**
@@ -15,8 +15,8 @@ export type PrismaResolverOutput = {total: number; items: unknown[]};
  *
  * @category Types
  */
-export type PrismaResolverInputs = {
-    context: ResolverContext;
+export type PrismaResolverInputs<PrismaClient, Models extends ModelMap> = {
+    context: ResolverContext<PrismaClient, Models>;
     prismaModelName: string;
     graphqlArgs: any;
     selection: Selection;
@@ -26,8 +26,8 @@ export type PrismaResolverInputs = {
  *
  * @category Types
  */
-export type PrismaResolver = TypedFunction<
-    Readonly<PrismaResolverInputs>,
+export type PrismaResolver<PrismaClient, Models extends ModelMap> = TypedFunction<
+    Readonly<PrismaResolverInputs<PrismaClient, Models>>,
     Promise<PrismaResolverOutput>
 >;
 
@@ -36,13 +36,15 @@ export type PrismaResolver = TypedFunction<
  *
  * @category Internals
  */
-export function extractResolverContext(context: any): ResolverContext {
+export function extractResolverContext<PrismaClient, Models extends ModelMap>(
+    context: any,
+): ResolverContext<PrismaClient, Models> {
     const prismaClient = context.prismaClient;
     assertDefined(prismaClient, "'prismaClient' is missing from context");
 
     return {
         prismaClient,
         models: context.models,
-        operationScope: context.operationScope as OperationScope,
+        operationScope: context.operationScope as OperationScope<Models>,
     };
 }

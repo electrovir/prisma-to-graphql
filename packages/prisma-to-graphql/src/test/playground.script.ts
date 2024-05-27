@@ -29,15 +29,17 @@ async function main(prismaClient: PrismaClient) {
     prismaClient.user.findMany({
         where: {
             firstName: 'Zebra',
+            lastName: {
+                contains: 'hi',
+            },
         },
         select: {
             regions: {
-                select: {
-                    users: {
-                        select: {
-                            firstName: true,
-                            lastName: true,
-                        },
+                where: {
+                    AND
+                    createdAt: {
+                        equals: new Date(),
+                        AND
                     },
                 },
             },

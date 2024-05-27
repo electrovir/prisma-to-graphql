@@ -21,7 +21,6 @@ import {
     createGraphqlFetcher,
     fetchRawGraphql,
 } from '@prisma-to-graphql/fetch-graphql';
-import {graphqlServerHeaders} from '@prisma-to-graphql/scripts/src/start-graphql-server';
 import {assert} from 'chai';
 import {createUtcFullDate} from 'date-vir';
 import {Server} from 'node:http';

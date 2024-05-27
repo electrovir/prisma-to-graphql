@@ -1,10 +1,10 @@
-import {createDeferredPromiseWrapper, parseJson} from '@augment-vir/common';
+import {createDeferredPromiseWrapper} from '@augment-vir/common';
 import {log} from '@augment-vir/node-js';
 import {Plugin, YogaInitialContext, createSchema, createYoga} from 'graphql-yoga';
 import {readFile} from 'node:fs/promises';
 import {RequestListener, createServer} from 'node:http';
 import {getPortPromise} from 'portfinder';
-import {OperationScope, ResolverContext} from './resolver-context';
+import {ModelMap, OperationScope, ResolverContext} from './resolver-context';
 
 export type GraphqlServerPlugin<PrismaClient> = Plugin<
     {
@@ -12,23 +12,20 @@ export type GraphqlServerPlugin<PrismaClient> = Plugin<
     } & YogaInitialContext
 >;
 
-export const graphqlServerHeaders = {
-    setOperationScope: 'set-operation-scope',
-    userId: 'user-id',
-};
-
-export async function runGraphqlServer<PrismaClient>({
+export async function runGraphqlServer<PrismaClient, Models extends ModelMap>({
     schemaGraphqlFilePath,
     resolversCjsFilePath,
     modelMapCjsFilePath,
     prismaClient,
     plugins,
+    createOperationScope,
 }: {
     schemaGraphqlFilePath: string;
     resolversCjsFilePath: string;
     modelMapCjsFilePath: string;
     prismaClient: PrismaClient;
     plugins?: GraphqlServerPlugin<PrismaClient>[];
+    createOperationScope?: ((request: Request) => OperationScope<Models> | undefined) | undefined;
 }) {
     const typeDefs = [
         (await readFile(schemaGraphqlFilePath)).toString(),
@@ -36,37 +33,18 @@ export async function runGraphqlServer<PrismaClient>({
     const {resolvers} = await import(resolversCjsFilePath);
     const {models} = await import(modelMapCjsFilePath);
 
-    const schema = createSchema<ResolverContext<PrismaClient>>({
+    const schema = createSchema<ResolverContext<PrismaClient, Models>>({
         typeDefs,
         resolvers,
     });
 
     const yogaServer = createYoga({
         schema,
-        context({request}): ResolverContext<PrismaClient> {
-            const userId = request.headers.get(graphqlServerHeaders.userId) || '';
-            const setOperationScope =
-                request.headers.get(graphqlServerHeaders.setOperationScope) || '';
-
-            const operationScope: OperationScope | undefined = userId
-                ? {
-                      where: {
-                          User: {
-                              id: {equals: userId},
-                          },
-                      },
-                  }
-                : parseJson({
-                      jsonString: setOperationScope,
-                      errorHandler() {
-                          return undefined;
-                      },
-                  });
-
-            const context: ResolverContext<PrismaClient> = {
+        context({request}): ResolverContext<PrismaClient, Models> {
+            const context: ResolverContext<PrismaClient, Models> = {
                 prismaClient,
                 models,
-                operationScope,
+                operationScope: createOperationScope?.(request),
             };
 
             return context;

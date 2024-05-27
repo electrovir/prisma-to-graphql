@@ -1,8 +1,13 @@
 /** Run this as a script for manual testing via `npm start`. */
 
+// @ts-ignore: this won't be generated until tests run at least once
+import type {models} from '.prisma/graphql/models';
+
+import {parseJson} from '@augment-vir/common';
 import {notCommittedDir, runGraphqlServer, setupTestPrismaDb} from '@prisma-to-graphql/scripts';
 import {rm} from 'node:fs/promises';
 import {join} from 'node:path';
+import {OperationScope} from '../../../scripts/src/resolver-context';
 import {packageDir} from '../util/file-paths';
 import {testFilesDir} from '../util/file-paths.test-helper';
 import {seedDatabase} from './seed-test-database.test-helper';
@@ -11,6 +16,11 @@ let setupCount = 0;
 
 const graphqlOutputDir = join(packageDir, 'node_modules', '.prisma', 'graphql');
 const prismaSchemaPath = join(testFilesDir, 'full-run-time', 'schema.prisma');
+
+export const graphqlServerHeaders = {
+    setOperationScope: 'set-operation-scope',
+    userId: 'user-id',
+};
 
 export async function setupFullServer() {
     setupCount++;
@@ -37,6 +47,35 @@ export async function setupFullServer() {
         schemaGraphqlFilePath: join(graphqlOutputDir, 'schema.graphql'),
         modelMapCjsFilePath: join(graphqlOutputDir, 'models.cjs'),
         prismaClient,
+        createOperationScope(request) {
+            const userId = request.headers.get(graphqlServerHeaders.userId) || '';
+            const setOperationScope =
+                request.headers.get(graphqlServerHeaders.setOperationScope) || '';
+
+            const operationScope: OperationScope<typeof models> | undefined = userId
+                ? {
+                      where: {
+                          User: {
+                              id: {
+                                  equals: userId,
+                              },
+                          },
+                      },
+                      //   where: {
+                      //       User: {
+                      //           id: {equals: userId},
+                      //       },
+                      //   },
+                  }
+                : parseJson({
+                      jsonString: setOperationScope,
+                      errorHandler() {
+                          return undefined;
+                      },
+                  });
+
+            return operationScope;
+        },
     });
 
     return {

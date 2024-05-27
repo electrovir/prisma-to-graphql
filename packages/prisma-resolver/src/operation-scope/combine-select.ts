@@ -1,7 +1,7 @@
 import {AnyObject, RequiredAndNotNullBy, isObject, mapObjectValues} from '@augment-vir/common';
 import {assertDefined, assertRunTimeType} from 'run-time-assertions';
+import {generatePrismaWhere} from './prisma-where';
 import {ModelMap, OperationScope} from './resolver-context';
-import {expandModelScope} from './where-scope';
 
 /**
  * Combines operation scope and Prisma selection into a Prisma selection with where clauses (to meet
@@ -9,12 +9,12 @@ import {expandModelScope} from './where-scope';
  *
  * @category Internals
  */
-export function combineSelect(
+export function combineSelect<const Models extends ModelMap>(
     /** The where provided by the query. */
     querySelect: unknown,
     modelUnderQuery: string,
-    models: Readonly<ModelMap> | undefined,
-    operationScope: Readonly<OperationScope> | undefined,
+    models: Readonly<Models> | undefined,
+    operationScope: Readonly<OperationScope<Models>> | undefined,
 ) {
     const whereScope = operationScope?.where;
 
@@ -36,11 +36,11 @@ export function combineSelect(
     return buildSelectRecursively(querySelect, modelUnderQuery, models, {where: whereScope});
 }
 
-function buildSelectRecursively(
+function buildSelectRecursively<const Models extends ModelMap>(
     querySelect: Record<string, any>,
     modelUnderQuery: string,
-    models: Readonly<ModelMap>,
-    operationScope: Readonly<RequiredAndNotNullBy<OperationScope, 'where'>>,
+    models: Readonly<Models>,
+    operationScope: Readonly<RequiredAndNotNullBy<OperationScope<Models>, 'where'>>,
 ): AnyObject {
     return mapObjectValues(querySelect, (fieldName, fieldSelection) => {
         const currentField = models?.[modelUnderQuery]?.[fieldName];
@@ -56,7 +56,7 @@ function buildSelectRecursively(
                 `relation field selection is not an object: '${modelUnderQuery} -> ${fieldName}'`,
             );
 
-            const expandedWhereScope = expandModelScope(
+            const expandedWhereScope = generatePrismaWhere(
                 currentField.type,
                 models,
                 operationScope.where,

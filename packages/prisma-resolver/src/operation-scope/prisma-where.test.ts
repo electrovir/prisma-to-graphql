@@ -1,9 +1,60 @@
 import {itCases} from '@augment-vir/chai';
+import {getNowInIsoString} from 'date-vir';
+import {assertTypeOf} from 'run-time-assertions';
 import {generatedModels} from './generated-models.mock';
-import {expandModelScope} from './where-scope';
+import {generatePrismaWhere, PrismaWhereField, SingleModelPrismaWhere} from './prisma-where';
 
-describe(expandModelScope.name, () => {
-    itCases(expandModelScope, [
+const nowIsoString = getNowInIsoString();
+
+describe('PrismaFieldWhere', () => {
+    it('supports list conditions', () => {
+        assertTypeOf({
+            some: {
+                body: {
+                    equals: 'hi',
+                },
+                updatedAt: {
+                    equals: nowIsoString,
+                },
+            },
+        } as const).toBeAssignableTo<PrismaWhereField<typeof generatedModels, 'User', 'posts'>>();
+    });
+
+    it('supports nested conditions', () => {
+        assertTypeOf({
+            some: {
+                body: {
+                    equals: 'hi',
+                },
+                updatedAt: {
+                    equals: nowIsoString,
+                },
+                user: {
+                    id: {
+                        equals: 'hi',
+                    },
+                },
+            },
+        } as const).toBeAssignableTo<PrismaWhereField<typeof generatedModels, 'User', 'posts'>>();
+    });
+});
+
+describe('SingleModelPrismaWhere', () => {
+    it('allows nested conditions', () => {
+        const kljfsdla: SingleModelPrismaWhere<typeof generatedModels, 'User'> = {
+            settings: {
+                stats: {
+                    likes: {
+                        equals: 1,
+                    },
+                },
+            },
+        };
+    });
+});
+
+describe(generatePrismaWhere.name, () => {
+    itCases(generatePrismaWhere<typeof generatedModels, 'User'>, [
         {
             it: 'generates nothing if there is no model scope',
             inputs: [
@@ -60,23 +111,6 @@ describe(expandModelScope.name, () => {
             },
         },
         {
-            it: 'fails on a field named AND',
-            inputs: [
-                'User',
-                {
-                    User: {
-                        AND: {
-                            isList: false,
-                            type: 'String',
-                            isRelation: true,
-                        },
-                    },
-                },
-                {},
-            ],
-            throws: Error,
-        },
-        {
             it: 'generates multiple wheres',
             inputs: [
                 'User',
@@ -125,15 +159,15 @@ describe(expandModelScope.name, () => {
                         id: {
                             equals: 'fake user id',
                         },
-                        settings: {
-                            id: {
-                                equals: 'fake settings id',
-                            },
-                        },
                     },
                     UserStats: {
                         likes: {
                             equals: 1,
+                        },
+                    },
+                    UserSettings: {
+                        id: {
+                            equals: 'fake settings id',
                         },
                     },
                 },
@@ -143,20 +177,14 @@ describe(expandModelScope.name, () => {
                     equals: 'fake user id',
                 },
                 settings: {
-                    AND: [
-                        {
-                            id: {
-                                equals: 'fake settings id',
-                            },
+                    id: {
+                        equals: 'fake settings id',
+                    },
+                    stats: {
+                        likes: {
+                            equals: 1,
                         },
-                        {
-                            stats: {
-                                likes: {
-                                    equals: 1,
-                                },
-                            },
-                        },
-                    ],
+                    },
                 },
             },
         },

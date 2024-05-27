@@ -15,7 +15,7 @@ import {
     OperationDefinitionNode,
     SelectionSetNode,
 } from 'graphql';
-import {ResolverContext} from '../operation-scope/resolver-context';
+import {ModelMap, ResolverContext} from '../operation-scope/resolver-context';
 import {parseItemSelection} from '../util/parse-selection';
 import {runPrismaMutationOperation} from './mutations/prisma-mutation-operation';
 import {
@@ -26,7 +26,7 @@ import {
 } from './prisma-resolver';
 import {runPrismaQueryOperations} from './queries/prisma-query-operation';
 
-const resolvers: Readonly<Record<OperationType, PrismaResolver>> = {
+const resolvers: Readonly<Record<OperationType, PrismaResolver<any, any>>> = {
     Mutation: runPrismaMutationOperation,
     Query: runPrismaQueryOperations,
 };
@@ -37,8 +37,8 @@ const resolvers: Readonly<Record<OperationType, PrismaResolver>> = {
  *
  * @category Main
  */
-export async function runPrismaResolver(
-    context: ResolverContext,
+export async function runPrismaResolver<PrismaClient, Models extends ModelMap>(
+    context: ResolverContext<PrismaClient, Models>,
     prismaModelName: string,
     graphqlArgs: any,
     resolveInfo: Readonly<Pick<GraphQLResolveInfo, 'fieldNodes' | 'fieldName' | 'operation'>>,
@@ -53,7 +53,7 @@ export async function runPrismaResolver(
 
         const resolver = resolvers[operationType];
 
-        const resolverInputs: Readonly<PrismaResolverInputs> = {
+        const resolverInputs: Readonly<PrismaResolverInputs<PrismaClient, Models>> = {
             graphqlArgs,
             context: extractResolverContext(context),
             prismaModelName,

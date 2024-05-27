@@ -1,7 +1,7 @@
 import {AnyObject} from '@augment-vir/common';
 import {UtcIsoString} from 'date-vir';
 import {assertTypeOf} from 'run-time-assertions';
-import {PrismaTypeMap} from './prisma-type-map';
+import {MapPrismaType, PrismaTypeMap} from './prisma-type-map';
 
 describe('PrismaTypeMap', () => {
     it('has proper type', () => {
@@ -19,7 +19,7 @@ describe('PrismaTypeMap', () => {
                 output: Buffer;
             };
             DateTime: {
-                input: string | Date;
+                input: UtcIsoString | Date;
                 output: UtcIsoString;
             };
             Decimal: {
@@ -55,5 +55,12 @@ describe('PrismaTypeMap', () => {
                 output: string;
             };
         }>();
+    });
+});
+
+describe('MapPrismaType', () => {
+    it('maps types properly', () => {
+        assertTypeOf<MapPrismaType<'String', 'input'>>().toEqualTypeOf<string>();
+        assertTypeOf<MapPrismaType<'DateTime', 'input'>>().toEqualTypeOf<UtcIsoString | Date>();
     });
 });
