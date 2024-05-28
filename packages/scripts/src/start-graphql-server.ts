@@ -4,7 +4,9 @@ import {Plugin, YogaInitialContext, createSchema, createYoga} from 'graphql-yoga
 import {readFile} from 'node:fs/promises';
 import {RequestListener, createServer} from 'node:http';
 import {getPortPromise} from 'portfinder';
-import {ModelMap, OperationScope, ResolverContext} from './resolver-context';
+import {ModelMap} from './operation-scope/model-map';
+import {OperationScope} from './operation-scope/operation-scope';
+import {ResolverContext} from './operation-scope/resolver-context';
 
 export type GraphqlServerPlugin<PrismaClient> = Plugin<
     {

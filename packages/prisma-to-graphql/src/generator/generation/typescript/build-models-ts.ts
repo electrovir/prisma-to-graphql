@@ -1,7 +1,7 @@
-import {hasKey, mapObjectValues, pickObjectKeys} from '@augment-vir/common';
+import {mapObjectValues, pickObjectKeys, typedArrayIncludes} from '@augment-vir/common';
+import {mappedPrismaTypes} from '@prisma-to-graphql/prisma-resolver';
 import JSON5 from 'json5';
 import {JsonObject} from 'type-fest';
-import {prismaTypeMapShape} from '../../../util/prisma-type-map';
 import {PrismaModel} from '../model/prisma-model';
 
 export function buildModelsTs(models: ReadonlyArray<Readonly<PrismaModel>>): string {
@@ -19,7 +19,7 @@ function buildModelJson(models: ReadonlyArray<Readonly<PrismaModel>>): JsonObjec
 
 function buildFieldsJson(modelName: string, fields: Readonly<PrismaModel['fields']>): JsonObject {
     return mapObjectValues(fields, (fieldName, field) => {
-        if (!field.isRelation && !hasKey(prismaTypeMapShape.defaultValue, field.type)) {
+        if (!field.isRelation && !typedArrayIncludes(mappedPrismaTypes, field.type)) {
             throw new Error(
                 `Model '${modelName}' has field '${field.name}' with type '${field.type}' which is not represented in the Prisma type map.`,
             );

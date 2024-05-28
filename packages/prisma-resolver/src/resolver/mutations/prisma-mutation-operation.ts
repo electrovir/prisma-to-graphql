@@ -16,7 +16,7 @@ import {runUpsert} from './prisma-upsert-operation';
  * @category Operations
  */
 export async function runPrismaMutationOperation(
-    params: Readonly<PrismaResolverInputs>,
+    params: Readonly<PrismaResolverInputs<any, any>>,
 ): Promise<PrismaResolverOutput> {
     const upsertArg = params.graphqlArgs.upsert;
     const createArg = params.graphqlArgs.create;

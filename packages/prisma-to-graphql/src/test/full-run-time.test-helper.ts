@@ -4,10 +4,10 @@
 import type {models} from '.prisma/graphql/models';
 
 import {parseJson} from '@augment-vir/common';
+import {OperationScope} from '@prisma-to-graphql/prisma-resolver';
 import {notCommittedDir, runGraphqlServer, setupTestPrismaDb} from '@prisma-to-graphql/scripts';
 import {rm} from 'node:fs/promises';
 import {join} from 'node:path';
-import {OperationScope} from '../../../scripts/src/resolver-context';
 import {packageDir} from '../util/file-paths';
 import {testFilesDir} from '../util/file-paths.test-helper';
 import {seedDatabase} from './seed-test-database.test-helper';
@@ -42,7 +42,7 @@ export async function setupFullServer() {
 
     await seedDatabase(prismaClient);
 
-    const graphqlServer = await runGraphqlServer({
+    const graphqlServer = await runGraphqlServer<typeof prismaClient, typeof models>({
         resolversCjsFilePath: join(graphqlOutputDir, 'resolvers.cjs'),
         schemaGraphqlFilePath: join(graphqlOutputDir, 'schema.graphql'),
         modelMapCjsFilePath: join(graphqlOutputDir, 'models.cjs'),
@@ -61,11 +61,6 @@ export async function setupFullServer() {
                               },
                           },
                       },
-                      //   where: {
-                      //       User: {
-                      //           id: {equals: userId},
-                      //       },
-                      //   },
                   }
                 : parseJson({
                       jsonString: setOperationScope,

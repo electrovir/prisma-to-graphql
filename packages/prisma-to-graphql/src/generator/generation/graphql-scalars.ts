@@ -1,4 +1,5 @@
 import {isTruthy, typedArrayIncludes} from '@augment-vir/common';
+import {PrismaTypeMap} from '@prisma-to-graphql/prisma-resolver/src/operation-scope/prisma-type-map';
 import {GraphqlBlockByType} from '../../builders/graphql-builder/graphql-block';
 
 /**
@@ -6,7 +7,9 @@ import {GraphqlBlockByType} from '../../builders/graphql-builder/graphql-block';
  *
  * @category Prisma Generator
  */
-export const supportedExtraGraphqlScalars = ['DateTime'] as const;
+export const supportedExtraGraphqlScalars = ['DateTime'] as const satisfies ReadonlyArray<
+    keyof PrismaTypeMap
+>;
 
 /**
  * Checks if the given GraphQL type is one of our supported extra (non-GraphQL-built-in) scalars.

@@ -22,6 +22,15 @@ export const generatedModels = {
             type: 'String',
             isRelation: false,
         },
+        /**
+         * This field was manually added because our in-repo test schema uses SQLite which does not
+         * support primitive lists.
+         */
+        addresses: {
+            isList: true,
+            type: 'String',
+            isRelation: false,
+        },
         password: {
             isList: false,
             type: 'String',

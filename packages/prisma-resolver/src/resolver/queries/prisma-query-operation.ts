@@ -24,7 +24,7 @@ export async function runPrismaQueryOperations({
     prismaModelName,
     graphqlArgs,
     selection,
-}: Readonly<PrismaResolverInputs>): Promise<PrismaResolverOutput> {
+}: Readonly<PrismaResolverInputs<any, any>>): Promise<PrismaResolverOutput> {
     const queryWhere = graphqlArgs.where || undefined;
 
     if (!selection.select.total && !selection.select.items) {

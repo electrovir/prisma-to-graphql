@@ -34,7 +34,10 @@ export async function runUpsert({
     prismaModelName,
     selection,
 }: Readonly<
-    Pick<PrismaResolverInputs, 'graphqlArgs' | 'context' | 'prismaModelName' | 'selection'>
+    Pick<
+        PrismaResolverInputs<any, any>,
+        'graphqlArgs' | 'context' | 'prismaModelName' | 'selection'
+    >
 >): Promise<PrismaResolverOutput> {
     try {
         const upsertData = graphqlArgs.upsert?.data;

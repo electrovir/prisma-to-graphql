@@ -7,6 +7,11 @@ const baseConfig = generateDepCruiserConfig({
         'no-orphans': {
             from: [
                 'src/index.ts',
+                /**
+                 * Needed for the `scripts` package which uses a symlink to access this folder and
+                 * thus does not necessarily use it all.
+                 */
+                'src/operation-scope/*',
             ],
         },
         'no-non-package-json': {

@@ -28,7 +28,7 @@ export async function runUpdate({
     context: {prismaClient, models, operationScope},
     prismaModelName,
 }: Readonly<
-    Pick<PrismaResolverInputs, 'graphqlArgs' | 'context' | 'prismaModelName'>
+    Pick<PrismaResolverInputs<any, any>, 'graphqlArgs' | 'context' | 'prismaModelName'>
 >): Promise<PrismaResolverOutput> {
     const updateData = graphqlArgs.update?.data;
     const updateWhere = graphqlArgs.update?.where;

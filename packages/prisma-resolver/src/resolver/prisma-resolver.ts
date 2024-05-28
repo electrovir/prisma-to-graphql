@@ -1,6 +1,8 @@
 import {TypedFunction} from '@augment-vir/common';
 import {assertDefined} from 'run-time-assertions';
-import {ModelMap, OperationScope, ResolverContext} from '../operation-scope/resolver-context';
+import {ModelMap} from '../operation-scope/model-map';
+import {OperationScope} from '../operation-scope/operation-scope';
+import {ResolverContext} from '../operation-scope/resolver-context';
 import {Selection} from '../util/parse-selection';
 
 /**

@@ -1,7 +1,8 @@
 import {AnyObject, RequiredAndNotNullBy, isObject, mapObjectValues} from '@augment-vir/common';
 import {assertDefined, assertRunTimeType} from 'run-time-assertions';
+import {ModelMap} from './model-map';
+import {OperationScope} from './operation-scope';
 import {generatePrismaWhere} from './prisma-where';
-import {ModelMap, OperationScope} from './resolver-context';
 
 /**
  * Combines operation scope and Prisma selection into a Prisma selection with where clauses (to meet

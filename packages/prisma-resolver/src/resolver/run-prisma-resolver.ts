@@ -15,7 +15,8 @@ import {
     OperationDefinitionNode,
     SelectionSetNode,
 } from 'graphql';
-import {ModelMap, ResolverContext} from '../operation-scope/resolver-context';
+import {ModelMap} from '../operation-scope/model-map';
+import {ResolverContext} from '../operation-scope/resolver-context';
 import {parseItemSelection} from '../util/parse-selection';
 import {runPrismaMutationOperation} from './mutations/prisma-mutation-operation';
 import {

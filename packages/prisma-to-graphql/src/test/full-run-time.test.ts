@@ -26,7 +26,7 @@ import {createUtcFullDate} from 'date-vir';
 import {Server} from 'node:http';
 import {assertDefined, assertRunTimeType, assertThrows, assertTypeOf} from 'run-time-assertions';
 import {buildUrl, joinUrlParts} from 'url-vir';
-import {setupFullServer} from './full-run-time.test-helper';
+import {graphqlServerHeaders, setupFullServer} from './full-run-time.test-helper';
 
 type GraphqlTestCase = {
     it: string;

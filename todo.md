@@ -1,12 +1,13 @@
 # todo
 
+-   remove skip as a user defined input
+    -   automatically apply skip:1 if a cursor is set.
+-   remove skip cursor operation
 -   build sane authentication middleware
 -   add deletion resolver
 -   add a config for a max item request count
     -   use operation scope, add `take` scope
 -   test many-to-many operations with the regions table
--   make `args` optional in `fetchGraphql`
--   give `OperationScope` optional type param for stricter typing
 -   try on a real prisma schema
 -   add plugin that allows per-field limitations
     -   like a limit on string field length

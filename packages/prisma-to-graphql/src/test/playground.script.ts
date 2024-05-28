@@ -26,26 +26,6 @@ async function main(prismaClient: PrismaClient) {
         where: {id: ''},
     });
 
-    prismaClient.user.findMany({
-        where: {
-            firstName: 'Zebra',
-            lastName: {
-                contains: 'hi',
-            },
-        },
-        select: {
-            regions: {
-                where: {
-                    AND
-                    createdAt: {
-                        equals: new Date(),
-                        AND
-                    },
-                },
-            },
-        },
-    });
-
     prismaClient.region.findMany({
         select: {
             users: {

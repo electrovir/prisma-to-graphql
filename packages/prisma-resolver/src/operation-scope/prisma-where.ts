@@ -1,12 +1,13 @@
-import {filterObject, mapObjectValues, omitObjectKeys} from '@augment-vir/common';
-import {assertDefined} from 'run-time-assertions';
+import {AnyObject, filterObject, mapObjectValues, omitObjectKeys} from '@augment-vir/common';
+import {assertDefined, hasProperty} from 'run-time-assertions';
+import {ModelMap, ModelMapField} from './model-map';
 import {
     FieldScope,
     ListOperation,
-    ModelMap,
     WhereScope,
     customFieldScopeProps,
-} from './resolver-context';
+    defaultListOperation,
+} from './operation-scope';
 
 /**
  * A direct-to-prisma `where` for a single model.
@@ -31,7 +32,7 @@ export type PrismaWhereField<
     FieldName extends keyof Models[ModelName],
 > = Models[ModelName][FieldName]['isList'] extends true
     ? PrismaWhereFieldList<Models, ModelName, FieldName>
-    : PrismaWhereCondition<Models, Models[ModelName][FieldName]['type']>;
+    : PrismaWhereCondition<Models, Models[ModelName][FieldName]>;
 
 /**
  * A single list field for {@link PrismaWhereField}.
@@ -43,10 +44,7 @@ export type PrismaWhereFieldList<
     ModelName extends keyof Models,
     FieldName extends keyof Models[ModelName],
 > = Partial<{
-    [Operation in ListOperation]: PrismaWhereCondition<
-        Models,
-        Models[ModelName][FieldName]['type']
-    >;
+    [Operation in ListOperation]: PrismaWhereCondition<Models, Models[ModelName][FieldName]>;
 }>;
 
 /**
@@ -56,10 +54,10 @@ export type PrismaWhereFieldList<
  */
 export type PrismaWhereCondition<
     Models extends ModelMap,
-    FieldType extends string,
-> = FieldType extends keyof Models
-    ? SingleModelPrismaWhere<Models, FieldType>
-    : Omit<FieldScope<FieldType>, 'listOperation'>;
+    ModelField extends ModelMapField,
+> = ModelField['type'] extends keyof Models
+    ? SingleModelPrismaWhere<Models, ModelField['type']>
+    : Omit<FieldScope<ModelField>, 'listOperation'>;
 
 /**
  * Expand an operations scope's "where" into a Prisma client compatible "where" input, based on the
@@ -93,15 +91,41 @@ function recursivelyBuildWhere<const Models extends ModelMap, const ModelName ex
     visitedModels.add(modelName);
 
     const originalModelWhereScope = whereScope[modelName];
+    const modelDefinition = models[modelName];
+
     const originalPrismaWhere: SingleModelPrismaWhere<Models, ModelName> = originalModelWhereScope
         ? (filterObject(
               mapObjectValues(
                   originalModelWhereScope,
-                  (fieldName, fieldScope): FieldScope<string> | undefined => {
-                      if (!fieldScope) {
+                  (fieldName, fieldScope): FieldScope<ModelMapField> | undefined => {
+                      const fieldDefinition = hasProperty(modelDefinition, fieldName)
+                          ? modelDefinition[fieldName]
+                          : undefined;
+
+                      assertDefined(
+                          fieldDefinition,
+                          `Missing field definition: '${String(modelName)} -> ${String(fieldName)}'`,
+                      );
+
+                      if (!fieldScope || fieldDefinition.isRelation) {
                           return undefined;
                       }
-                      return omitObjectKeys(fieldScope, customFieldScopeProps);
+
+                      const customScopePropsRemoved = omitObjectKeys(
+                          fieldScope as AnyObject,
+                          customFieldScopeProps,
+                      ) as FieldScope<ModelMapField>;
+
+                      if (modelDefinition[fieldName]?.isList) {
+                          const listOperation =
+                              ('listOperation' in fieldScope && fieldScope.listOperation) ||
+                              defaultListOperation;
+                          return {
+                              [listOperation]: customScopePropsRemoved,
+                          };
+                      } else {
+                          return customScopePropsRemoved;
+                      }
                   },
               ),
               (key, value): value is NonNullable<typeof value> => !!value,
@@ -110,7 +134,6 @@ function recursivelyBuildWhere<const Models extends ModelMap, const ModelName ex
           } as SingleModelPrismaWhere<Models, ModelName>)
         : {};
 
-    const modelDefinition = models[modelName];
     assertDefined(
         modelDefinition,
         `Failed to find model map entry by model name '${String(modelName)}'`,
@@ -157,8 +180,8 @@ function recursivelyBuildWhere<const Models extends ModelMap, const ModelName ex
                     | SingleModelPrismaWhere<Models, Model[typeof fieldName]['type']> = field.isList
                     ? createListFieldScope(
                           (originalModelWhereScope &&
-                              fieldName in originalModelWhereScope &&
-                              originalModelWhereScope?.[fieldName]) ||
+                              hasProperty(originalModelWhereScope, fieldName) &&
+                              originalModelWhereScope[fieldName]) ||
                               {},
                           relationWhere,
                       )
@@ -187,10 +210,12 @@ function createListFieldScope<
     const ModelName extends keyof Models,
     const FieldName extends keyof Models[ModelName],
 >(
-    whereDefinition: FieldScope<string>,
-    originalWhere: FieldScope<string>,
+    whereDefinition: FieldScope<Models[ModelName][FieldName]>,
+    originalWhere: FieldScope<Models[ModelName][FieldName]>,
 ): PrismaWhereFieldList<Models, ModelName, FieldName> {
-    const listOperation = whereDefinition.listOperation || 'some';
+    const listOperation =
+        ('listOperation' in whereDefinition && whereDefinition.listOperation) ||
+        defaultListOperation;
 
     return {
         [listOperation]: originalWhere,

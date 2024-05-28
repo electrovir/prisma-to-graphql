@@ -1,4 +1,4 @@
-import {AnyObject} from '@augment-vir/common';
+import {AnyObject, getObjectTypedKeys} from '@augment-vir/common';
 import {UtcIsoString} from 'date-vir';
 import {defineShape} from 'object-shape-tester';
 import type {JsonValue} from 'type-fest';
@@ -20,8 +20,19 @@ export type PrismaTypeMap = {
           };
 };
 
-export type RawPrismaTypeMap = typeof prismaTypeMapShape.runTimeType;
-export const prismaTypeMapShape = defineShape({
+/**
+ * Type of {@link rawPrismaTypeMapShape}.
+ *
+ * @category Internals
+ */
+export type RawPrismaTypeMap = typeof rawPrismaTypeMapShape.runTimeType;
+/**
+ * All known mapped Prisma type strings. As the raw entry, this allows a shorthand definition of
+ * mapping without the `input`/`output` fields but also supports those fields when needed.
+ *
+ * @category Internals
+ */
+export const rawPrismaTypeMapShape = defineShape({
     BigInt: 0n,
     Boolean: false,
     Bytes: Buffer.from('') as Buffer,
@@ -43,7 +54,23 @@ export const prismaTypeMapShape = defineShape({
     UUID: '',
 });
 
+/**
+ * All known mapped prisma type strings supported in {@link PrismaTypeMap}.
+ *
+ * @category Internals
+ */
+export const mappedPrismaTypes: ReadonlyArray<keyof RawPrismaTypeMap> = getObjectTypedKeys(
+    rawPrismaTypeMapShape.defaultValue,
+);
+
+/**
+ * Tries to map a type string to a Prisma type mapping.
+ *
+ * @category Types
+ */
 export type MapPrismaType<
-    PrismaType,
+    PrismaTypeString,
     Direction extends 'input' | 'output',
-> = PrismaType extends keyof PrismaTypeMap ? PrismaTypeMap[PrismaType][Direction] : unknown;
+> = PrismaTypeString extends keyof PrismaTypeMap
+    ? PrismaTypeMap[PrismaTypeString][Direction]
+    : unknown;

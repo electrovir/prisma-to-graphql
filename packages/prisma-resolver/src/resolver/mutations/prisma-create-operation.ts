@@ -25,7 +25,7 @@ export async function runCreate({
     context: {prismaClient},
     prismaModelName,
     selection,
-}: Readonly<PrismaResolverInputs>): Promise<PrismaResolverOutput> {
+}: Readonly<PrismaResolverInputs<any, any>>): Promise<PrismaResolverOutput> {
     const createData = graphqlArgs.create?.data;
 
     if (!isRunTimeType(createData, 'array')) {

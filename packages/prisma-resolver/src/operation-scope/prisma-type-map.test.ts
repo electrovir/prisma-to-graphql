@@ -1,7 +1,13 @@
 import {AnyObject} from '@augment-vir/common';
+import {assert} from 'chai';
 import {UtcIsoString} from 'date-vir';
 import {assertTypeOf} from 'run-time-assertions';
-import {MapPrismaType, PrismaTypeMap} from './prisma-type-map';
+import {
+    MapPrismaType,
+    PrismaTypeMap,
+    mappedPrismaTypes,
+    rawPrismaTypeMapShape,
+} from './prisma-type-map';
 
 describe('PrismaTypeMap', () => {
     it('has proper type', () => {
@@ -62,5 +68,14 @@ describe('MapPrismaType', () => {
     it('maps types properly', () => {
         assertTypeOf<MapPrismaType<'String', 'input'>>().toEqualTypeOf<string>();
         assertTypeOf<MapPrismaType<'DateTime', 'input'>>().toEqualTypeOf<UtcIsoString | Date>();
+    });
+});
+
+describe('mappedPrismaTypes', () => {
+    it('has all mapped Prisma type keys', () => {
+        assert.includeMembers(
+            mappedPrismaTypes as string[],
+            Object.keys(rawPrismaTypeMapShape.defaultValue),
+        );
     });
 });

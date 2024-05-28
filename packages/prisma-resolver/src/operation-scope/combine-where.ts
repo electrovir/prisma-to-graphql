@@ -1,6 +1,7 @@
 import {assertDefined} from 'run-time-assertions';
+import {ModelMap} from './model-map';
+import {OperationScope} from './operation-scope';
 import {generatePrismaWhere} from './prisma-where';
-import {ModelMap, OperationScope} from './resolver-context';
 
 /**
  * Combines operation scope and Prisma where into a single Prisma where clause.
