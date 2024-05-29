@@ -20,7 +20,6 @@ type Query {
         cursor: User_WhereUnfilteredUniqueInput
         distinct: [User_DistinctInput!]
         take: Int
-        skip: Int
     ): User_QueryOutput!
     UserSettings(
         where: UserSettings_WhereInput
@@ -28,7 +27,6 @@ type Query {
         cursor: UserSettings_WhereUnfilteredUniqueInput
         distinct: [UserSettings_DistinctInput!]
         take: Int
-        skip: Int
     ): UserSettings_QueryOutput!
 }
 

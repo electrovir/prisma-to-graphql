@@ -20,7 +20,6 @@ type Query {
         cursor: User_WhereUnfilteredUniqueInput
         distinct: [User_DistinctInput!]
         take: Int
-        skip: Int
     ): User_QueryOutput!
     Posts(
         where: Post_WhereInput
@@ -28,7 +27,6 @@ type Query {
         cursor: Post_WhereUnfilteredUniqueInput
         distinct: [Post_DistinctInput!]
         take: Int
-        skip: Int
     ): Post_QueryOutput!
 }
 

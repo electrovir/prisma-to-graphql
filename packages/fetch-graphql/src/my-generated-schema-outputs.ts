@@ -73,7 +73,6 @@ export type Query_UsersArgs = {
     cursor?: InputMaybe<User_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<User_DistinctInput>>;
     take?: InputMaybe<Scalars['Int']['input']>;
-    skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Query_RegionsArgs = {
@@ -82,7 +81,6 @@ export type Query_RegionsArgs = {
     cursor?: InputMaybe<Region_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<Region_DistinctInput>>;
     take?: InputMaybe<Scalars['Int']['input']>;
-    skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Query_UserPostsArgs = {
@@ -91,7 +89,6 @@ export type Query_UserPostsArgs = {
     cursor?: InputMaybe<UserPost_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<UserPost_DistinctInput>>;
     take?: InputMaybe<Scalars['Int']['input']>;
-    skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Query_UserSettingsArgs = {
@@ -100,7 +97,6 @@ export type Query_UserSettingsArgs = {
     cursor?: InputMaybe<UserSettings_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<UserSettings_DistinctInput>>;
     take?: InputMaybe<Scalars['Int']['input']>;
-    skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Query_UserStatsArgs = {
@@ -109,7 +105,6 @@ export type Query_UserStatsArgs = {
     cursor?: InputMaybe<UserStats_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<UserStats_DistinctInput>>;
     take?: InputMaybe<Scalars['Int']['input']>;
-    skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export enum SortOrder {
@@ -1547,7 +1542,6 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 cursor: 'User_WhereUnfilteredUniqueInput',
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
-                skip: 'Int',
             },
             output: 'User_QueryOutput!',
         },
@@ -1558,7 +1552,6 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 cursor: 'Region_WhereUnfilteredUniqueInput',
                 distinct: '[Region_DistinctInput!]',
                 take: 'Int',
-                skip: 'Int',
             },
             output: 'Region_QueryOutput!',
         },
@@ -1569,7 +1562,6 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 cursor: 'UserPost_WhereUnfilteredUniqueInput',
                 distinct: '[UserPost_DistinctInput!]',
                 take: 'Int',
-                skip: 'Int',
             },
             output: 'UserPost_QueryOutput!',
         },
@@ -1580,7 +1572,6 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 cursor: 'UserSettings_WhereUnfilteredUniqueInput',
                 distinct: '[UserSettings_DistinctInput!]',
                 take: 'Int',
-                skip: 'Int',
             },
             output: 'UserSettings_QueryOutput!',
         },
@@ -1591,7 +1582,6 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 cursor: 'UserStats_WhereUnfilteredUniqueInput',
                 distinct: '[UserStats_DistinctInput!]',
                 take: 'Int',
-                skip: 'Int',
             },
             output: 'UserStats_QueryOutput!',
         },

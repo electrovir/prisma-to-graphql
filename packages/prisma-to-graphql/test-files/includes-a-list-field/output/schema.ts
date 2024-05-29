@@ -50,7 +50,6 @@ export type Query_UsersArgs = {
   cursor?: InputMaybe<User_WhereUnfilteredUniqueInput>;
   distinct?: InputMaybe<ReadonlyArray<User_DistinctInput>>;
   take?: InputMaybe<Scalars['Int']['input']>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -60,7 +59,6 @@ export type Query_PostsArgs = {
   cursor?: InputMaybe<Post_WhereUnfilteredUniqueInput>;
   distinct?: InputMaybe<ReadonlyArray<Post_DistinctInput>>;
   take?: InputMaybe<Scalars['Int']['input']>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export enum SortOrder {
@@ -586,7 +584,6 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 cursor: 'User_WhereUnfilteredUniqueInput',
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
-                skip: 'Int',
             },
             output: 'User_QueryOutput!',
         },
@@ -597,7 +594,6 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 cursor: 'Post_WhereUnfilteredUniqueInput',
                 distinct: '[Post_DistinctInput!]',
                 take: 'Int',
-                skip: 'Int',
             },
             output: 'Post_QueryOutput!',
         },

@@ -640,6 +640,89 @@ const testCases: Readonly<TestCases> = [
                     ],
                 },
             },
+            {
+                it: 'supports a cursor',
+                async test({prismaClient}) {
+                    const firstUser = await prismaClient.user.findFirstOrThrow({
+                        orderBy: {
+                            firstName: {
+                                sort: 'asc',
+                            },
+                        },
+                        select: {
+                            firstName: true,
+                            id: true,
+                        },
+                    });
+
+                    return await runPrismaQueryOperations({
+                        graphqlArgs: {
+                            orderBy: {
+                                firstName: {
+                                    sort: 'asc',
+                                },
+                            },
+                            cursor: {
+                                id: firstUser.id,
+                            },
+                            take: 2,
+                        },
+                        context: {prismaClient},
+                        prismaModelName: 'User',
+                        selection: {
+                            select: {
+                                total: true,
+                                items: {
+                                    select: {
+                                        firstName: true,
+                                    },
+                                },
+                            },
+                        },
+                    });
+                },
+                expect: {
+                    total: 5,
+                    items: [
+                        {
+                            firstName: 'Has',
+                        },
+                        {
+                            firstName: 'Over',
+                        },
+                    ],
+                },
+            },
+            {
+                it: 'fails on an invalid cursor',
+                async test({prismaClient}) {
+                    return await runPrismaQueryOperations({
+                        graphqlArgs: {
+                            orderBy: {
+                                firstName: {
+                                    sort: 'asc',
+                                },
+                            },
+                            cursor: 'this should be an object',
+                            take: 2,
+                        },
+                        context: {prismaClient},
+                        prismaModelName: 'User',
+                        selection: {
+                            select: {
+                                total: true,
+                                items: {
+                                    select: {
+                                        firstName: true,
+                                        id: true,
+                                    },
+                                },
+                            },
+                        },
+                    });
+                },
+                throws: 'Invalid value provided. Expected UserWhereUniqueInput, provided String.',
+            },
         ],
     },
     {

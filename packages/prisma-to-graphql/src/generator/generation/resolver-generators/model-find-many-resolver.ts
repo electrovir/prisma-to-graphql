@@ -431,12 +431,6 @@ export const modelFindManyOperation: ResolverGenerator = {
                     value: 'Int',
                     required: false,
                 },
-                {
-                    type: 'property',
-                    name: 'skip',
-                    value: 'Int',
-                    required: false,
-                },
             ],
             name: prismaModel.pluralModelName,
             output: {

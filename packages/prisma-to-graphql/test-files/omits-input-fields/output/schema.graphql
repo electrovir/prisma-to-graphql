@@ -15,7 +15,6 @@ type Query {
         cursor: User_WhereUnfilteredUniqueInput
         distinct: [User_DistinctInput!]
         take: Int
-        skip: Int
     ): User_QueryOutput!
 }
 

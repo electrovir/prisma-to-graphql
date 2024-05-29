@@ -72,7 +72,6 @@ export type Query_UsersArgs = {
     cursor?: InputMaybe<User_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<User_DistinctInput>>;
     take?: InputMaybe<Scalars['Int']['input']>;
-    skip?: InputMaybe<Scalars['Int']['input']>;
 };
 export type Query_UserSettingsArgs = {
     where?: InputMaybe<UserSettings_WhereInput>;
@@ -80,7 +79,6 @@ export type Query_UserSettingsArgs = {
     cursor?: InputMaybe<UserSettings_WhereUnfilteredUniqueInput>;
     distinct?: InputMaybe<ReadonlyArray<UserSettings_DistinctInput>>;
     take?: InputMaybe<Scalars['Int']['input']>;
-    skip?: InputMaybe<Scalars['Int']['input']>;
 };
 export declare enum SortOrder {
     asc = "asc",

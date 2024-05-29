@@ -40,7 +40,6 @@ exports.operationParams = {
                 cursor: 'User_WhereUnfilteredUniqueInput',
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
-                skip: 'Int',
             },
             output: 'User_QueryOutput!',
         },

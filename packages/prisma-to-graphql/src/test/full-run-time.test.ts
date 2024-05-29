@@ -661,7 +661,7 @@ const testCases: GraphqlTestCase[] = [
                             Users(
                                 where: {role: {equals: "user"}}
                                 orderBy: {firstName: {sort: asc}}
-                                take: 1
+                                take: 2
                             ) {
                                 total
                                 items {
@@ -687,7 +687,7 @@ const testCases: GraphqlTestCase[] = [
                         sort: 'asc',
                     },
                 },
-                take: 1,
+                take: 2,
                 select: {
                     id: true,
                     firstName: true,
@@ -698,7 +698,10 @@ const testCases: GraphqlTestCase[] = [
 
             assert.deepStrictEqual(
                 firstPageFromGraphql.items.map((item) => item.firstName),
-                ['Derp'],
+                [
+                    'Derp',
+                    'No',
+                ],
             );
 
             const cursorId = firstPageFromGraphql.items[0].id;
@@ -713,7 +716,6 @@ const testCases: GraphqlTestCase[] = [
                                 where: {role: {equals: "user"}}
                                 orderBy: {firstName: {sort: asc}}
                                 take: 1
-                                skip: 1
                                 cursor: {id: $cursorId}
                             ) {
                                 total
@@ -741,6 +743,7 @@ const testCases: GraphqlTestCase[] = [
                     },
                 },
                 take: 1,
+                /** This skip is automatically inserted inside the GraphQL resolver. */
                 skip: 1,
                 cursor: {
                     id: cursorId,
@@ -760,6 +763,8 @@ const testCases: GraphqlTestCase[] = [
                     },
                 ],
             });
+
+            assert.deepEqual(secondPageFromPrisma[0]?.firstName, firstPageFromPrisma[1]?.firstName);
         },
     },
     {

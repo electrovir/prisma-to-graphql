@@ -20,7 +20,6 @@ type Query {
         cursor: User_WhereUnfilteredUniqueInput
         distinct: [User_DistinctInput!]
         take: Int
-        skip: Int
     ): User_QueryOutput!
     Companies(
         where: Company_WhereInput
@@ -28,7 +27,6 @@ type Query {
         cursor: Company_WhereUnfilteredUniqueInput
         distinct: [Company_DistinctInput!]
         take: Int
-        skip: Int
     ): Company_QueryOutput!
 }
 

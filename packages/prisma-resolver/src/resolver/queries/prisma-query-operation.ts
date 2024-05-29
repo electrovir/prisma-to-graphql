@@ -49,7 +49,8 @@ export async function runPrismaQueryOperations({
               select: finalSelect,
               orderBy: graphqlArgs.orderBy,
               take: graphqlArgs.take,
-              skip: graphqlArgs.skip,
+              skip: graphqlArgs.cursor ? 1 : undefined,
+              cursor: graphqlArgs.cursor,
               distinct: graphqlArgs.distinct,
           })
         : [];

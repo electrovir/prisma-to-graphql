@@ -41,7 +41,6 @@ export type Query_UsersArgs = {
   cursor?: InputMaybe<User_WhereUnfilteredUniqueInput>;
   distinct?: InputMaybe<ReadonlyArray<User_DistinctInput>>;
   take?: InputMaybe<Scalars['Int']['input']>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export enum SortOrder {
@@ -376,7 +375,6 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 cursor: 'User_WhereUnfilteredUniqueInput',
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
-                skip: 'Int',
             },
             output: 'User_QueryOutput!',
         },
