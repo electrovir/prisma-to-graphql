@@ -17,6 +17,7 @@ import {
 import {log} from '@augment-vir/node-js';
 import {
     GraphqlFetcher,
+    Operations,
     ResolverOutput,
     createGraphqlFetcher,
     fetchRawGraphql,
@@ -1251,7 +1252,7 @@ const testCases: GraphqlTestCase[] = [
                         total: true,
                     },
                 },
-            } as const;
+            } as const satisfies Operations<typeof fetchGraphql, 'Query'>;
 
             const resultsWithoutScope = await fetchGraphql(
                 {

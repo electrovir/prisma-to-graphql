@@ -39,6 +39,7 @@ export type GraphqlFetcher<Resolvers extends Readonly<BaseResolvers>> = <
     const Operations extends Readonly<GraphqlOperations<Resolvers, OperationType>>,
 >(
     params: Readonly<FetchGraphqlParams<Resolvers, OperationType>>,
+    /** The queries to run. */
     operations: Operations,
 ) => Promise<
     IsAny<Resolvers> extends true
