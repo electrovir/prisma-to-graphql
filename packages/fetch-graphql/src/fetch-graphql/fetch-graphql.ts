@@ -1,5 +1,6 @@
 import {SchemaOperationParams} from '@prisma-to-graphql/graphql-codegen-operation-params';
 import {IsAny} from 'type-fest';
+import {buildUrl} from 'url-vir';
 import {buildGraphqlQuery} from '../build-query/build-graphql-query';
 import {BuildGraphqlQueryOptions} from '../build-query/build-graphql-query-options';
 import {FetchRawGraphqlOptions, GraphqlQuery, fetchRawGraphql} from './fetch-raw-graphql';
@@ -25,7 +26,19 @@ export type FetchGraphqlParams<
      * See https://graphql.org/learn/queries/#operation-name.
      */
     operationName: string;
-    options?: Partial<FetchRawGraphqlOptions & BuildGraphqlQueryOptions> | undefined;
+    options?:
+        | Partial<
+              FetchRawGraphqlOptions &
+                  BuildGraphqlQueryOptions & {
+                      /**
+                       * By default, the GraphQL operation name is appended to the URL as a query
+                       * param to improve searchability (particularly the in browser dev tools's
+                       * network tab). Set this property to true to prevent that behavior.
+                       */
+                      omitOperationNameFromUrl: boolean;
+                  }
+          >
+        | undefined;
 };
 
 /**
@@ -106,7 +119,9 @@ export function createGraphqlFetcher<const Resolvers extends Readonly<BaseResolv
             options,
         });
 
-        return await fetchRawGraphql(url, graphqlQuery, options);
+        const withOperationName = buildUrl(url, {search: {operation: operationName}});
+
+        return await fetchRawGraphql(withOperationName.href, graphqlQuery, options);
     }
 
     return fetchGraphql as unknown as GraphqlFetcher<Resolvers>;
