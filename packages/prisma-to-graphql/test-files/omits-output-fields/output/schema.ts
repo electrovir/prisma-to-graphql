@@ -20,7 +20,7 @@ export type Scalars = {
 };
 
 export type Mutation = {
-  readonly Users: User_QueryOutput;
+  readonly Users: User_Output;
 };
 
 
@@ -31,7 +31,7 @@ export type Mutation_UsersArgs = {
 };
 
 export type Query = {
-  readonly Users: User_QueryOutput;
+  readonly Users: User_Output;
 };
 
 
@@ -79,9 +79,16 @@ export type SortOrderWithNulls = {
   readonly nulls?: InputMaybe<NullsOrder | `${NullsOrder}`>;
 };
 
-export type User_QueryOutput = {
+export type User_Output = {
   readonly total: Scalars['Int']['output'];
   readonly items: ReadonlyArray<User>;
+  readonly messages: ReadonlyArray<Maybe<OutputMessage>>;
+};
+
+export type OutputMessage = {
+  readonly code: Scalars['String']['output'];
+  readonly message: Scalars['String']['output'];
+  readonly description: Scalars['String']['output'];
 };
 
 export type OrderByCount = {
@@ -275,7 +282,8 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<User>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   SortOrderWithNulls: SortOrderWithNulls;
-  User_QueryOutput: ResolverTypeWrapper<User_QueryOutput>;
+  User_Output: ResolverTypeWrapper<User_Output>;
+  OutputMessage: ResolverTypeWrapper<OutputMessage>;
   OrderByCount: OrderByCount;
   User_WhereInput: User_WhereInput;
   User_OrderByInput: User_OrderByInput;
@@ -302,7 +310,8 @@ export type ResolversParentTypes = {
   User: User;
   String: Scalars['String']['output'];
   SortOrderWithNulls: SortOrderWithNulls;
-  User_QueryOutput: User_QueryOutput;
+  User_Output: User_Output;
+  OutputMessage: OutputMessage;
   OrderByCount: OrderByCount;
   User_WhereInput: User_WhereInput;
   User_OrderByInput: User_OrderByInput;
@@ -320,11 +329,11 @@ export type ResolversParentTypes = {
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, Partial<Mutation_UsersArgs>>;
+  Users?: Resolver<ResolversTypes['User_Output'], ParentType, ContextType, Partial<Mutation_UsersArgs>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, Partial<Query_UsersArgs>>;
+  Users?: Resolver<ResolversTypes['User_Output'], ParentType, ContextType, Partial<Query_UsersArgs>>;
 };
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
@@ -345,9 +354,17 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type User_QueryOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['User_QueryOutput'] = ResolversParentTypes['User_QueryOutput']> = {
+export type User_OutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['User_Output'] = ResolversParentTypes['User_Output']> = {
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   items?: Resolver<ReadonlyArray<ResolversTypes['User']>, ParentType, ContextType>;
+  messages?: Resolver<ReadonlyArray<Maybe<ResolversTypes['OutputMessage']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OutputMessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['OutputMessage'] = ResolversParentTypes['OutputMessage']> = {
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -357,7 +374,8 @@ export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
   _AllModels?: _AllModelsResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
-  User_QueryOutput?: User_QueryOutputResolvers<ContextType>;
+  User_Output?: User_OutputResolvers<ContextType>;
+  OutputMessage?: OutputMessageResolvers<ContextType>;
 };
 
 
@@ -371,7 +389,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 update: 'User_UpdateInput',
                 upsert: 'User_UpsertInput',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
     },
     Query: {
@@ -383,7 +401,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
     },
 };

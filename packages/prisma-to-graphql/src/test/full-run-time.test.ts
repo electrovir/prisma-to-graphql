@@ -22,6 +22,7 @@ import {
     createGraphqlFetcher,
     fetchRawGraphql,
 } from '@prisma-to-graphql/fetch-graphql';
+import {OperationScope} from '@prisma-to-graphql/prisma-resolver';
 import {assert} from 'chai';
 import {createUtcFullDate} from 'date-vir';
 import {Server} from 'node:http';
@@ -1252,11 +1253,13 @@ const testCases: GraphqlTestCase[] = [
                         total: true,
                     },
                 },
+                // @ts-ignore: this won't work until the prisma output has been generated
             } as const satisfies Operations<typeof fetchGraphql, 'Query'>;
 
             const resultsWithoutScope = await fetchGraphql(
                 {
                     operationName: 'non-scoped user stuff',
+                    // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
                     url: joinUrlParts(serverUrl, 'graphql'),
                 },
@@ -1268,13 +1271,17 @@ const testCases: GraphqlTestCase[] = [
                 ...resultsWithoutScope,
                 Users: {
                     ...resultsWithoutScope.Users,
+                    // @ts-ignore: this won't work until the prisma output has been generated
                     items: resultsWithoutScope.Users.items.map((user) =>
+                        // @ts-ignore: this won't work until the prisma output has been generated
                         omitObjectKeys(user, ['id']),
                     ),
                 },
                 UserSettings: {
                     ...resultsWithoutScope.UserSettings,
+                    // @ts-ignore: this won't work until the prisma output has been generated
                     items: resultsWithoutScope.UserSettings.items.map((user) =>
+                        // @ts-ignore: this won't work until the prisma output has been generated
                         omitObjectKeys(user, ['id']),
                     ),
                 },
@@ -1334,6 +1341,7 @@ const testCases: GraphqlTestCase[] = [
             const resultsWithScope = await fetchGraphql(
                 {
                     operationName: 'non-scoped user stuff',
+                    // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
                     url: joinUrlParts(serverUrl, 'graphql'),
                     options: {
@@ -1352,11 +1360,14 @@ const testCases: GraphqlTestCase[] = [
                 ...resultsWithScope,
                 Users: {
                     ...resultsWithScope.Users,
+                    // @ts-ignore: this won't work until the prisma output has been generated
                     items: resultsWithScope.Users.items.map((user) => omitObjectKeys(user, ['id'])),
                 },
                 UserSettings: {
                     ...resultsWithScope.UserSettings,
+                    // @ts-ignore: this won't work until the prisma output has been generated
                     items: resultsWithScope.UserSettings.items.map((user) =>
+                        // @ts-ignore: this won't work until the prisma output has been generated
                         omitObjectKeys(user, ['id']),
                     ),
                 },
@@ -1401,6 +1412,7 @@ const testCases: GraphqlTestCase[] = [
             const uniquePostUsers = await fetchGraphql(
                 {
                     operationName: 'many field where',
+                    // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
                     url: joinUrlParts(serverUrl, 'graphql'),
                 },
@@ -1498,6 +1510,7 @@ const testCases: GraphqlTestCase[] = [
             const uniquePostUsers = await fetchGraphql(
                 {
                     operationName: 'scoped many where',
+                    // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
                     url: joinUrlParts(serverUrl, 'graphql'),
                     options: {
@@ -1577,6 +1590,7 @@ const testCases: GraphqlTestCase[] = [
             const uniquePostUsers = await fetchGraphql(
                 {
                     operationName: 'nested scope',
+                    // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
                     url: joinUrlParts(serverUrl, 'graphql'),
                     options: {
@@ -1649,6 +1663,82 @@ const testCases: GraphqlTestCase[] = [
                                     ],
                                 },
                             ],
+                        },
+                    ],
+                },
+            });
+        },
+    },
+    {
+        it: 'limits query result count',
+        async test({serverUrl, fetchGraphql}) {
+            const uniquePostUsers = await fetchGraphql(
+                {
+                    operationName: 'nested scope',
+                    // @ts-ignore: this won't work until the prisma output has been generated
+                    operationType: 'Query',
+                    url: joinUrlParts(serverUrl, 'graphql'),
+                    options: {
+                        fetchOptions: {
+                            headers: {
+                                [graphqlServerHeaders.setOperationScope]: JSON.stringify({
+                                    maxCount: 2,
+                                } satisfies OperationScope<any>),
+                            },
+                        },
+                    },
+                },
+                {
+                    Users: {
+                        args: {
+                            orderBy: [
+                                {
+                                    firstName: {
+                                        sort: 'asc',
+                                    },
+                                },
+                            ],
+                            where: {
+                                firstName: {
+                                    not: null,
+                                },
+                            },
+                        },
+                        select: {
+                            items: {
+                                firstName: true,
+                                lastName: true,
+                            },
+                            total: true,
+                            messages: {
+                                code: true,
+                                description: true,
+                                message: true,
+                            },
+                        },
+                    },
+                },
+            );
+
+            assert.deepStrictEqual(uniquePostUsers, {
+                Users: {
+                    items: [
+                        {
+                            firstName: 'Derp',
+                            lastName: 'Doo',
+                        },
+                        {
+                            firstName: 'Nick',
+                            lastName: 'Jordan',
+                        },
+                    ],
+                    total: 6,
+                    messages: [
+                        {
+                            code: 'ptg-2',
+                            description: 'query results truncated',
+                            message:
+                                'ptg-2: Query results were truncated to the first 2 entries. Please use pagination to split your query up.',
                         },
                     ],
                 },

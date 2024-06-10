@@ -28,7 +28,7 @@ exports.operationParams = {
                 update: 'User_UpdateInput',
                 upsert: 'User_UpsertInput',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
     },
     Query: {
@@ -40,7 +40,7 @@ exports.operationParams = {
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
     },
 };

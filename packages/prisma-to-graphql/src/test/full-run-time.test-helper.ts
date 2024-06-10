@@ -15,7 +15,7 @@ import {seedDatabase} from './seed-test-database.test-helper';
 let setupCount = 0;
 
 const graphqlOutputDir = join(packageDir, 'node_modules', '.prisma', 'graphql');
-const prismaSchemaPath = join(testFilesDir, 'full-run-time', 'schema.prisma');
+export const prismaSchemaPath = join(testFilesDir, 'full-run-time', 'schema.prisma');
 
 export const graphqlServerHeaders = {
     setOperationScope: 'set-operation-scope',

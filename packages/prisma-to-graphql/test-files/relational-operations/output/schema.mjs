@@ -35,7 +35,7 @@ export const operationParams = {
                 update: 'User_UpdateInput',
                 upsert: 'User_UpsertInput',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
         UserSettings: {
             args: {
@@ -43,7 +43,7 @@ export const operationParams = {
                 update: 'UserSettings_UpdateInput',
                 upsert: 'UserSettings_UpsertInput',
             },
-            output: 'UserSettings_QueryOutput!',
+            output: 'UserSettings_Output!',
         },
     },
     Query: {
@@ -55,7 +55,7 @@ export const operationParams = {
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
         UserSettings: {
             args: {
@@ -65,7 +65,7 @@ export const operationParams = {
                 distinct: '[UserSettings_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'UserSettings_QueryOutput!',
+            output: 'UserSettings_Output!',
         },
     },
 };

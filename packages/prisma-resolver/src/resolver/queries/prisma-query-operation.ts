@@ -1,7 +1,9 @@
-import {isObject} from '@augment-vir/common';
+import {isObject, isTruthy} from '@augment-vir/common';
 import {GraphQLError} from 'graphql';
 import {combineSelect} from '../../operation-scope/combine-select';
 import {combineWhere} from '../../operation-scope/combine-where';
+import {extractMaxCountScope} from '../../operation-scope/max-count';
+import {outputMessages} from '../output-messages';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
 
 /**
@@ -19,7 +21,7 @@ import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
  *
  * @category Operations
  */
-export async function runPrismaQueryOperations({
+export async function runPrismaQuery({
     context: {models, operationScope, prismaClient},
     prismaModelName,
     graphqlArgs,
@@ -33,27 +35,45 @@ export async function runPrismaQueryOperations({
 
     const finalWhere = combineWhere(queryWhere, prismaModelName, models, operationScope);
 
-    const total = selection.select.total
-        ? await prismaClient[prismaModelName].count({
-              where: finalWhere,
-          })
-        : 0;
+    const maxResultCount = extractMaxCountScope(operationScope, 'query');
+    const useMaxCount =
+        maxResultCount && (graphqlArgs.take == undefined || graphqlArgs.take > maxResultCount);
+    const finalTake = useMaxCount ? maxResultCount : graphqlArgs.take;
 
     const finalSelect = isObject(selection.select.items)
         ? combineSelect(selection.select.items.select, prismaModelName, models, operationScope)
         : undefined;
+
+    const total =
+        selection.select.total || useMaxCount
+            ? await prismaClient[prismaModelName].count({
+                  where: finalWhere,
+              })
+            : 0;
 
     const items = isObject(selection.select.items)
         ? await prismaClient[prismaModelName].findMany({
               where: finalWhere,
               select: finalSelect,
               orderBy: graphqlArgs.orderBy,
-              take: graphqlArgs.take,
-              skip: graphqlArgs.cursor ? 1 : undefined,
+              take: finalTake,
+              skip: graphqlArgs.cursor == undefined ? undefined : 1,
               cursor: graphqlArgs.cursor,
               distinct: graphqlArgs.distinct,
           })
         : [];
 
-    return {total, items};
+    const wereQueryResultsTruncated = useMaxCount && finalTake < total;
+
+    return {
+        total,
+        items,
+        messages: [
+            wereQueryResultsTruncated &&
+                maxResultCount &&
+                outputMessages.byDescription['query results truncated'].create({
+                    max: maxResultCount,
+                }),
+        ].filter(isTruthy),
+    };
 }

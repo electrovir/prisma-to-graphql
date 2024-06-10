@@ -4,7 +4,7 @@ import {prismaFilters} from '../filter-inputs/prisma-filters';
 import {GeneratedGraphql} from '../generated-graphql';
 import {PrismaModel} from '../model/prisma-model';
 import {ResolverGenerator} from '../resolver-generator';
-import {createQueryOutputName, createResolverInputName} from './model-resolver-io';
+import {createQueryOutputName, createResolverInputName} from './model-resolver-names';
 
 const sortOrderBlock: GraphqlBlockByType<'enum'> = {
     type: 'enum',
@@ -341,10 +341,33 @@ export function createWhereUnfilteredUniqueInputBlock(
  *
  * @category Prisma Generator
  */
-export function createOutputTypeBlock(
-    prismaModel: Readonly<PrismaModel>,
-): GraphqlBlockByType<'type'> {
-    return {
+export function createOutputTypeBlocks(prismaModel: Readonly<PrismaModel>) {
+    const outputMessageBlock: GraphqlBlockByType<'type'> = {
+        type: 'type',
+        name: 'OutputMessage',
+        props: [
+            {
+                type: 'property',
+                name: 'code',
+                value: 'String',
+                required: true,
+            },
+            {
+                type: 'property',
+                name: 'message',
+                value: 'String',
+                required: true,
+            },
+            {
+                type: 'property',
+                name: 'description',
+                value: 'String',
+                required: true,
+            },
+        ],
+    };
+
+    const outputBlock: GraphqlBlockByType<'type'> = {
         type: 'type',
         name: createQueryOutputName(prismaModel.modelName),
         props: [
@@ -364,7 +387,18 @@ export function createOutputTypeBlock(
                 value: `[${prismaModel.modelName}!]`,
                 required: true,
             },
+            {
+                type: 'property',
+                name: 'messages',
+                value: `[${outputMessageBlock.name}]`,
+                required: true,
+            },
         ],
+    };
+
+    return {
+        output: outputBlock,
+        outputMessage: outputMessageBlock,
     };
 }
 
@@ -396,7 +430,7 @@ export const modelFindManyOperation: ResolverGenerator = {
         });
 
         const queryInputBlocks = createQueryInputBlocks(prismaModel);
-        const outputTypeBlock = createOutputTypeBlock(prismaModel);
+        const outputBlocks = createOutputTypeBlocks(prismaModel);
 
         const operationBlock: GraphqlBlockByType<'operation'> = {
             type: 'operation',
@@ -434,7 +468,7 @@ export const modelFindManyOperation: ResolverGenerator = {
             ],
             name: prismaModel.pluralModelName,
             output: {
-                value: outputTypeBlock.name,
+                value: outputBlocks.output.name,
                 required: true,
             },
         };
@@ -450,7 +484,7 @@ export const modelFindManyOperation: ResolverGenerator = {
                 sortOrderBlock,
                 sortOrderWithNullsBlock,
                 nullsOrderBlock,
-                outputTypeBlock,
+                ...Object.values(outputBlocks),
                 orderByCountBlock,
                 ...Object.values(queryInputBlocks),
                 ...propFiltersNeeded,

@@ -32,7 +32,7 @@ exports.operationParams = {
                 update: 'User_UpdateInput',
                 upsert: 'User_UpsertInput',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
         Posts: {
             args: {
@@ -40,7 +40,7 @@ exports.operationParams = {
                 update: 'Post_UpdateInput',
                 upsert: 'Post_UpsertInput',
             },
-            output: 'Post_QueryOutput!',
+            output: 'Post_Output!',
         },
     },
     Query: {
@@ -52,7 +52,7 @@ exports.operationParams = {
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
         Posts: {
             args: {
@@ -62,7 +62,7 @@ exports.operationParams = {
                 distinct: '[Post_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'Post_QueryOutput!',
+            output: 'Post_Output!',
         },
     },
 };

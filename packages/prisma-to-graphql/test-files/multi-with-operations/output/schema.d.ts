@@ -49,8 +49,8 @@ export type Scalars = {
     };
 };
 export type Mutation = {
-    readonly Users: User_QueryOutput;
-    readonly Companies: Company_QueryOutput;
+    readonly Users: User_Output;
+    readonly Companies: Company_Output;
 };
 export type Mutation_UsersArgs = {
     create?: InputMaybe<User_CreateInput>;
@@ -63,8 +63,8 @@ export type Mutation_CompaniesArgs = {
     upsert?: InputMaybe<Company_UpsertInput>;
 };
 export type Query = {
-    readonly Users: User_QueryOutput;
-    readonly Companies: Company_QueryOutput;
+    readonly Users: User_Output;
+    readonly Companies: Company_Output;
 };
 export type Query_UsersArgs = {
     where?: InputMaybe<User_WhereInput>;
@@ -124,9 +124,15 @@ export type SortOrderWithNulls = {
     readonly sort: SortOrder | `${SortOrder}`;
     readonly nulls?: InputMaybe<NullsOrder | `${NullsOrder}`>;
 };
-export type User_QueryOutput = {
+export type User_Output = {
     readonly total: Scalars['Int']['output'];
     readonly items: ReadonlyArray<User>;
+    readonly messages: ReadonlyArray<Maybe<OutputMessage>>;
+};
+export type OutputMessage = {
+    readonly code: Scalars['String']['output'];
+    readonly message: Scalars['String']['output'];
+    readonly description: Scalars['String']['output'];
 };
 export type OrderByCount = {
     readonly _count?: InputMaybe<SortOrder | `${SortOrder}`>;
@@ -248,9 +254,10 @@ export type Company = {
     readonly updatedAt: Scalars['DateTime']['output'];
     readonly name: Scalars['String']['output'];
 };
-export type Company_QueryOutput = {
+export type Company_Output = {
     readonly total: Scalars['Int']['output'];
     readonly items: ReadonlyArray<Company>;
+    readonly messages: ReadonlyArray<Maybe<OutputMessage>>;
 };
 export type Company_WhereInput = {
     readonly AND?: InputMaybe<ReadonlyArray<Company_WhereInput>>;
@@ -350,7 +357,8 @@ export type ResolversTypes = {
     User: ResolverTypeWrapper<User>;
     String: ResolverTypeWrapper<Scalars['String']['output']>;
     SortOrderWithNulls: SortOrderWithNulls;
-    User_QueryOutput: ResolverTypeWrapper<User_QueryOutput>;
+    User_Output: ResolverTypeWrapper<User_Output>;
+    OutputMessage: ResolverTypeWrapper<OutputMessage>;
     OrderByCount: OrderByCount;
     User_WhereInput: User_WhereInput;
     User_OrderByInput: User_OrderByInput;
@@ -365,7 +373,7 @@ export type ResolversTypes = {
     User_CreateDataInput: User_CreateDataInput;
     User_UpdateDataInput: User_UpdateDataInput;
     Company: ResolverTypeWrapper<Company>;
-    Company_QueryOutput: ResolverTypeWrapper<Company_QueryOutput>;
+    Company_Output: ResolverTypeWrapper<Company_Output>;
     Company_WhereInput: Company_WhereInput;
     Company_OrderByInput: Company_OrderByInput;
     Company_WhereUnfilteredUniqueInput: Company_WhereUnfilteredUniqueInput;
@@ -388,7 +396,8 @@ export type ResolversParentTypes = {
     User: User;
     String: Scalars['String']['output'];
     SortOrderWithNulls: SortOrderWithNulls;
-    User_QueryOutput: User_QueryOutput;
+    User_Output: User_Output;
+    OutputMessage: OutputMessage;
     OrderByCount: OrderByCount;
     User_WhereInput: User_WhereInput;
     User_OrderByInput: User_OrderByInput;
@@ -403,7 +412,7 @@ export type ResolversParentTypes = {
     User_CreateDataInput: User_CreateDataInput;
     User_UpdateDataInput: User_UpdateDataInput;
     Company: Company;
-    Company_QueryOutput: Company_QueryOutput;
+    Company_Output: Company_Output;
     Company_WhereInput: Company_WhereInput;
     Company_OrderByInput: Company_OrderByInput;
     Company_WhereUnfilteredUniqueInput: Company_WhereUnfilteredUniqueInput;
@@ -417,12 +426,12 @@ export type ResolversParentTypes = {
     Boolean: Scalars['Boolean']['output'];
 };
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-    Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, Partial<Mutation_UsersArgs>>;
-    Companies?: Resolver<ResolversTypes['Company_QueryOutput'], ParentType, ContextType, Partial<Mutation_CompaniesArgs>>;
+    Users?: Resolver<ResolversTypes['User_Output'], ParentType, ContextType, Partial<Mutation_UsersArgs>>;
+    Companies?: Resolver<ResolversTypes['Company_Output'], ParentType, ContextType, Partial<Mutation_CompaniesArgs>>;
 };
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-    Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, Partial<Query_UsersArgs>>;
-    Companies?: Resolver<ResolversTypes['Company_QueryOutput'], ParentType, ContextType, Partial<Query_CompaniesArgs>>;
+    Users?: Resolver<ResolversTypes['User_Output'], ParentType, ContextType, Partial<Query_UsersArgs>>;
+    Companies?: Resolver<ResolversTypes['Company_Output'], ParentType, ContextType, Partial<Query_CompaniesArgs>>;
 };
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
     name: 'DateTime';
@@ -444,9 +453,16 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
     phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
-export type User_QueryOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['User_QueryOutput'] = ResolversParentTypes['User_QueryOutput']> = {
+export type User_OutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['User_Output'] = ResolversParentTypes['User_Output']> = {
     total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
     items?: Resolver<ReadonlyArray<ResolversTypes['User']>, ParentType, ContextType>;
+    messages?: Resolver<ReadonlyArray<Maybe<ResolversTypes['OutputMessage']>>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+export type OutputMessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['OutputMessage'] = ResolversParentTypes['OutputMessage']> = {
+    code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 export type CompanyResolvers<ContextType = any, ParentType extends ResolversParentTypes['Company'] = ResolversParentTypes['Company']> = {
@@ -456,9 +472,10 @@ export type CompanyResolvers<ContextType = any, ParentType extends ResolversPare
     name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
-export type Company_QueryOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['Company_QueryOutput'] = ResolversParentTypes['Company_QueryOutput']> = {
+export type Company_OutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['Company_Output'] = ResolversParentTypes['Company_Output']> = {
     total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
     items?: Resolver<ReadonlyArray<ResolversTypes['Company']>, ParentType, ContextType>;
+    messages?: Resolver<ReadonlyArray<Maybe<ResolversTypes['OutputMessage']>>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 export type Resolvers<ContextType = any> = {
@@ -467,9 +484,10 @@ export type Resolvers<ContextType = any> = {
     DateTime?: GraphQLScalarType;
     _AllModels?: _AllModelsResolvers<ContextType>;
     User?: UserResolvers<ContextType>;
-    User_QueryOutput?: User_QueryOutputResolvers<ContextType>;
+    User_Output?: User_OutputResolvers<ContextType>;
+    OutputMessage?: OutputMessageResolvers<ContextType>;
     Company?: CompanyResolvers<ContextType>;
-    Company_QueryOutput?: Company_QueryOutputResolvers<ContextType>;
+    Company_Output?: Company_OutputResolvers<ContextType>;
 };
 import type { SchemaOperationParams } from '@prisma-to-graphql/graphql-codegen-operation-params';
 export declare const operationParams: Readonly<SchemaOperationParams>;

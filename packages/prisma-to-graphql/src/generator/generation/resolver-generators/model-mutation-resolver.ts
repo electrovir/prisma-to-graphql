@@ -9,11 +9,11 @@ import {GenerationOptions} from '../generation-options';
 import {PrismaField, PrismaModel} from '../model/prisma-model';
 import {ResolverGenerator} from '../resolver-generator';
 import {
-    createOutputTypeBlock,
+    createOutputTypeBlocks,
     createWhereInputBlock,
     createWhereManyInputBlock,
 } from './model-find-many-resolver';
-import {createResolverInputName, createWithoutRelationInputName} from './model-resolver-io';
+import {createResolverInputName, createWithoutRelationInputName} from './model-resolver-names';
 
 function isFieldRequired(field: Readonly<PrismaField>): boolean {
     return (
@@ -445,7 +445,7 @@ export const modelMutationOperation: ResolverGenerator = {
         options: Readonly<GenerationOptions>,
     ): GeneratedGraphql {
         const argBlocks = createArgInputBlocks(prismaModel);
-        const outputTypeBlock = createOutputTypeBlock(prismaModel);
+        const outputBlocks = createOutputTypeBlocks(prismaModel);
 
         const operationBlock: GraphqlBlockByType<'operation'> = {
             type: 'operation',
@@ -471,7 +471,7 @@ export const modelMutationOperation: ResolverGenerator = {
                 },
             ],
             output: {
-                value: outputTypeBlock.name,
+                value: outputBlocks.output.name,
                 required: true,
             },
         };
@@ -487,6 +487,7 @@ export const modelMutationOperation: ResolverGenerator = {
                 ...Object.values(argBlocks).flat(),
                 ...createNestedCreateInputBlocks(prismaModel),
                 createWhereManyInputBlock(prismaModel),
+                ...Object.values(outputBlocks),
             ],
             resolvers: [
                 {

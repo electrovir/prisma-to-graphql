@@ -119,9 +119,12 @@ export function createGraphqlFetcher<const Resolvers extends Readonly<BaseResolv
             options,
         });
 
-        const withOperationName = buildUrl(url, {search: {operation: operationName}});
+        const urlWithOperationName =
+            url && !options?.omitOperationNameFromUrl
+                ? buildUrl(url, {search: {operation: operationName}}).href
+                : url;
 
-        return await fetchRawGraphql(withOperationName.href, graphqlQuery, options);
+        return await fetchRawGraphql(urlWithOperationName, graphqlQuery, options);
     }
 
     return fetchGraphql as unknown as GraphqlFetcher<Resolvers>;

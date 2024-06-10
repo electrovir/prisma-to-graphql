@@ -2,6 +2,8 @@ import {AnyObject, extractErrorMessage, filterObject, isObject} from '@augment-v
 import {GraphQLError} from 'graphql';
 import {isPrimitive, isRunTimeType} from 'run-time-assertions';
 import {combineWhere} from '../../operation-scope/combine-where';
+import {extractMaxCountScope} from '../../operation-scope/max-count';
+import {outputMessages} from '../output-messages';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
 
 /**
@@ -28,7 +30,7 @@ import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
  *
  * @category Operations
  */
-export async function runUpsert({
+export async function runPrismaUpsert({
     graphqlArgs,
     context: {models, operationScope, prismaClient},
     prismaModelName,
@@ -51,6 +53,22 @@ export async function runUpsert({
 
         const finalWhere = combineWhere(upsertWhere, prismaModelName, models, operationScope);
 
+        const maxUpdateCount = extractMaxCountScope(operationScope, 'update');
+        if (maxUpdateCount) {
+            const updateCount = await prismaClient[prismaModelName].count({
+                where: finalWhere,
+            });
+
+            if (updateCount > maxUpdateCount) {
+                throw new GraphQLError(
+                    outputMessages.byDescription['update too big'].message({
+                        count: updateCount,
+                        max: maxUpdateCount,
+                    }),
+                );
+            }
+        }
+
         const updatedEntry = await prismaClient[prismaModelName].upsert({
             where: finalWhere,
             create: createCreateData({upsertData, upsertWhere}),
@@ -60,6 +78,7 @@ export async function runUpsert({
 
         return {
             total: 1,
+            messages: [],
             items: isObject(selection.select.items) ? [updatedEntry] : [],
         };
     } catch (error) {

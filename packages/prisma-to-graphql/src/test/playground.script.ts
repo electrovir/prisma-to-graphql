@@ -26,18 +26,8 @@ async function main(prismaClient: PrismaClient) {
         where: {id: ''},
     });
 
-    prismaClient.region.findMany({
-        select: {
-            users: {
-                select: {
-                    firstName: true,
-                    lastName: true,
-                },
-                where: {
-                    role: 'user',
-                },
-            },
-        },
+    prismaClient.region.count({
+        where: {},
     });
 
     await prismaClient.userSettings.findMany({
@@ -46,6 +36,7 @@ async function main(prismaClient: PrismaClient) {
                 role: 'user',
             },
         },
+        take: 4,
         select: {
             id: true,
             user: {

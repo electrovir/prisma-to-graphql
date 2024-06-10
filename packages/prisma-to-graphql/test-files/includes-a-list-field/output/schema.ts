@@ -20,8 +20,8 @@ export type Scalars = {
 };
 
 export type Mutation = {
-  readonly Users: User_QueryOutput;
-  readonly Posts: Post_QueryOutput;
+  readonly Users: User_Output;
+  readonly Posts: Post_Output;
 };
 
 
@@ -39,8 +39,8 @@ export type Mutation_PostsArgs = {
 };
 
 export type Query = {
-  readonly Users: User_QueryOutput;
-  readonly Posts: Post_QueryOutput;
+  readonly Users: User_Output;
+  readonly Posts: Post_Output;
 };
 
 
@@ -100,9 +100,16 @@ export type SortOrderWithNulls = {
   readonly nulls?: InputMaybe<NullsOrder | `${NullsOrder}`>;
 };
 
-export type User_QueryOutput = {
+export type User_Output = {
   readonly total: Scalars['Int']['output'];
   readonly items: ReadonlyArray<User>;
+  readonly messages: ReadonlyArray<Maybe<OutputMessage>>;
+};
+
+export type OutputMessage = {
+  readonly code: Scalars['String']['output'];
+  readonly message: Scalars['String']['output'];
+  readonly description: Scalars['String']['output'];
 };
 
 export type OrderByCount = {
@@ -232,9 +239,10 @@ export type Post = {
   readonly user: User;
 };
 
-export type Post_QueryOutput = {
+export type Post_Output = {
   readonly total: Scalars['Int']['output'];
   readonly items: ReadonlyArray<Post>;
+  readonly messages: ReadonlyArray<Maybe<OutputMessage>>;
 };
 
 export type Post_WhereInput = {
@@ -411,7 +419,8 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<User>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   SortOrderWithNulls: SortOrderWithNulls;
-  User_QueryOutput: ResolverTypeWrapper<User_QueryOutput>;
+  User_Output: ResolverTypeWrapper<User_Output>;
+  OutputMessage: ResolverTypeWrapper<OutputMessage>;
   OrderByCount: OrderByCount;
   User_WhereInput: User_WhereInput;
   User_OrderByInput: User_OrderByInput;
@@ -430,7 +439,7 @@ export type ResolversTypes = {
   User_Without_Post_ConnectionManyInput: User_Without_Post_ConnectionManyInput;
   User_Without_Post_ConnectionInput: User_Without_Post_ConnectionInput;
   Post: ResolverTypeWrapper<Post>;
-  Post_QueryOutput: ResolverTypeWrapper<Post_QueryOutput>;
+  Post_Output: ResolverTypeWrapper<Post_Output>;
   Post_WhereInput: Post_WhereInput;
   Post_OrderByInput: Post_OrderByInput;
   Post_WhereUnfilteredUniqueInput: Post_WhereUnfilteredUniqueInput;
@@ -458,7 +467,8 @@ export type ResolversParentTypes = {
   User: User;
   String: Scalars['String']['output'];
   SortOrderWithNulls: SortOrderWithNulls;
-  User_QueryOutput: User_QueryOutput;
+  User_Output: User_Output;
+  OutputMessage: OutputMessage;
   OrderByCount: OrderByCount;
   User_WhereInput: User_WhereInput;
   User_OrderByInput: User_OrderByInput;
@@ -477,7 +487,7 @@ export type ResolversParentTypes = {
   User_Without_Post_ConnectionManyInput: User_Without_Post_ConnectionManyInput;
   User_Without_Post_ConnectionInput: User_Without_Post_ConnectionInput;
   Post: Post;
-  Post_QueryOutput: Post_QueryOutput;
+  Post_Output: Post_Output;
   Post_WhereInput: Post_WhereInput;
   Post_OrderByInput: Post_OrderByInput;
   Post_WhereUnfilteredUniqueInput: Post_WhereUnfilteredUniqueInput;
@@ -496,13 +506,13 @@ export type ResolversParentTypes = {
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, Partial<Mutation_UsersArgs>>;
-  Posts?: Resolver<ResolversTypes['Post_QueryOutput'], ParentType, ContextType, Partial<Mutation_PostsArgs>>;
+  Users?: Resolver<ResolversTypes['User_Output'], ParentType, ContextType, Partial<Mutation_UsersArgs>>;
+  Posts?: Resolver<ResolversTypes['Post_Output'], ParentType, ContextType, Partial<Mutation_PostsArgs>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, Partial<Query_UsersArgs>>;
-  Posts?: Resolver<ResolversTypes['Post_QueryOutput'], ParentType, ContextType, Partial<Query_PostsArgs>>;
+  Users?: Resolver<ResolversTypes['User_Output'], ParentType, ContextType, Partial<Query_UsersArgs>>;
+  Posts?: Resolver<ResolversTypes['Post_Output'], ParentType, ContextType, Partial<Query_PostsArgs>>;
 };
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
@@ -523,9 +533,17 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type User_QueryOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['User_QueryOutput'] = ResolversParentTypes['User_QueryOutput']> = {
+export type User_OutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['User_Output'] = ResolversParentTypes['User_Output']> = {
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   items?: Resolver<ReadonlyArray<ResolversTypes['User']>, ParentType, ContextType>;
+  messages?: Resolver<ReadonlyArray<Maybe<ResolversTypes['OutputMessage']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OutputMessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['OutputMessage'] = ResolversParentTypes['OutputMessage']> = {
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -537,9 +555,10 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type Post_QueryOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post_QueryOutput'] = ResolversParentTypes['Post_QueryOutput']> = {
+export type Post_OutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post_Output'] = ResolversParentTypes['Post_Output']> = {
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   items?: Resolver<ReadonlyArray<ResolversTypes['Post']>, ParentType, ContextType>;
+  messages?: Resolver<ReadonlyArray<Maybe<ResolversTypes['OutputMessage']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -549,9 +568,10 @@ export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
   _AllModels?: _AllModelsResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
-  User_QueryOutput?: User_QueryOutputResolvers<ContextType>;
+  User_Output?: User_OutputResolvers<ContextType>;
+  OutputMessage?: OutputMessageResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
-  Post_QueryOutput?: Post_QueryOutputResolvers<ContextType>;
+  Post_Output?: Post_OutputResolvers<ContextType>;
 };
 
 
@@ -565,7 +585,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 update: 'User_UpdateInput',
                 upsert: 'User_UpsertInput',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
         Posts: {
             args: {
@@ -573,7 +593,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 update: 'Post_UpdateInput',
                 upsert: 'Post_UpsertInput',
             },
-            output: 'Post_QueryOutput!',
+            output: 'Post_Output!',
         },
     },
     Query: {
@@ -585,7 +605,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
         Posts: {
             args: {
@@ -595,7 +615,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 distinct: '[Post_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'Post_QueryOutput!',
+            output: 'Post_Output!',
         },
     },
 };

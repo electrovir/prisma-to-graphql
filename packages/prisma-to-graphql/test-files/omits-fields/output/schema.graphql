@@ -5,7 +5,7 @@ type Mutation {
         create: User_CreateInput
         update: User_UpdateInput
         upsert: User_UpsertInput
-    ): User_QueryOutput!
+    ): User_Output!
 }
 
 type Query {
@@ -15,7 +15,7 @@ type Query {
         cursor: User_WhereUnfilteredUniqueInput
         distinct: [User_DistinctInput!]
         take: Int
-    ): User_QueryOutput!
+    ): User_Output!
 }
 
 scalar DateTime
@@ -55,11 +55,18 @@ input SortOrderWithNulls {
     nulls: NullsOrder
 }
 
-type User_QueryOutput {
+type User_Output {
     # Total count of items based on the provided 'where' argument.
     # This total ignores pagination args so that, when using pagination, you can know how many pages are needed.
     total: Int!
     items: [User!]!
+    messages: [OutputMessage]!
+}
+
+type OutputMessage {
+    code: String!
+    message: String!
+    description: String!
 }
 
 input OrderByCount {

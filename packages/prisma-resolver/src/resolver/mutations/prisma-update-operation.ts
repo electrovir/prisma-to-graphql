@@ -1,6 +1,8 @@
 import {GraphQLError} from 'graphql';
 import {isRunTimeType} from 'run-time-assertions';
 import {combineWhere} from '../../operation-scope/combine-where';
+import {extractMaxCountScope} from '../../operation-scope/max-count';
+import {outputMessages} from '../output-messages';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
 
 /**
@@ -23,7 +25,7 @@ import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
  *
  * @category Operations
  */
-export async function runUpdate({
+export async function runPrismaUpdate({
     graphqlArgs,
     context: {prismaClient, models, operationScope},
     prismaModelName,
@@ -41,6 +43,22 @@ export async function runUpdate({
 
     const finalWhere = combineWhere(updateWhere, prismaModelName, models, operationScope);
 
+    const maxUpdateCount = extractMaxCountScope(operationScope, 'update');
+    if (maxUpdateCount) {
+        const updateCount = await prismaClient[prismaModelName].count({
+            where: finalWhere,
+        });
+
+        if (updateCount > maxUpdateCount) {
+            throw new GraphQLError(
+                outputMessages.byDescription['update too big'].message({
+                    count: updateCount,
+                    max: maxUpdateCount,
+                }),
+            );
+        }
+    }
+
     const updateOutput: {count: number} = await prismaClient[prismaModelName].updateMany({
         where: finalWhere,
         data: updateData,
@@ -48,6 +66,7 @@ export async function runUpdate({
 
     return {
         total: updateOutput.count,
+        messages: [],
         items: [],
     };
 }

@@ -49,7 +49,7 @@ export type Scalars = {
     };
 };
 export type Mutation = {
-    readonly Users: User_QueryOutput;
+    readonly Users: User_Output;
 };
 export type Mutation_UsersArgs = {
     create?: InputMaybe<User_CreateInput>;
@@ -57,7 +57,7 @@ export type Mutation_UsersArgs = {
     upsert?: InputMaybe<User_UpsertInput>;
 };
 export type Query = {
-    readonly Users: User_QueryOutput;
+    readonly Users: User_Output;
 };
 export type Query_UsersArgs = {
     where?: InputMaybe<User_WhereInput>;
@@ -95,9 +95,15 @@ export type SortOrderWithNulls = {
     readonly sort: SortOrder | `${SortOrder}`;
     readonly nulls?: InputMaybe<NullsOrder | `${NullsOrder}`>;
 };
-export type User_QueryOutput = {
+export type User_Output = {
     readonly total: Scalars['Int']['output'];
     readonly items: ReadonlyArray<User>;
+    readonly messages: ReadonlyArray<Maybe<OutputMessage>>;
+};
+export type OutputMessage = {
+    readonly code: Scalars['String']['output'];
+    readonly message: Scalars['String']['output'];
+    readonly description: Scalars['String']['output'];
 };
 export type OrderByCount = {
     readonly _count?: InputMaybe<SortOrder | `${SortOrder}`>;
@@ -228,7 +234,8 @@ export type ResolversTypes = {
     User: ResolverTypeWrapper<User>;
     String: ResolverTypeWrapper<Scalars['String']['output']>;
     SortOrderWithNulls: SortOrderWithNulls;
-    User_QueryOutput: ResolverTypeWrapper<User_QueryOutput>;
+    User_Output: ResolverTypeWrapper<User_Output>;
+    OutputMessage: ResolverTypeWrapper<OutputMessage>;
     OrderByCount: OrderByCount;
     User_WhereInput: User_WhereInput;
     User_OrderByInput: User_OrderByInput;
@@ -254,7 +261,8 @@ export type ResolversParentTypes = {
     User: User;
     String: Scalars['String']['output'];
     SortOrderWithNulls: SortOrderWithNulls;
-    User_QueryOutput: User_QueryOutput;
+    User_Output: User_Output;
+    OutputMessage: OutputMessage;
     OrderByCount: OrderByCount;
     User_WhereInput: User_WhereInput;
     User_OrderByInput: User_OrderByInput;
@@ -271,10 +279,10 @@ export type ResolversParentTypes = {
     Boolean: Scalars['Boolean']['output'];
 };
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-    Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, Partial<Mutation_UsersArgs>>;
+    Users?: Resolver<ResolversTypes['User_Output'], ParentType, ContextType, Partial<Mutation_UsersArgs>>;
 };
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-    Users?: Resolver<ResolversTypes['User_QueryOutput'], ParentType, ContextType, Partial<Query_UsersArgs>>;
+    Users?: Resolver<ResolversTypes['User_Output'], ParentType, ContextType, Partial<Query_UsersArgs>>;
 };
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
     name: 'DateTime';
@@ -291,9 +299,16 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
     firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
-export type User_QueryOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['User_QueryOutput'] = ResolversParentTypes['User_QueryOutput']> = {
+export type User_OutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['User_Output'] = ResolversParentTypes['User_Output']> = {
     total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
     items?: Resolver<ReadonlyArray<ResolversTypes['User']>, ParentType, ContextType>;
+    messages?: Resolver<ReadonlyArray<Maybe<ResolversTypes['OutputMessage']>>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+export type OutputMessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['OutputMessage'] = ResolversParentTypes['OutputMessage']> = {
+    code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 export type Resolvers<ContextType = any> = {
@@ -302,7 +317,8 @@ export type Resolvers<ContextType = any> = {
     DateTime?: GraphQLScalarType;
     _AllModels?: _AllModelsResolvers<ContextType>;
     User?: UserResolvers<ContextType>;
-    User_QueryOutput?: User_QueryOutputResolvers<ContextType>;
+    User_Output?: User_OutputResolvers<ContextType>;
+    OutputMessage?: OutputMessageResolvers<ContextType>;
 };
 import type { SchemaOperationParams } from '@prisma-to-graphql/graphql-codegen-operation-params';
 export declare const operationParams: Readonly<SchemaOperationParams>;

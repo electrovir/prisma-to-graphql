@@ -5,12 +5,12 @@ type Mutation {
         create: User_CreateInput
         update: User_UpdateInput
         upsert: User_UpsertInput
-    ): User_QueryOutput!
+    ): User_Output!
     UserSettings(
         create: UserSettings_CreateInput
         update: UserSettings_UpdateInput
         upsert: UserSettings_UpsertInput
-    ): UserSettings_QueryOutput!
+    ): UserSettings_Output!
 }
 
 type Query {
@@ -20,14 +20,14 @@ type Query {
         cursor: User_WhereUnfilteredUniqueInput
         distinct: [User_DistinctInput!]
         take: Int
-    ): User_QueryOutput!
+    ): User_Output!
     UserSettings(
         where: UserSettings_WhereInput
         orderBy: [UserSettings_OrderByInput!]
         cursor: UserSettings_WhereUnfilteredUniqueInput
         distinct: [UserSettings_DistinctInput!]
         take: Int
-    ): UserSettings_QueryOutput!
+    ): UserSettings_Output!
 }
 
 scalar DateTime
@@ -83,11 +83,18 @@ input SortOrderWithNulls {
     nulls: NullsOrder
 }
 
-type User_QueryOutput {
+type User_Output {
     # Total count of items based on the provided 'where' argument.
     # This total ignores pagination args so that, when using pagination, you can know how many pages are needed.
     total: Int!
     items: [User!]!
+    messages: [OutputMessage]!
+}
+
+type OutputMessage {
+    code: String!
+    message: String!
+    description: String!
 }
 
 input OrderByCount {
@@ -259,11 +266,12 @@ type UserSettings {
     user: User!
 }
 
-type UserSettings_QueryOutput {
+type UserSettings_Output {
     # Total count of items based on the provided 'where' argument.
     # This total ignores pagination args so that, when using pagination, you can know how many pages are needed.
     total: Int!
     items: [UserSettings!]!
+    messages: [OutputMessage]!
 }
 
 input UserSettings_WhereInput {

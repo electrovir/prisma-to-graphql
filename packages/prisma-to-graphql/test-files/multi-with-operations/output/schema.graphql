@@ -5,12 +5,12 @@ type Mutation {
         create: User_CreateInput
         update: User_UpdateInput
         upsert: User_UpsertInput
-    ): User_QueryOutput!
+    ): User_Output!
     Companies(
         create: Company_CreateInput
         update: Company_UpdateInput
         upsert: Company_UpsertInput
-    ): Company_QueryOutput!
+    ): Company_Output!
 }
 
 type Query {
@@ -20,14 +20,14 @@ type Query {
         cursor: User_WhereUnfilteredUniqueInput
         distinct: [User_DistinctInput!]
         take: Int
-    ): User_QueryOutput!
+    ): User_Output!
     Companies(
         where: Company_WhereInput
         orderBy: [Company_OrderByInput!]
         cursor: Company_WhereUnfilteredUniqueInput
         distinct: [Company_DistinctInput!]
         take: Int
-    ): Company_QueryOutput!
+    ): Company_Output!
 }
 
 scalar DateTime
@@ -83,11 +83,18 @@ input SortOrderWithNulls {
     nulls: NullsOrder
 }
 
-type User_QueryOutput {
+type User_Output {
     # Total count of items based on the provided 'where' argument.
     # This total ignores pagination args so that, when using pagination, you can know how many pages are needed.
     total: Int!
     items: [User!]!
+    messages: [OutputMessage]!
+}
+
+type OutputMessage {
+    code: String!
+    message: String!
+    description: String!
 }
 
 input OrderByCount {
@@ -224,11 +231,12 @@ type Company {
     name: String!
 }
 
-type Company_QueryOutput {
+type Company_Output {
     # Total count of items based on the provided 'where' argument.
     # This total ignores pagination args so that, when using pagination, you can know how many pages are needed.
     total: Int!
     items: [Company!]!
+    messages: [OutputMessage]!
 }
 
 input Company_WhereInput {

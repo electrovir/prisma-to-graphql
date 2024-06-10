@@ -25,11 +25,11 @@ import {
     PrismaResolverOutput,
     extractResolverContext,
 } from './prisma-resolver';
-import {runPrismaQueryOperations} from './queries/prisma-query-operation';
+import {runPrismaQuery} from './queries/prisma-query-operation';
 
 const resolvers: Readonly<Record<OperationType, PrismaResolver<any, any>>> = {
     Mutation: runPrismaMutationOperation,
-    Query: runPrismaQueryOperations,
+    Query: runPrismaQuery,
 };
 
 /**

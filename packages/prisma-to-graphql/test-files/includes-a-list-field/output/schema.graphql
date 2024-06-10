@@ -5,12 +5,12 @@ type Mutation {
         create: User_CreateInput
         update: User_UpdateInput
         upsert: User_UpsertInput
-    ): User_QueryOutput!
+    ): User_Output!
     Posts(
         create: Post_CreateInput
         update: Post_UpdateInput
         upsert: Post_UpsertInput
-    ): Post_QueryOutput!
+    ): Post_Output!
 }
 
 type Query {
@@ -20,14 +20,14 @@ type Query {
         cursor: User_WhereUnfilteredUniqueInput
         distinct: [User_DistinctInput!]
         take: Int
-    ): User_QueryOutput!
+    ): User_Output!
     Posts(
         where: Post_WhereInput
         orderBy: [Post_OrderByInput!]
         cursor: Post_WhereUnfilteredUniqueInput
         distinct: [Post_DistinctInput!]
         take: Int
-    ): Post_QueryOutput!
+    ): Post_Output!
 }
 
 scalar DateTime
@@ -71,11 +71,18 @@ input SortOrderWithNulls {
     nulls: NullsOrder
 }
 
-type User_QueryOutput {
+type User_Output {
     # Total count of items based on the provided 'where' argument.
     # This total ignores pagination args so that, when using pagination, you can know how many pages are needed.
     total: Int!
     items: [User!]!
+    messages: [OutputMessage]!
+}
+
+type OutputMessage {
+    code: String!
+    message: String!
+    description: String!
 }
 
 input OrderByCount {
@@ -205,11 +212,12 @@ type Post {
     user: User!
 }
 
-type Post_QueryOutput {
+type Post_Output {
     # Total count of items based on the provided 'where' argument.
     # This total ignores pagination args so that, when using pagination, you can know how many pages are needed.
     total: Int!
     items: [Post!]!
+    messages: [OutputMessage]!
 }
 
 input Post_WhereInput {

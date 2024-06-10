@@ -10,7 +10,7 @@ export * from './generation/model/prisma-model';
 export * from './generation/resolver-generator';
 export * from './generation/resolver-generators/model-find-many-resolver';
 export * from './generation/resolver-generators/model-mutation-resolver';
-export * from './generation/resolver-generators/model-resolver-io';
+export * from './generation/resolver-generators/model-resolver-names';
 export * from './generation/typescript/build-schema-ts';
 export * from './generation/typescript/compile-ts';
 export * from './generator';

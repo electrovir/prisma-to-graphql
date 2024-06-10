@@ -1,3 +1,4 @@
+import {MaxCountScope} from './max-count';
 import {ModelMap, ModelMapField, ModelMapModel} from './model-map';
 import {MapPrismaType} from './prisma-type-map';
 
@@ -17,9 +18,11 @@ import {MapPrismaType} from './prisma-type-map';
  *         },
  *     };
  */
-export type OperationScope<Models extends ModelMap> = Partial<{
-    where: WhereScope<Models>;
-}>;
+export type OperationScope<Models extends ModelMap> = Partial<
+    {
+        where: WhereScope<Models>;
+    } & MaxCountScope
+>;
 
 /**
  * The user defined where scope. Includes entries for every model in the user provided model map.

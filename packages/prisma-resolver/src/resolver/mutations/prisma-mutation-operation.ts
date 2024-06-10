@@ -1,8 +1,8 @@
 import {GraphQLError} from 'graphql';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
-import {runCreate} from './prisma-create-operation';
-import {runUpdate} from './prisma-update-operation';
-import {runUpsert} from './prisma-upsert-operation';
+import {runPrismaCreate} from './prisma-create-operation';
+import {runPrismaUpdate} from './prisma-update-operation';
+import {runPrismaUpsert} from './prisma-upsert-operation';
 
 /**
  * Decides which CRUD resolver to use based on the given graphql args.
@@ -23,11 +23,11 @@ export async function runPrismaMutationOperation(
     const updateArg = params.graphqlArgs.update;
 
     if (upsertArg) {
-        return await runUpsert(params);
+        return await runPrismaUpsert(params);
     } else if (createArg) {
-        return await runCreate(params);
+        return await runPrismaCreate(params);
     } else if (updateArg) {
-        return await runUpdate(params);
+        return await runPrismaUpdate(params);
     } else {
         throw new GraphQLError(
             'At least one mutation arg must be provided: create, update, or upsert.',

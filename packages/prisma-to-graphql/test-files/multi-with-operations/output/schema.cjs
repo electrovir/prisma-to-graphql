@@ -39,7 +39,7 @@ exports.operationParams = {
                 update: 'User_UpdateInput',
                 upsert: 'User_UpsertInput',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
         Companies: {
             args: {
@@ -47,7 +47,7 @@ exports.operationParams = {
                 update: 'Company_UpdateInput',
                 upsert: 'Company_UpsertInput',
             },
-            output: 'Company_QueryOutput!',
+            output: 'Company_Output!',
         },
     },
     Query: {
@@ -59,7 +59,7 @@ exports.operationParams = {
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
         Companies: {
             args: {
@@ -69,7 +69,7 @@ exports.operationParams = {
                 distinct: '[Company_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'Company_QueryOutput!',
+            output: 'Company_Output!',
         },
     },
 };

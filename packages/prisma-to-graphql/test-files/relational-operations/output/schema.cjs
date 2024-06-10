@@ -38,7 +38,7 @@ exports.operationParams = {
                 update: 'User_UpdateInput',
                 upsert: 'User_UpsertInput',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
         UserSettings: {
             args: {
@@ -46,7 +46,7 @@ exports.operationParams = {
                 update: 'UserSettings_UpdateInput',
                 upsert: 'UserSettings_UpsertInput',
             },
-            output: 'UserSettings_QueryOutput!',
+            output: 'UserSettings_Output!',
         },
     },
     Query: {
@@ -58,7 +58,7 @@ exports.operationParams = {
                 distinct: '[User_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'User_QueryOutput!',
+            output: 'User_Output!',
         },
         UserSettings: {
             args: {
@@ -68,7 +68,7 @@ exports.operationParams = {
                 distinct: '[UserSettings_DistinctInput!]',
                 take: 'Int',
             },
-            output: 'UserSettings_QueryOutput!',
+            output: 'UserSettings_Output!',
         },
     },
 };

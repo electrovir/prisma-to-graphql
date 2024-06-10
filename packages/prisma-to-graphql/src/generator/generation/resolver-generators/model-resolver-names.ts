@@ -43,7 +43,7 @@ export type ResolverInputNames = {
 export function createQueryOutputName(modelName: string): string {
     return [
         modelName,
-        'QueryOutput',
+        'Output',
     ].join('_');
 }
 

@@ -129,7 +129,7 @@ describe(createGraphqlFetcher.name, () => {
                     },
                 },
             ],
-            throws: "Fetch to 'example.com' failed: 418: test",
+            throws: "Fetch to 'example.com/?operation=Test1' failed: 418: test",
         },
         {
             it: 'combines graphql errors',
@@ -173,6 +173,36 @@ describe(createGraphqlFetcher.name, () => {
                     operationType: 'Query',
                     url: 'example.com',
                     options: {
+                        customFetch() {
+                            return {
+                                ok: true,
+                                json() {
+                                    return {};
+                                },
+                            } as unknown as ReturnType<typeof fetch>;
+                        },
+                    },
+                },
+                {
+                    Users: {
+                        args: {
+                            where: {role: {equals: 'user'}},
+                        },
+                        select: {},
+                    },
+                },
+            ],
+            throws: "GraphQL Response from 'example.com/?operation=Test1' had no data.",
+        },
+        {
+            it: 'rejects missing response data and omits operation name from url',
+            inputs: [
+                {
+                    operationName: 'Test1',
+                    operationType: 'Query',
+                    url: 'example.com',
+                    options: {
+                        omitOperationNameFromUrl: true,
                         customFetch() {
                             return {
                                 ok: true,

@@ -43,7 +43,7 @@ model UserSettings {
     userId String @unique
 
     stats UserStats?
-    user  User       @relation(fields: [userId], references: [id])
+    user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model UserStats {
@@ -56,5 +56,5 @@ model UserStats {
     views    Int
 
     userSettingsId String       @unique
-    settings       UserSettings @relation(fields: [userSettingsId], references: [id])
+    settings       UserSettings @relation(fields: [userSettingsId], references: [id], onDelete: Cascade)
 }
