@@ -4,7 +4,7 @@
 import type {models} from '.prisma/graphql/models';
 
 import {parseJson} from '@augment-vir/common';
-import {OperationScope} from '@prisma-to-graphql/prisma-resolver';
+import {OperationScope} from '@prisma-to-graphql/operation-scope';
 import {notCommittedDir, runGraphqlServer, setupTestPrismaDb} from '@prisma-to-graphql/scripts';
 import {rm} from 'node:fs/promises';
 import {join} from 'node:path';

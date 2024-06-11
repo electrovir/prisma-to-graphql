@@ -1,5 +1,5 @@
 import {isTruthy, typedArrayIncludes} from '@augment-vir/common';
-import {PrismaTypeMap} from '@prisma-to-graphql/prisma-resolver/src/operation-scope/prisma-type-map';
+import {PrismaTypeMap} from '@prisma-to-graphql/operation-scope';
 import {GraphqlBlockByType} from '../../builders/graphql-builder/graphql-block';
 
 /**

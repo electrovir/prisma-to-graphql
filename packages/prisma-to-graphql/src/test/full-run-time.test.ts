@@ -22,7 +22,7 @@ import {
     createGraphqlFetcher,
     fetchRawGraphql,
 } from '@prisma-to-graphql/fetch-graphql';
-import {OperationScope} from '@prisma-to-graphql/prisma-resolver';
+import {OperationScope} from '@prisma-to-graphql/operation-scope';
 import {assert} from 'chai';
 import {createUtcFullDate} from 'date-vir';
 import {Server} from 'node:http';

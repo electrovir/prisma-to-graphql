@@ -1,6 +1,6 @@
 import {randomString} from '@augment-vir/common';
-import {generatedModels} from '../operation-scope/generated-models.mock';
 import {runPrismaQuery} from '../resolver/queries/prisma-query-operation';
+import {generatedModels} from './generated-models.mock';
 import {ResolverTests} from './resolver-test-case.test-helper';
 
 export const prismaQueryTests: ResolverTests = {

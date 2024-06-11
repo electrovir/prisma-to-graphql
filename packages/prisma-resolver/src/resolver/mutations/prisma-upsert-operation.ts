@@ -1,9 +1,11 @@
 import {AnyObject, extractErrorMessage, filterObject, isObject} from '@augment-vir/common';
+import {
+    combineWhere,
+    extractMaxCountScope,
+    outputMessages,
+} from '@prisma-to-graphql/operation-scope';
 import {GraphQLError} from 'graphql';
 import {isPrimitive, isRunTimeType} from 'run-time-assertions';
-import {combineWhere} from '../../operation-scope/combine-where';
-import {extractMaxCountScope} from '../../operation-scope/max-count';
-import {outputMessages} from '../output-messages';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
 
 /**

@@ -19,6 +19,9 @@
             "path": "../fetch-graphql"
         },
         {
+            "path": "../operation-scope"
+        },
+        {
             "path": "../scripts"
         }
     ]

@@ -1,10 +1,12 @@
 import {TypedFunction} from '@augment-vir/common';
+import {
+    ModelMap,
+    OperationScope,
+    OutputMessage,
+    ResolverContext,
+} from '@prisma-to-graphql/operation-scope';
 import {assertDefined} from 'run-time-assertions';
-import {ModelMap} from '../operation-scope/model-map';
-import {OperationScope} from '../operation-scope/operation-scope';
-import {ResolverContext} from '../operation-scope/resolver-context';
 import {Selection} from '../util/parse-selection';
-import {OutputMessage} from './output-messages';
 
 /**
  * All of the `prisma-resolver` package's resolvers return this output;

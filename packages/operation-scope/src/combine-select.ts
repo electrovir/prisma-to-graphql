@@ -1,7 +1,9 @@
 import {AnyObject, RequiredAndNotNullBy, isObject, mapObjectValues} from '@augment-vir/common';
 import {assertDefined, assertRunTimeType} from 'run-time-assertions';
+import {extractMaxCountScope} from './max-count';
 import {ModelMap} from './model-map';
 import {OperationScope} from './operation-scope';
+import {OutputMessage, outputMessages} from './output-messages';
 import {generatePrismaWhere} from './prisma-where';
 
 /**
@@ -16,7 +18,7 @@ export function combineSelect<const Models extends ModelMap>(
     modelUnderQuery: string,
     models: Readonly<Models> | undefined,
     operationScope: Readonly<OperationScope<Models>> | undefined,
-) {
+): {select: AnyObject; messages: OutputMessage[]} {
     const whereScope = operationScope?.where;
 
     if (
@@ -26,7 +28,10 @@ export function combineSelect<const Models extends ModelMap>(
         !Object.keys(querySelect).length ||
         !operationScope
     ) {
-        return querySelect || {};
+        return {
+            select: querySelect || {},
+            messages: [],
+        };
     }
 
     assertDefined(
@@ -34,7 +39,16 @@ export function combineSelect<const Models extends ModelMap>(
         'Missing `models` GraphQL context variable, needed to use the `operationScope` context variable.',
     );
 
-    return buildSelectRecursively(querySelect, modelUnderQuery, models, {where: whereScope});
+    return buildSelectRecursively(
+        querySelect,
+        modelUnderQuery,
+        models,
+        {
+            where: whereScope,
+            maxCount: operationScope.maxCount,
+        },
+        [modelUnderQuery],
+    );
 }
 
 function buildSelectRecursively<const Models extends ModelMap>(
@@ -42,8 +56,11 @@ function buildSelectRecursively<const Models extends ModelMap>(
     modelUnderQuery: string,
     models: Readonly<Models>,
     operationScope: Readonly<RequiredAndNotNullBy<OperationScope<Models>, 'where'>>,
-): AnyObject {
-    return mapObjectValues(querySelect, (fieldName, fieldSelection) => {
+    parentFieldChain: string[],
+): {select: AnyObject; messages: OutputMessage[]} {
+    const messages: OutputMessage[] = [];
+
+    const select = mapObjectValues(querySelect, (fieldName, fieldSelection) => {
         const currentField = models?.[modelUnderQuery]?.[fieldName];
 
         assertDefined(
@@ -63,17 +80,43 @@ function buildSelectRecursively<const Models extends ModelMap>(
                 operationScope.where,
             );
 
+            const maxCount = extractMaxCountScope(operationScope, 'query');
+            const useMaxCount =
+                maxCount != undefined &&
+                (querySelect[fieldName].take == undefined ||
+                    maxCount <= querySelect[fieldName].take);
+            const take = useMaxCount ? maxCount : querySelect[fieldName].take;
+
+            const fieldChain = parentFieldChain.concat(fieldName);
+
+            if (useMaxCount) {
+                messages.push(
+                    outputMessages.byDescription['field possibly truncated'].create({
+                        fieldChain,
+                        max: maxCount,
+                    }),
+                );
+            }
+
+            const recursiveSelect = buildSelectRecursively(
+                querySelect[fieldName].select,
+                currentField.type,
+                models,
+                operationScope,
+                fieldChain,
+            );
+
+            messages.push(...recursiveSelect.messages);
+
             return {
-                select: buildSelectRecursively(
-                    querySelect[fieldName].select,
-                    currentField.type,
-                    models,
-                    operationScope,
-                ),
+                select: recursiveSelect.select,
                 ...(expandedWhereScope ? {where: expandedWhereScope} : {}),
+                ...(take == undefined ? {} : {take}),
             };
         }
 
         return fieldSelection;
     });
+
+    return {select, messages};
 }

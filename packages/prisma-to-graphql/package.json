@@ -34,6 +34,7 @@
         "@graphql-codegen/plugin-helpers": "^5.0.4",
         "@graphql-codegen/typescript": "^4.0.7",
         "@graphql-codegen/typescript-resolvers": "^4.1.0",
+        "@prisma-to-graphql/operation-scope": "^1.0.0",
         "@prisma-to-graphql/prisma-resolver": "^1.0.0",
         "@prisma/generator-helper": "^5.14.0",
         "@prisma/internals": "^5.14.0",

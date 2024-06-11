@@ -8,6 +8,7 @@ import {
     OperationType,
     allValidOperationTypes,
 } from '@prisma-to-graphql/graphql-codegen-operation-params';
+import {ModelMap, ResolverContext} from '@prisma-to-graphql/operation-scope';
 import {
     FieldNode,
     GraphQLResolveInfo,
@@ -15,8 +16,6 @@ import {
     OperationDefinitionNode,
     SelectionSetNode,
 } from 'graphql';
-import {ModelMap} from '../operation-scope/model-map';
-import {ResolverContext} from '../operation-scope/resolver-context';
 import {parseItemSelection} from '../util/parse-selection';
 import {runPrismaMutationOperation} from './mutations/prisma-mutation-operation';
 import {

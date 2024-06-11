@@ -1,12 +1,10 @@
 import {createDeferredPromiseWrapper} from '@augment-vir/common';
 import {log} from '@augment-vir/node-js';
+import {ModelMap, OperationScope, ResolverContext} from '@prisma-to-graphql/operation-scope';
 import {Plugin, YogaInitialContext, createSchema, createYoga} from 'graphql-yoga';
 import {readFile} from 'node:fs/promises';
 import {RequestListener, createServer} from 'node:http';
 import {getPortPromise} from 'portfinder';
-import {ModelMap} from './operation-scope/model-map';
-import {OperationScope} from './operation-scope/operation-scope';
-import {ResolverContext} from './operation-scope/resolver-context';
 
 export type GraphqlServerPlugin<PrismaClient> = Plugin<
     {

@@ -6,7 +6,7 @@ import {MapPrismaType} from './prisma-type-map';
  * Defines extra scopes, or extra requirements for each query. The defined scope will be merged with
  * all user queries to limit what data they can reach.
  *
- * @category Types
+ * @category Main
  * @example
  *     // this will limit all user queries or other queries that contain user relations to users
  *     // to only the id `current-user-id`.

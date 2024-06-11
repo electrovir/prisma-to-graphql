@@ -76,6 +76,11 @@ const messageDefinitions = {
             `Update failed. The given query would update ${count} rows but the max is ${max}. Please provide a tighter "where" argument.`,
         description: 'update too big',
     },
+    'ptg-4': {
+        message: ({fieldChain, max}: {fieldChain: string[]; max: number}) =>
+            `Field '${fieldChain.join(' > ')}' possibly truncated to max ${max} results.`,
+        description: 'field possibly truncated',
+    },
 } as const satisfies {
     /** `ptg` stands for prisma-to-graphql. */
     [MessageCode in `ptg-${number}`]: Omit<MessageDefinition, 'code'>;
@@ -172,9 +177,9 @@ const outputMessagesByDescription: OutputMessagesByDescription = arrayToObject(
 ) as OutputMessagesByDescription;
 
 /**
- * All output messages
+ * All possible messages that prisma-to-graphql query resolvers may return.
  *
- * @category Internals
+ * @category Main
  */
 export const outputMessages: Readonly<OutputMessages> = {
     byCode: outputMessagesByCode,

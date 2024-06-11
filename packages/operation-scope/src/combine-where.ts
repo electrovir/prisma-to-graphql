@@ -1,4 +1,3 @@
-import {assertDefined} from 'run-time-assertions';
 import {ModelMap} from './model-map';
 import {OperationScope} from './operation-scope';
 import {generatePrismaWhere} from './prisma-where';
@@ -15,18 +14,7 @@ export function combineWhere<const Models extends ModelMap>(
     models: Readonly<Models> | undefined,
     operationScope: Readonly<OperationScope<Models>> | undefined,
 ) {
-    const whereScope = operationScope?.where;
-
-    if (!whereScope) {
-        return queryWhere;
-    }
-
-    assertDefined(
-        models,
-        'Missing `models` GraphQL context variable, needed to use the `operationScope` context variable.',
-    );
-
-    const expandedWhereScope = generatePrismaWhere(modelUnderQuery, models, whereScope);
+    const expandedWhereScope = generatePrismaWhere(modelUnderQuery, models, operationScope?.where);
 
     if (!queryWhere && expandedWhereScope) {
         return expandedWhereScope;

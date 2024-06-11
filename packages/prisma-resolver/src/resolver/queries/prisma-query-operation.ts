@@ -1,9 +1,11 @@
 import {isObject, isTruthy} from '@augment-vir/common';
+import {
+    combineSelect,
+    combineWhere,
+    extractMaxCountScope,
+    outputMessages,
+} from '@prisma-to-graphql/operation-scope';
 import {GraphQLError} from 'graphql';
-import {combineSelect} from '../../operation-scope/combine-select';
-import {combineWhere} from '../../operation-scope/combine-where';
-import {extractMaxCountScope} from '../../operation-scope/max-count';
-import {outputMessages} from '../output-messages';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
 
 /**
@@ -54,7 +56,7 @@ export async function runPrismaQuery({
     const items = isObject(selection.select.items)
         ? await prismaClient[prismaModelName].findMany({
               where: finalWhere,
-              select: finalSelect,
+              select: finalSelect?.select,
               orderBy: graphqlArgs.orderBy,
               take: finalTake,
               skip: graphqlArgs.cursor == undefined ? undefined : 1,
@@ -69,6 +71,7 @@ export async function runPrismaQuery({
         total,
         items,
         messages: [
+            ...(finalSelect ? finalSelect.messages : []),
             wereQueryResultsTruncated &&
                 maxResultCount &&
                 outputMessages.byDescription['query results truncated'].create({

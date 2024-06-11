@@ -70,9 +70,17 @@ export function generatePrismaWhere<
     const ModelName extends keyof Models,
 >(
     modelUnderQuery: ModelName,
-    models: Readonly<Models>,
-    whereScope: Readonly<WhereScope<Models>>,
+    models: Readonly<Models> | undefined,
+    whereScope: Readonly<WhereScope<Models>> | undefined,
 ): SingleModelPrismaWhere<Models, ModelName> | undefined {
+    if (!whereScope) {
+        return undefined;
+    }
+
+    assertDefined(
+        models,
+        'Missing `models` GraphQL context variable, needed to use the `operationScope` context variable.',
+    );
     return recursivelyBuildWhere(modelUnderQuery, models, whereScope, new Set());
 }
 
