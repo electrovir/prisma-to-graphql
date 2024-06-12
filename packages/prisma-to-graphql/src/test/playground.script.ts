@@ -13,60 +13,14 @@
 import {PrismaClient} from '.prisma';
 
 async function main(prismaClient: PrismaClient) {
-    await prismaClient.userSettings.upsert({
-        update: {},
-        create: {
-            id: '',
-            user: {
-                connect: {
-                    id: '',
-                },
-            },
-        },
-        where: {id: ''},
-    });
-
-    prismaClient.region.count({
-        where: {},
-    });
-
-    await prismaClient.userSettings.findMany({
+    await prismaClient.user.update({
         where: {
-            user: {
-                role: 'user',
-            },
+            id: 'b12b86db-36a7-4644-8531-297cbb7b2d87',
         },
-        take: 4,
-        select: {
-            id: true,
-            user: {
-                select: {
-                    firstName: true,
-                    lastName: true,
-                },
-            },
-        },
-    });
-
-    await prismaClient.user.create({
         data: {
-            email: '',
-            password: '',
-            posts: {
-                // createMany,
-            },
-            settings: {
-                connect: {
-                    id: 'yo',
-                    receivesMarketingEmails: {},
-                    stats: {},
-                    user: {},
-                },
-            },
+            email: 'hello@example.com',
         },
     });
 }
 
 main(new PrismaClient());
-
-Object.values;

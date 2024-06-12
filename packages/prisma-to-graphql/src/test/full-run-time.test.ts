@@ -3,48 +3,18 @@ import type {PrismaClient} from '.prisma';
 // @ts-ignore: this won't be generated until tests run at least once
 import type {Resolvers} from '.prisma/graphql/schema';
 
-import {
-    ArrayElement,
-    MaybePromise,
-    assertLengthAtLeast,
-    awaitedForEach,
-    createDeferredPromiseWrapper,
-    ensureErrorAndPrependMessage,
-    isUuid,
-    omitObjectKeys,
-    waitUntilTruthy,
-} from '@augment-vir/common';
-import {log} from '@augment-vir/node-js';
-import {
-    GraphqlFetcher,
-    Operations,
-    ResolverOutput,
-    createGraphqlFetcher,
-    fetchRawGraphql,
-} from '@prisma-to-graphql/fetch-graphql';
+import {ArrayElement, assertLengthAtLeast, isUuid, omitObjectKeys} from '@augment-vir/common';
+import {Operations, ResolverOutput, fetchRawGraphql} from '@prisma-to-graphql/fetch-graphql';
 import {OperationScope} from '@prisma-to-graphql/operation-scope';
+import {GraphqlTestCase, runGraphqlServerTests} from '@prisma-to-graphql/scripts';
 import {assert} from 'chai';
 import {createUtcFullDate} from 'date-vir';
-import {Server} from 'node:http';
 import {assertDefined, assertRunTimeType, assertThrows, assertTypeOf} from 'run-time-assertions';
-import {buildUrl, joinUrlParts} from 'url-vir';
-import {graphqlServerHeaders, setupFullServer} from './full-run-time.test-helper';
+import {joinUrlParts} from 'url-vir';
+import {setupTestServerConfig} from './full-run-time.test-helper';
+import {graphqlServerHeaders} from './server-headers.mock';
 
-type GraphqlTestCase = {
-    it: string;
-    /**
-     * Do not support `only` or `force` as each test is sequential and depends on the results of the
-     * previous tests.
-     */
-    // only?: true;
-    test: (params: {
-        serverUrl: string;
-        fetchGraphql: GraphqlFetcher<Resolvers>;
-        prismaClient: PrismaClient;
-    }) => MaybePromise<void>;
-};
-
-const testCases: GraphqlTestCase[] = [
+const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     {
         it: 'finds multiple users',
         async test({serverUrl, fetchGraphql}) {
@@ -1747,63 +1717,8 @@ const testCases: GraphqlTestCase[] = [
     },
 ];
 
-async function runTests(testCases: ReadonlyArray<Readonly<GraphqlTestCase>>) {
-    let server: Server | undefined;
-    try {
-        const fullServer = await setupFullServer();
-        server = fullServer.server;
-        const serverUrl = buildUrl('http://localhost', {
-            port: fullServer.port,
-        }).href;
-
-        await waitUntilTruthy(async () => {
-            const response = await fetch(joinUrlParts(serverUrl, 'health'));
-
-            return response.ok;
-        });
-
-        // @ts-ignore: this won't be generated until tests run at least once
-        const {operationParams} = await import('.prisma/graphql/schema.cjs');
-
-        const fetchGraphql = createGraphqlFetcher<Resolvers>(operationParams);
-
-        const itNames = new Set<string>();
-
-        await awaitedForEach(testCases, async (testCase) => {
-            if (itNames.has(testCase.it)) {
-                throw new Error(`Duplicate it name: '${testCase.it}'`);
-            }
-            itNames.add(testCase.it);
-            try {
-                log.faint(testCase.it);
-                await testCase.test({
-                    serverUrl,
-                    fetchGraphql,
-                    prismaClient: fullServer.prismaClient,
-                });
-            } catch (error) {
-                throw ensureErrorAndPrependMessage(error, testCase.it);
-            }
-        });
-    } finally {
-        if (server) {
-            const serverCloseDeferredPromise = createDeferredPromiseWrapper();
-            server.closeAllConnections();
-            server.close((error) => {
-                if (error) {
-                    serverCloseDeferredPromise.reject(error);
-                }
-                {
-                    serverCloseDeferredPromise.resolve();
-                }
-            });
-            await serverCloseDeferredPromise.promise;
-        }
-    }
-}
-
 describe('resolver run time', () => {
     it('passes all tests', async () => {
-        await runTests(testCases);
+        await runGraphqlServerTests(await setupTestServerConfig(), testCases);
     });
 });

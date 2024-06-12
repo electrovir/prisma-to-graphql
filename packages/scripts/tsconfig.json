@@ -17,6 +17,9 @@
     "references": [
         {
             "path": "../operation-scope"
+        },
+        {
+            "path": "../fetch-graphql"
         }
     ]
 }

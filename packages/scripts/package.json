@@ -30,6 +30,7 @@
         "@augment-vir/chai": "^28.0.2",
         "@electrovir/nyc": "^15.1.0-fix0",
         "@istanbuljs/nyc-config-typescript": "^1.0.2",
+        "@prisma-to-graphql/fetch-graphql": "*",
         "@types/chai": "^4.3.16",
         "@types/mocha": "^10.0.6",
         "@types/node": "^20.12.13",

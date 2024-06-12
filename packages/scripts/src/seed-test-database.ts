@@ -1,10 +1,11 @@
-import {awaitedForEach, getObjectTypedEntries, randomString} from '@augment-vir/common';
+import {
+    awaitedForEach,
+    ensureErrorAndPrependMessage,
+    getObjectTypedEntries,
+    randomString,
+} from '@augment-vir/common';
 
-// @ts-ignore: this won't be generated until tests run at least once
-import {PrismaClient} from '.prisma';
-
-// @ts-ignore: this won't be generated until tests run at least once
-const seedData: {user: Parameters<PrismaClient['user']['create']>[0]['data'][]} = {
+const seedData = {
     user: [
         {
             email: 'test1@example.com',
@@ -202,7 +203,7 @@ const seedData: {user: Parameters<PrismaClient['user']['create']>[0]['data'][]} 
     ],
 };
 
-export async function seedDatabase(prismaClient: PrismaClient) {
+export async function seedDatabase<PrismaClient>(prismaClient: PrismaClient) {
     await awaitedForEach(
         getObjectTypedEntries(seedData),
         async ([
@@ -210,7 +211,11 @@ export async function seedDatabase(prismaClient: PrismaClient) {
             dataEntries,
         ]) => {
             await awaitedForEach(dataEntries, async (dataEntry) => {
-                await prismaClient[modelName].create({data: dataEntry});
+                try {
+                    await (prismaClient as any)[modelName].create({data: dataEntry});
+                } catch (error) {
+                    throw ensureErrorAndPrependMessage(error, `Failed on seeding '${modelName}'`);
+                }
             });
         },
     );

@@ -12,6 +12,15 @@ export type GraphqlServerPlugin<PrismaClient> = Plugin<
     } & YogaInitialContext
 >;
 
+export type RunGraphqlServerConfig<PrismaClient, Models extends ModelMap> = Readonly<{
+    schemaGraphqlFilePath: string;
+    resolversCjsFilePath: string;
+    modelMapCjsFilePath: string;
+    prismaClient: PrismaClient;
+    plugins?: GraphqlServerPlugin<PrismaClient>[] | undefined;
+    createOperationScope?: ((request: Request) => OperationScope<Models> | undefined) | undefined;
+}>;
+
 export async function runGraphqlServer<PrismaClient, Models extends ModelMap>({
     schemaGraphqlFilePath,
     resolversCjsFilePath,
@@ -19,14 +28,7 @@ export async function runGraphqlServer<PrismaClient, Models extends ModelMap>({
     prismaClient,
     plugins,
     createOperationScope,
-}: {
-    schemaGraphqlFilePath: string;
-    resolversCjsFilePath: string;
-    modelMapCjsFilePath: string;
-    prismaClient: PrismaClient;
-    plugins?: GraphqlServerPlugin<PrismaClient>[];
-    createOperationScope?: ((request: Request) => OperationScope<Models> | undefined) | undefined;
-}) {
+}: RunGraphqlServerConfig<PrismaClient, Models>) {
     const typeDefs = [
         (await readFile(schemaGraphqlFilePath)).toString(),
     ];

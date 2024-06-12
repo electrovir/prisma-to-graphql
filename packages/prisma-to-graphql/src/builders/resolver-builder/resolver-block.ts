@@ -62,7 +62,7 @@ export const resolverInputVarTypes: Record<
 > = {
     [ResolverBodyVarNames.parentValue]: 'unknown',
     [ResolverBodyVarNames.graphqlArgs]: 'unknown',
-    [ResolverBodyVarNames.context]: 'unknown',
+    [ResolverBodyVarNames.context]: 'any',
     [ResolverBodyVarNames.resolveInfo]: 'GraphQLResolveInfo',
 };
 
