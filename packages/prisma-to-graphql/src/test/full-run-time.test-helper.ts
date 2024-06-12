@@ -1,9 +1,13 @@
 import {PrismaClient} from '.prisma';
 import {models} from '.prisma/graphql/models';
 import {parseJson} from '@augment-vir/common';
-import {OperationScope} from '@prisma-to-graphql/operation-scope';
-import {notCommittedDir, setupFullServer, SetupFullServerConfig} from '@prisma-to-graphql/scripts';
-import {seedDatabase} from '@prisma-to-graphql/scripts/src/seed-test-database.test-helper';
+import {OperationScope} from '@prisma-to-graphql/resolver-context';
+import {
+    notCommittedDir,
+    seedDatabase,
+    setupFullServer,
+    SetupFullServerConfig,
+} from '@prisma-to-graphql/scripts';
 import {rm} from 'node:fs/promises';
 import {join} from 'node:path';
 import {packageDir} from '../util/file-paths';

@@ -1,5 +1,5 @@
 import {mapObjectValues, pickObjectKeys, typedArrayIncludes} from '@augment-vir/common';
-import {mappedPrismaTypes} from '@prisma-to-graphql/operation-scope';
+import {mappedPrismaTypes} from '@prisma-to-graphql/resolver-context';
 import JSON5 from 'json5';
 import {JsonObject} from 'type-fest';
 import {PrismaModel} from '../model/prisma-model';

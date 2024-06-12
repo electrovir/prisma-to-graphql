@@ -1,6 +1,6 @@
 import {itCases} from '@augment-vir/chai';
+import {generatedModels} from '../generated-models.mock';
 import {combineWhere} from './combine-where';
-import {generatedModels} from './generated-models.mock';
 
 describe(combineWhere.name, () => {
     itCases(combineWhere, [

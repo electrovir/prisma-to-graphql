@@ -1,5 +1,5 @@
 import {awaitedBlockingMap, isObject, isTruthy} from '@augment-vir/common';
-import {extractMaxCountScope, outputMessages} from '@prisma-to-graphql/operation-scope';
+import {extractMaxCountScope, outputMessages} from '@prisma-to-graphql/resolver-context';
 import {GraphQLError} from 'graphql';
 import {isRunTimeType} from 'run-time-assertions';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';

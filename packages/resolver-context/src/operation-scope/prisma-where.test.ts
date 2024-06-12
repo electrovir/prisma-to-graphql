@@ -2,7 +2,7 @@ import {itCases} from '@augment-vir/chai';
 import {omitObjectKeys} from '@augment-vir/common';
 import {getNowInIsoString} from 'date-vir';
 import {assertThrows, assertTypeOf} from 'run-time-assertions';
-import {generatedModels} from './generated-models.mock';
+import {generatedModels} from '../generated-models.mock';
 import {PrismaWhereField, SingleModelPrismaWhere, generatePrismaWhere} from './prisma-where';
 
 const nowIsoString = getNowInIsoString();

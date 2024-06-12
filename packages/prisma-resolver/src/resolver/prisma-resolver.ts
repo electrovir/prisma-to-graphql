@@ -4,7 +4,7 @@ import {
     OperationScope,
     OutputMessage,
     ResolverContext,
-} from '@prisma-to-graphql/operation-scope';
+} from '@prisma-to-graphql/resolver-context';
 import {assertDefined} from 'run-time-assertions';
 import {Selection} from '../util/parse-selection';
 

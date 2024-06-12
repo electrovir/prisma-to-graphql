@@ -1,5 +1,5 @@
 import {assertTypeOf} from 'run-time-assertions';
-import {generatedModels} from './generated-models.mock';
+import {generatedModels} from '../generated-models.mock';
 import {FieldScope, ListOperation, ModelScope, OperationScope} from './operation-scope';
 
 describe('OperationScope', () => {

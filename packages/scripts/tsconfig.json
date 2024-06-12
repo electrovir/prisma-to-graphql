@@ -16,7 +16,7 @@
     "extends": "../../configs/tsconfig.base.json",
     "references": [
         {
-            "path": "../operation-scope"
+            "path": "../resolver-context"
         },
         {
             "path": "../fetch-graphql"

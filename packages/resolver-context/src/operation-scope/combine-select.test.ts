@@ -1,6 +1,6 @@
 import {itCases} from '@augment-vir/chai';
+import {generatedModels} from '../generated-models.mock';
 import {combineSelect} from './combine-select';
-import {generatedModels} from './generated-models.mock';
 
 describe(combineSelect.name, () => {
     itCases(combineSelect, [

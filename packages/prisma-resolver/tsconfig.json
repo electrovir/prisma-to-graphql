@@ -23,7 +23,7 @@
             "path": "../scripts"
         },
         {
-            "path": "../operation-scope"
+            "path": "../resolver-context"
         }
     ]
 }

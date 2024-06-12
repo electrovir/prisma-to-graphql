@@ -1,5 +1,5 @@
 {
-    "name": "@prisma-to-graphql/operation-scope",
+    "name": "@prisma-to-graphql/resolver-context",
     "version": "1.0.0",
     "homepage": "https://github.com/electrovir/prisma-to-graphql",
     "bugs": {

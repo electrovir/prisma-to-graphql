@@ -28,7 +28,7 @@
     },
     "dependencies": {
         "@augment-vir/common": "^28.0.2",
-        "@prisma-to-graphql/operation-scope": "^1.0.0",
+        "@prisma-to-graphql/resolver-context": "^1.0.0",
         "@prisma/client": "^5.14.0",
         "date-vir": "^5.3.1",
         "graphql": "^16.8.1",

@@ -3,8 +3,8 @@
  * GraphQL servers.
  */
 
-import {ModelMap} from './model-map';
-import {OperationScope} from './operation-scope';
+import {ModelMap} from './operation-scope/model-map';
+import {OperationScope} from './operation-scope/operation-scope';
 
 /**
  * The context object which `prisma-to-graphql` generated resolvers require and thus must be

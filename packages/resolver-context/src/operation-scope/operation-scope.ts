@@ -1,6 +1,6 @@
+import {MapPrismaType} from '../prisma-type-map';
 import {MaxCountScope} from './max-count';
 import {ModelMap, ModelMapField, ModelMapModel} from './model-map';
-import {MapPrismaType} from './prisma-type-map';
 
 /**
  * Defines extra scopes, or extra requirements for each query. The defined scope will be merged with

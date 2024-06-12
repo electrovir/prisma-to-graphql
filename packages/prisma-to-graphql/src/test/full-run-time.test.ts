@@ -5,7 +5,7 @@ import type {Resolvers} from '.prisma/graphql/schema';
 
 import {ArrayElement, assertLengthAtLeast, isUuid, omitObjectKeys} from '@augment-vir/common';
 import {Operations, ResolverOutput, fetchRawGraphql} from '@prisma-to-graphql/fetch-graphql';
-import {OperationScope} from '@prisma-to-graphql/operation-scope';
+import {OperationScope} from '@prisma-to-graphql/resolver-context';
 import {GraphqlTestCase, runGraphqlServerTests} from '@prisma-to-graphql/scripts';
 import {assert} from 'chai';
 import {createUtcFullDate} from 'date-vir';

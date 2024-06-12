@@ -19,7 +19,7 @@
             "path": "../fetch-graphql"
         },
         {
-            "path": "../operation-scope"
+            "path": "../resolver-context"
         },
         {
             "path": "../scripts"

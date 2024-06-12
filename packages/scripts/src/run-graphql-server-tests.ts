@@ -11,7 +11,7 @@ import {
     GraphqlFetcher,
     createGraphqlFetcher,
 } from '@prisma-to-graphql/fetch-graphql';
-import {ModelMap} from '@prisma-to-graphql/operation-scope';
+import {ModelMap} from '@prisma-to-graphql/resolver-context';
 import {Server} from 'node:http';
 import {join} from 'node:path';
 import {buildUrl, joinUrlParts} from 'url-vir';

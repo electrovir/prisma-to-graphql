@@ -8,7 +8,7 @@ import {
     OperationType,
     allValidOperationTypes,
 } from '@prisma-to-graphql/graphql-codegen-operation-params';
-import {ModelMap, ResolverContext} from '@prisma-to-graphql/operation-scope';
+import {ModelMap, ResolverContext} from '@prisma-to-graphql/resolver-context';
 import {
     FieldNode,
     GraphQLResolveInfo,

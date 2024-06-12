@@ -18,13 +18,14 @@
     "dependencies": {
         "@augment-vir/common": "^28.0.2",
         "@augment-vir/node-js": "^28.0.2",
-        "@prisma-to-graphql/operation-scope": "*",
+        "@prisma-to-graphql/resolver-context": "*",
         "date-vir": "^5.3.1",
         "graphql-yoga": "^5.3.1",
         "object-shape-tester": "^2.3.2",
         "portfinder": "^1.0.32",
         "run-time-assertions": "^1.5.1",
-        "type-fest": "^4.18.3"
+        "type-fest": "^4.18.3",
+        "url-vir": "^1.5.0"
     },
     "devDependencies": {
         "@augment-vir/chai": "^28.0.2",
