@@ -1,4 +1,5 @@
 import {
+    ResolverOperation,
     combineWhere,
     extractMaxCountScope,
     outputMessages,
@@ -45,7 +46,7 @@ export async function runPrismaUpdate({
 
     const finalWhere = combineWhere(updateWhere, prismaModelName, models, operationScope);
 
-    const maxUpdateCount = extractMaxCountScope(operationScope, 'update');
+    const maxUpdateCount = extractMaxCountScope(operationScope, ResolverOperation.Update);
     if (maxUpdateCount) {
         const updateCount = await prismaClient[prismaModelName].count({
             where: finalWhere,

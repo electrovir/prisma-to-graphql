@@ -1,4 +1,5 @@
 import {itCases} from '@augment-vir/chai';
+import {ResolverOperation} from '../resolver-operation-type';
 import {extractMaxCountScope} from './max-count';
 
 describe(extractMaxCountScope.name, () => {
@@ -7,7 +8,7 @@ describe(extractMaxCountScope.name, () => {
             it: 'extracts nothing when no scope is given',
             inputs: [
                 undefined,
-                'create',
+                ResolverOperation.Create,
             ],
             expect: undefined,
         },
@@ -19,7 +20,7 @@ describe(extractMaxCountScope.name, () => {
                         delete: 4,
                     },
                 },
-                'create',
+                ResolverOperation.Create,
             ],
             expect: undefined,
         },
@@ -29,7 +30,7 @@ describe(extractMaxCountScope.name, () => {
                 {
                     maxCount: 4,
                 },
-                'create',
+                ResolverOperation.Create,
             ],
             expect: 4,
         },
@@ -44,7 +45,7 @@ describe(extractMaxCountScope.name, () => {
                         update: 4,
                     },
                 },
-                'query',
+                ResolverOperation.Query,
             ],
             expect: 3,
         },

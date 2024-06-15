@@ -1,21 +1,14 @@
 import {AnyObject, isObject} from '@augment-vir/common';
+import {ResolverOperation} from '../resolver-operation-type';
 
 /**
  * Includes a `maxCount` property which will limit operations to that defined max. Operations will
  * either truncate their inputs or throw errors when truncation is not possible.
  *
- * @category Types
+ * @category Operation Scope
  */
 export type MaxCountScope = {
-    maxCount?:
-        | number
-        | Partial<{
-              query: number;
-              create: number;
-              update: number;
-              delete: number;
-          }>
-        | undefined;
+    maxCount?: number | Partial<Record<ResolverOperation, number>> | undefined;
 };
 
 /**

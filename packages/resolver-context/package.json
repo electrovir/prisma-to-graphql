@@ -29,6 +29,7 @@
     "dependencies": {
         "@augment-vir/common": "^28.1.0",
         "date-vir": "^5.3.1",
+        "graphql": "^16.8.2",
         "object-shape-tester": "^2.4.0",
         "run-time-assertions": "^1.5.1",
         "type-fest": "^4.20.0"

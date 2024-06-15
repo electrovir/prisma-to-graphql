@@ -1,6 +1,7 @@
 import {AnyObject, RequiredAndNotNullBy, isObject, mapObjectValues} from '@augment-vir/common';
 import {assertDefined, assertRunTimeType} from 'run-time-assertions';
 import {OutputMessage, outputMessages} from '../output-messages';
+import {ResolverOperation} from '../resolver-operation-type';
 import {extractMaxCountScope} from './max-count';
 import {ModelMap} from './model-map';
 import {OperationScope} from './operation-scope';
@@ -80,7 +81,7 @@ function buildSelectRecursively<const Models extends ModelMap>(
                 operationScope.where,
             );
 
-            const maxCount = extractMaxCountScope(operationScope, 'query');
+            const maxCount = extractMaxCountScope(operationScope, ResolverOperation.Query);
             const useMaxCount =
                 maxCount != undefined &&
                 (querySelect[fieldName].take == undefined ||

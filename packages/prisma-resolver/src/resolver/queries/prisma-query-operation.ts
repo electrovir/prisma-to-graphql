@@ -1,5 +1,6 @@
 import {isObject, isTruthy} from '@augment-vir/common';
 import {
+    ResolverOperation,
     combineSelect,
     combineWhere,
     extractMaxCountScope,
@@ -37,7 +38,7 @@ export async function runPrismaQuery({
 
     const finalWhere = combineWhere(queryWhere, prismaModelName, models, operationScope);
 
-    const maxResultCount = extractMaxCountScope(operationScope, 'query');
+    const maxResultCount = extractMaxCountScope(operationScope, ResolverOperation.Query);
     const useMaxCount =
         maxResultCount && (graphqlArgs.take == undefined || graphqlArgs.take > maxResultCount);
     const finalTake = useMaxCount ? maxResultCount : graphqlArgs.take;

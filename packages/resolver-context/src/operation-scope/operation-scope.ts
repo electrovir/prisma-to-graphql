@@ -6,7 +6,7 @@ import {ModelMap, ModelMapField, ModelMapModel} from './model-map';
  * Defines extra scopes, or extra requirements for each query. The defined scope will be merged with
  * all user queries to limit what data they can reach.
  *
- * @category Main
+ * @category Operation Scope
  * @example
  *     // this will limit all user queries or other queries that contain user relations to users
  *     // to only the id `current-user-id`.
@@ -27,7 +27,7 @@ export type OperationScope<Models extends ModelMap> = Partial<
 /**
  * The user defined where scope. Includes entries for every model in the user provided model map.
  *
- * @category Types
+ * @category Operation Scope
  */
 export type WhereScope<Models extends ModelMap> = {
     [ModelName in keyof Models]?: undefined | ModelScope<Models[ModelName]>;
@@ -37,7 +37,7 @@ export type WhereScope<Models extends ModelMap> = {
  * A user defined scope for a Model. Excludes all relation fields as they should be defined as their
  * own separate entry in the operation scope.
  *
- * @category Types
+ * @category Operation Scope
  */
 export type ModelScope<Model extends ModelMapModel> = {
     [FieldName in keyof Model]?: Model[FieldName]['isRelation'] extends true
@@ -49,7 +49,7 @@ export type ModelScope<Model extends ModelMapModel> = {
  * Custom list operation setting. Only allowed in {@link ModelScope} for relation fields or
  * {@link FieldScope} for list fields.
  *
- * @category Types
+ * @category Operation Scope
  */
 export type WithCustomListOperation = Partial<{
     /**
@@ -64,7 +64,7 @@ export type WithCustomListOperation = Partial<{
  * {@link FieldScope}, this operation will be used whenever the defined field scope happens to be
  * used inside a list (an array). By default, `'some'` is used.
  *
- * @category Types
+ * @category Operation Scope
  */
 export type ListOperation = 'some' | 'none' | 'every';
 
@@ -78,7 +78,7 @@ export const defaultListOperation: ListOperation = 'some' as const;
 /**
  * Field scope for an individual field within a model within an {@link OperationScope}.
  *
- * @category Types
+ * @category Operation Scope
  */
 export type FieldScope<ModelField extends ModelMapField> = {
     equals?: MapPrismaType<ModelField['type'], 'input'>;

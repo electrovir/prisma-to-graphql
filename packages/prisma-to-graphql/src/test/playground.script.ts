@@ -21,6 +21,41 @@ async function main(prismaClient: PrismaClient) {
             email: 'hello@example.com',
         },
     });
+
+    await prismaClient.user.create({
+        data: {
+            id: '1',
+            email: 'something@example.com',
+            password: 'something',
+            firstName: 'Fred',
+            lastName: 'George',
+            regions: {
+                connect: {
+                    regionName: 'USA',
+                },
+            },
+        },
+    });
+
+    await prismaClient.user.create({
+        data: {
+            id: '1',
+            email: 'something@example.com',
+            password: 'something',
+            firstName: 'Fred',
+            lastName: 'George',
+            regions: {
+                create: [
+                    {
+                        regionName: 'USA',
+                    },
+                    {
+                        regionName: 'Europe',
+                    },
+                ],
+            },
+        },
+    });
 }
 
 main(new PrismaClient());

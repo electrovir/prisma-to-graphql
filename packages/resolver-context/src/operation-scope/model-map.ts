@@ -1,7 +1,7 @@
 /**
  * An individual model within a {@link ModelMap}.
  *
- * @category Types
+ * @category Operation Scope
  */
 export type ModelMapModel = {
     [FieldName in string]: {
@@ -14,7 +14,7 @@ export type ModelMapModel = {
 /**
  * An individual field within a {@link ModelMapModel}.
  *
- * @category Types
+ * @category Operation Scope
  */
 export type ModelMapField = {
     type: string;
@@ -26,7 +26,7 @@ export type ModelMapField = {
  * Model information generated from the `prisma-to-graphql` Prisma generator. This is required for
  * `OperationScope` to work.
  *
- * @category Types
+ * @category Operation Scope
  */
 export type ModelMap = {
     [ModelName in string]: ModelMapModel;

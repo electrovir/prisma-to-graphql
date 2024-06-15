@@ -16,9 +16,9 @@ export const typeDocConfig: Partial<TypeDocOptions> = {
         includeCategories: true,
     },
     categoryOrder: [
-        'Main',
-        'Types',
-        'Operations',
+        'GraphQL Context',
+        'Operation Scope',
+        'Field Requirements',
         'Internals',
     ],
 };

@@ -1,5 +1,6 @@
 import {AnyObject, extractErrorMessage, filterObject, isObject} from '@augment-vir/common';
 import {
+    ResolverOperation,
     combineWhere,
     extractMaxCountScope,
     outputMessages,
@@ -55,7 +56,7 @@ export async function runPrismaUpsert({
 
         const finalWhere = combineWhere(upsertWhere, prismaModelName, models, operationScope);
 
-        const maxUpdateCount = extractMaxCountScope(operationScope, 'update');
+        const maxUpdateCount = extractMaxCountScope(operationScope, ResolverOperation.Update);
         if (maxUpdateCount) {
             const updateCount = await prismaClient[prismaModelName].count({
                 where: finalWhere,

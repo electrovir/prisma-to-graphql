@@ -16,9 +16,11 @@ export const typeDocConfig: Partial<TypeDocOptions> = {
         includeCategories: true,
     },
     categoryOrder: [
-        'Main',
-        'Types',
-        'Operations',
+        'GraphQL Context',
+        'Field Requirements',
+        'Operation Scope',
+        'Output Messages',
+        'Prisma Type Map',
         'Internals',
     ],
 };

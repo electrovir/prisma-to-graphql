@@ -1,5 +1,9 @@
 import {awaitedBlockingMap, isObject, isTruthy} from '@augment-vir/common';
-import {extractMaxCountScope, outputMessages} from '@prisma-to-graphql/resolver-context';
+import {
+    ResolverOperation,
+    extractMaxCountScope,
+    outputMessages,
+} from '@prisma-to-graphql/resolver-context';
 import {GraphQLError} from 'graphql';
 import {isRunTimeType} from 'run-time-assertions';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
@@ -33,7 +37,7 @@ export async function runPrismaCreate({
         throw new GraphQLError("Missing valid 'create.data' input.");
     }
 
-    const maxCreationCount = extractMaxCountScope(operationScope, 'create');
+    const maxCreationCount = extractMaxCountScope(operationScope, ResolverOperation.Create);
 
     const truncatedCreateData = maxCreationCount
         ? createData.slice(0, maxCreationCount)

@@ -168,14 +168,13 @@ describe(combineSelect.name, () => {
                     {
                         code: 'ptg-4',
                         description: 'field possibly truncated',
-                        message:
-                            "ptg-4: Field 'User > regions' possibly truncated to max 3 results.",
+                        message: "ptg-4: Field 'User.regions' possibly truncated to max 3 results.",
                     },
                     {
                         code: 'ptg-4',
                         description: 'field possibly truncated',
                         message:
-                            "ptg-4: Field 'User > regions > users' possibly truncated to max 3 results.",
+                            "ptg-4: Field 'User.regions.users' possibly truncated to max 3 results.",
                     },
                 ],
             },

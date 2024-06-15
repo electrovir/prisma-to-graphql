@@ -1,6 +1,7 @@
 import {assert} from 'chai';
 import {assertRunTimeType, assertTypeOf} from 'run-time-assertions';
 import {OutputMessage, WrapWithCreate, outputMessages} from './output-messages';
+import {ResolverOperation} from './resolver-operation-type';
 
 describe('outputMessages', () => {
     it('has entries for each code and description', () => {
@@ -51,6 +52,25 @@ describe('outputMessages', () => {
         assert.strictEqual(
             outputMessages.byCode['ptg-3'].message({max: 5, count: 6}),
             'ptg-3: Update failed. The given query would update 6 rows but the max is 5. Please provide a tighter "where" argument.',
+        );
+        assert.strictEqual(
+            outputMessages.byCode['ptg-4'].message({
+                fieldChain: [
+                    'first',
+                    'second',
+                ],
+                max: 4,
+            }),
+            "ptg-4: Field 'first.second' possibly truncated to max 4 results.",
+        );
+        assert.strictEqual(
+            outputMessages.byCode['ptg-5'].message({
+                fieldName: 'MyField',
+                modelName: 'MyModel',
+                operation: ResolverOperation.Create,
+                reason: undefined,
+            }),
+            "ptg-5: Field requirement failed for 'MyModel.MyField' in create operation.",
         );
     });
 });

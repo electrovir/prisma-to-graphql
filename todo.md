@@ -14,6 +14,3 @@
 -   add depth limitation
 
 # in progress
-
--   add plugin that allows per-field limitations
-    -   like a limit on string field length

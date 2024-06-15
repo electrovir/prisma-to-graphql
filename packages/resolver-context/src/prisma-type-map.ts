@@ -6,7 +6,7 @@ import type {JsonValue} from 'type-fest';
 /**
  * A mapping of known Prisma field types to their JS input and output types
  *
- * @category Types
+ * @category Prisma Type Map
  */
 export type PrismaTypeMap = {
     [PrismaType in keyof RawPrismaTypeMap]: RawPrismaTypeMap[PrismaType] extends {
@@ -64,13 +64,23 @@ export const mappedPrismaTypes: ReadonlyArray<keyof RawPrismaTypeMap> = getObjec
 );
 
 /**
+ * The possible directions for Prisma type mappings.
+ *
+ * - `'input'` is used when sending data to Prisma.
+ * - `'output'` is used when reading data from Prisma.
+ *
+ * @category Internals
+ */
+export type PrismaTypeDirection = 'input' | 'output';
+
+/**
  * Tries to map a type string to a Prisma type mapping.
  *
- * @category Types
+ * @category Prisma Type Map
  */
 export type MapPrismaType<
     PrismaTypeString,
-    Direction extends 'input' | 'output',
+    Direction extends PrismaTypeDirection,
 > = PrismaTypeString extends keyof PrismaTypeMap
     ? PrismaTypeMap[PrismaTypeString][Direction]
     : unknown;
