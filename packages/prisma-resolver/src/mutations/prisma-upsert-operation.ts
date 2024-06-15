@@ -49,9 +49,13 @@ export async function runPrismaUpsert({
         const upsertWhere = graphqlArgs.upsert?.where;
 
         if (!isRunTimeType(upsertData, 'object')) {
-            throw new GraphQLError("Missing valid 'upsert.data' input.");
+            throw new GraphQLError(
+                outputMessages.byDescription['invalid input'].message({inputName: 'upsert.data'}),
+            );
         } else if (!isRunTimeType(upsertWhere, 'object')) {
-            throw new GraphQLError("Missing valid 'upsert.where' input.");
+            throw new GraphQLError(
+                outputMessages.byDescription['invalid input'].message({inputName: 'upsert.where'}),
+            );
         }
 
         const finalWhere = combineWhere(upsertWhere, prismaModelName, models, operationScope);

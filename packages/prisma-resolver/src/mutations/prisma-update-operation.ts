@@ -39,9 +39,13 @@ export async function runPrismaUpdate({
     const updateWhere = graphqlArgs.update?.where;
 
     if (!isRunTimeType(updateData, 'object')) {
-        throw new GraphQLError("Missing valid 'update.data' input.");
+        throw new GraphQLError(
+            outputMessages.byDescription['invalid input'].message({inputName: 'update.data'}),
+        );
     } else if (!isRunTimeType(updateWhere, 'object')) {
-        throw new GraphQLError("Missing valid 'update.where' input.");
+        throw new GraphQLError(
+            outputMessages.byDescription['invalid input'].message({inputName: 'update.where'}),
+        );
     }
 
     const finalWhere = combineWhere(updateWhere, prismaModelName, models, operationScope);

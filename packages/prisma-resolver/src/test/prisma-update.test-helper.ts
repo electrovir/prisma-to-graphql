@@ -1,5 +1,6 @@
 import {randomString} from '@augment-vir/common';
-import {runPrismaUpdate} from '../resolver/mutations/prisma-update-operation';
+import {outputMessages} from '@prisma-to-graphql/resolver-context';
+import {runPrismaUpdate} from '../mutations/prisma-update-operation';
 import {ResolverTests} from './resolver-test-case.test-helper';
 
 export const prismaUpdateTests: ResolverTests = {
@@ -46,7 +47,9 @@ export const prismaUpdateTests: ResolverTests = {
                     prismaModelName: 'User',
                 });
             },
-            throws: "Missing valid 'update.where' input",
+            throws: outputMessages.byDescription['invalid input'].message({
+                inputName: 'update.where',
+            }),
         },
         {
             it: 'rejects missing data',
@@ -65,7 +68,9 @@ export const prismaUpdateTests: ResolverTests = {
                     prismaModelName: 'User',
                 });
             },
-            throws: "Missing valid 'update.data' input.",
+            throws: outputMessages.byDescription['invalid input'].message({
+                inputName: 'update.data',
+            }),
         },
         {
             it: 'rejects too much data from general operation scope',

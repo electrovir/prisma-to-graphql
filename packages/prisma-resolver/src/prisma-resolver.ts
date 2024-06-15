@@ -4,9 +4,9 @@ import {
     OperationScope,
     OutputMessage,
     ResolverContext,
+    Selection,
 } from '@prisma-to-graphql/resolver-context';
 import {assertDefined} from 'run-time-assertions';
-import {Selection} from '../util/parse-selection';
 
 /**
  * All of the `prisma-resolver` package's resolvers return this output;

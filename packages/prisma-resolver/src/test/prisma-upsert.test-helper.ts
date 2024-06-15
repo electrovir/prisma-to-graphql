@@ -1,5 +1,6 @@
 import {randomString} from '@augment-vir/common';
-import {runPrismaUpsert} from '../resolver/mutations/prisma-upsert-operation';
+import {outputMessages} from '@prisma-to-graphql/resolver-context';
+import {runPrismaUpsert} from '../mutations/prisma-upsert-operation';
 import {resolverSeedData} from './resolver-seed-data.mock';
 import {ResolverTests} from './resolver-test-case.test-helper';
 
@@ -149,7 +150,9 @@ export const prismaUpsertTests: ResolverTests = {
                     },
                 });
             },
-            throws: "Missing valid 'upsert.data' input",
+            throws: outputMessages.byDescription['invalid input'].message({
+                inputName: 'upsert.data',
+            }),
         },
         {
             it: 'fails if no where',
@@ -177,7 +180,9 @@ export const prismaUpsertTests: ResolverTests = {
                     },
                 });
             },
-            throws: "Missing valid 'upsert.where' input",
+            throws: outputMessages.byDescription['invalid input'].message({
+                inputName: 'upsert.where',
+            }),
         },
         {
             it: 'omits items if not selected',

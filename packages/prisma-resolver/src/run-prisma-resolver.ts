@@ -8,7 +8,12 @@ import {
     OperationType,
     allValidOperationTypes,
 } from '@prisma-to-graphql/graphql-codegen-operation-params';
-import {ModelMap, ResolverContext} from '@prisma-to-graphql/resolver-context';
+import {
+    ModelMap,
+    ResolverContext,
+    assertValidMaxDepth,
+    parseItemSelection,
+} from '@prisma-to-graphql/resolver-context';
 import {
     FieldNode,
     GraphQLResolveInfo,
@@ -16,7 +21,6 @@ import {
     OperationDefinitionNode,
     SelectionSetNode,
 } from 'graphql';
-import {parseItemSelection} from '../util/parse-selection';
 import {runPrismaMutationOperation} from './mutations/prisma-mutation-operation';
 import {
     PrismaResolver,
@@ -48,6 +52,13 @@ export async function runPrismaResolver<PrismaClient, Models extends ModelMap>(
             findCurrentSelectionSet(resolveInfo),
             resolveInfo.operation.name?.value || resolveInfo.fieldName,
         );
+
+        assertValidMaxDepth({
+            data: selection,
+            operation: 'read',
+            scope: context.operationScope,
+            capitalizedDataName: 'Selection',
+        });
 
         const operationType = readOperationType(resolveInfo.operation);
 

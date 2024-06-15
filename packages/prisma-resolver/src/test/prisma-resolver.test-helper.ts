@@ -1,5 +1,6 @@
+import {outputMessages} from '@prisma-to-graphql/resolver-context';
 import {Kind, OperationTypeNode} from 'graphql';
-import {runPrismaResolver} from '../resolver/run-prisma-resolver';
+import {runPrismaResolver} from '../run-prisma-resolver';
 import {ResolverTests} from './resolver-test-case.test-helper';
 
 export const prismaResolverTests: ResolverTests = {
@@ -118,6 +119,96 @@ export const prismaResolverTests: ResolverTests = {
             throws: "Unsupported operation: 'subscription'",
         },
         {
+            it: 'rejects selection data that is too deep',
+            async test({prismaClient}) {
+                return await runPrismaResolver(
+                    {
+                        prismaClient,
+                        operationScope: {
+                            maxDepth: 2,
+                        },
+                    },
+                    'User',
+                    {
+                        where: {
+                            role: {
+                                equals: 'user',
+                            },
+                        },
+                    },
+                    {
+                        fieldName: 'Users',
+                        fieldNodes: [
+                            {
+                                kind: Kind.FIELD,
+                                name: {
+                                    kind: Kind.NAME,
+                                    value: 'Users',
+                                },
+                            },
+                        ],
+                        operation: {
+                            kind: Kind.OPERATION_DEFINITION,
+                            operation: OperationTypeNode.QUERY,
+                            selectionSet: {
+                                kind: Kind.SELECTION_SET,
+                                selections: [
+                                    {
+                                        kind: Kind.FIELD,
+                                        name: {
+                                            kind: Kind.NAME,
+                                            value: 'Users',
+                                        },
+                                        selectionSet: {
+                                            kind: Kind.SELECTION_SET,
+                                            selections: [
+                                                {
+                                                    kind: Kind.FIELD,
+                                                    name: {
+                                                        kind: Kind.NAME,
+                                                        value: 'items',
+                                                    },
+                                                    selectionSet: {
+                                                        kind: Kind.SELECTION_SET,
+                                                        selections: [
+                                                            {
+                                                                kind: Kind.FIELD,
+                                                                name: {
+                                                                    kind: Kind.NAME,
+                                                                    value: 'regions',
+                                                                },
+                                                                selectionSet: {
+                                                                    kind: Kind.SELECTION_SET,
+                                                                    selections: [
+                                                                        {
+                                                                            kind: Kind.FIELD,
+                                                                            name: {
+                                                                                kind: Kind.NAME,
+                                                                                value: 'regionName',
+                                                                            },
+                                                                        },
+                                                                    ],
+                                                                },
+                                                            },
+                                                        ],
+                                                    },
+                                                },
+                                            ],
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                );
+            },
+            throws: outputMessages.byDescription['max depth violated'].message({
+                depth: 6,
+                maxDepth: 2,
+                capitalizedName: 'Selection',
+            }),
+        },
+        {
             it: 'rejects empty selection',
             async test({prismaClient}) {
                 return await runPrismaResolver(
@@ -160,7 +251,7 @@ export const prismaResolverTests: ResolverTests = {
                     },
                 );
             },
-            throws: "Neither 'total' or 'items' where selected: there's nothing to do",
+            throws: outputMessages.byDescription['missing query args'].message(),
         },
     ],
 };

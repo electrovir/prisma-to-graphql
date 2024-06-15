@@ -1,5 +1,5 @@
 import {RequireExactlyOne} from 'type-fest';
-import {PrismaResolverOutput} from '../resolver/prisma-resolver';
+import {PrismaResolverOutput} from '../prisma-resolver';
 import {PrismaClient} from './resolver-seed-data.mock';
 
 export type ResolverTestCaseParams = {prismaClient: PrismaClient};

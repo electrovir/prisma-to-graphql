@@ -3,14 +3,14 @@ import {FieldNode, Kind, SelectionSetNode} from 'graphql';
 /**
  * A prisma compatible `select` object.
  *
- * @category Types
+ * @category Internals
  */
 export type Selection = {select: {[field in string]: boolean | Selection}};
 
 /**
  * Parse a GraphQL `SelectionSetNode` into a Prisma compatible `select` object.
  *
- * @category Operations
+ * @category Internals
  */
 export function parseItemSelection(
     selectionSet: Readonly<Pick<SelectionSetNode, 'selections'>> | undefined,

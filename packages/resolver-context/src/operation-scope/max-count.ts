@@ -1,4 +1,4 @@
-import {AnyObject, isObject} from '@augment-vir/common';
+import {AnyObject, PartialAndUndefined, isObject} from '@augment-vir/common';
 import {ResolverOperation} from '../resolver-operation-type';
 
 /**
@@ -7,9 +7,9 @@ import {ResolverOperation} from '../resolver-operation-type';
  *
  * @category Operation Scope
  */
-export type MaxCountScope = {
-    maxCount?: number | Partial<Record<ResolverOperation, number>> | undefined;
-};
+export type MaxCountScope = PartialAndUndefined<{
+    maxCount: number | Partial<Record<ResolverOperation, number>>;
+}>;
 
 /**
  * Read the `maxCount` property from an operation scope that contains {@link MaxCountScope}. If no

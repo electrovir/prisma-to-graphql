@@ -1,5 +1,6 @@
 import {randomString} from '@augment-vir/common';
-import {runPrismaQuery} from '../resolver/queries/prisma-query-operation';
+import {outputMessages} from '@prisma-to-graphql/resolver-context';
+import {runPrismaQuery} from '../queries/prisma-query-operation';
 import {generatedModels} from './generated-models.mock';
 import {ResolverTests} from './resolver-test-case.test-helper';
 
@@ -54,6 +55,55 @@ export const prismaQueryTests: ResolverTests = {
                     },
                 ],
             },
+        },
+        {
+            it: 'rejects a where that is too deep',
+            async test({prismaClient}) {
+                return await runPrismaQuery({
+                    graphqlArgs: {
+                        where: {
+                            regions: {
+                                some: {
+                                    users: {
+                                        some: {
+                                            firstName: {
+                                                equals: 'hi',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    context: {
+                        prismaClient,
+                        operationScope: {
+                            maxDepth: {
+                                read: 3,
+                            },
+                        },
+                    },
+                    prismaModelName: 'User',
+                    selection: {
+                        select: {
+                            items: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                    phoneNumber: true,
+                                    email: true,
+                                    role: true,
+                                },
+                            },
+                        },
+                    },
+                });
+            },
+            throws: outputMessages.byDescription['max depth violated'].message({
+                depth: 6,
+                maxDepth: 3,
+                capitalizedName: 'Query "where"',
+            }),
         },
         {
             it: 'handles missing where',

@@ -1,4 +1,5 @@
-import {runPrismaCreate} from '../resolver/mutations/prisma-create-operation';
+import {outputMessages} from '@prisma-to-graphql/resolver-context';
+import {runPrismaCreate} from '../mutations/prisma-create-operation';
 import {resolverSeedData} from './resolver-seed-data.mock';
 import {ResolverTests} from './resolver-test-case.test-helper';
 
@@ -156,7 +157,9 @@ export const prismaCreateTests: ResolverTests = {
                     },
                 });
             },
-            throws: "Missing valid 'create.data' input",
+            throws: outputMessages.byDescription['invalid input'].message({
+                inputName: 'create.data',
+            }),
         },
         {
             it: 'truncates create data',

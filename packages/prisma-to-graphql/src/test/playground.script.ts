@@ -29,6 +29,14 @@ async function main(prismaClient: PrismaClient) {
             password: 'something',
             firstName: 'Fred',
             lastName: 'George',
+            posts: {
+                create: [
+                    {
+                        body: 'stuff',
+                        title: 'stuff',
+                    },
+                ],
+            },
             regions: {
                 connect: {
                     regionName: 'USA',

@@ -1,4 +1,6 @@
+import {PartialAndUndefined} from '@augment-vir/common';
 import {MapPrismaType} from '../prisma-type-map';
+import {MaxDepthScope} from './depth';
 import {MaxCountScope} from './max-count';
 import {ModelMap, ModelMapField, ModelMapModel} from './model-map';
 
@@ -18,11 +20,11 @@ import {ModelMap, ModelMapField, ModelMapModel} from './model-map';
  *         },
  *     };
  */
-export type OperationScope<Models extends ModelMap> = Partial<
-    {
-        where: WhereScope<Models>;
-    } & MaxCountScope
->;
+export type OperationScope<Models extends ModelMap> = PartialAndUndefined<{
+    where: WhereScope<Models>;
+}> &
+    MaxCountScope &
+    MaxDepthScope;
 
 /**
  * The user defined where scope. Includes entries for every model in the user provided model map.

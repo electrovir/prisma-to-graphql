@@ -34,7 +34,11 @@ export async function runPrismaCreate({
     const createData = graphqlArgs.create?.data;
 
     if (!isRunTimeType(createData, 'array')) {
-        throw new GraphQLError("Missing valid 'create.data' input.");
+        throw new GraphQLError(
+            outputMessages.byDescription['invalid input'].message({
+                inputName: 'create.data',
+            }),
+        );
     }
 
     const maxCreationCount = extractMaxCountScope(operationScope, ResolverOperation.Create);

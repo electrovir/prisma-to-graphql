@@ -1,6 +1,7 @@
 import {isObject, isTruthy} from '@augment-vir/common';
 import {
     ResolverOperation,
+    assertValidMaxDepth,
     combineSelect,
     combineWhere,
     extractMaxCountScope,
@@ -33,8 +34,14 @@ export async function runPrismaQuery({
     const queryWhere = graphqlArgs.where || undefined;
 
     if (!selection.select.total && !selection.select.items) {
-        throw new GraphQLError("Neither 'total' or 'items' where selected: there's nothing to do.");
+        throw new GraphQLError(outputMessages.byDescription['missing query args'].message());
     }
+    assertValidMaxDepth({
+        data: queryWhere,
+        operation: 'read',
+        scope: operationScope,
+        capitalizedDataName: 'Query "where"',
+    });
 
     const finalWhere = combineWhere(queryWhere, prismaModelName, models, operationScope);
 

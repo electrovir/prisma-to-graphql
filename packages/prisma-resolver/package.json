@@ -20,11 +20,12 @@
     "scripts": {
         "compile": "rm -rf dist && rm -f tsconfig.tsbuildinfo && tsc --pretty -p tsconfig.cjs.json && tsc -b --pretty -f --pretty tsconfig.json",
         "docs": "virmator docs",
-        "test": "virmator test",
+        "test": "npm run compile --prefix ../.. && npm run test:uncompiled",
         "test:all": "concurrently --colors --kill-others-on-fail -c auto --names tests,docs \"npm run test:coverage\" \"npm run test:docs\"",
-        "test:coverage": "npm test coverage",
+        "test:coverage": "npm run test:uncompiled coverage",
         "test:docs": "virmator docs check",
-        "test:types": "tsc --noEmit"
+        "test:types": "tsc --noEmit",
+        "test:uncompiled": "virmator test"
     },
     "dependencies": {
         "@augment-vir/common": "^28.0.2",

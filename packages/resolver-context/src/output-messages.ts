@@ -3,7 +3,10 @@ import {
     PropertyValueType,
     TypedFunction,
     arrayToObject,
+    filterMap,
+    joinWithFinalConjunction,
     mapObjectValues,
+    wrapString,
 } from '@augment-vir/common';
 import {isRunTimeType} from 'run-time-assertions';
 import {IsNever} from 'type-fest';
@@ -110,6 +113,58 @@ const messageDefinitions = {
             }
         },
         description: 'field requirement failed',
+    },
+    'ptg-6': {
+        description: 'mutation input ignored',
+        message(params: Record<'upsert' | 'create' | 'update' | 'delete', boolean>) {
+            const ignored = filterMap(
+                Object.entries(params),
+                ([key]) => wrapString({value: key, wrapper: "'"}),
+                (
+                    mappedKey,
+                    [
+                        ,
+                        doesExist,
+                    ],
+                ) => doesExist,
+            );
+
+            return `Some mutation arguments were ignored due to multiple mutation arguments: ${joinWithFinalConjunction(ignored)}. Please split up your resolver query into multiple resolver queries.`;
+        },
+    },
+    'ptg-7': {
+        description: 'max depth violated',
+        message({
+            depth,
+            maxDepth,
+            capitalizedName,
+        }: {
+            depth: number;
+            maxDepth: number;
+            capitalizedName: string;
+        }) {
+            return `${capitalizedName} too deep: ${depth} surpasses the max of ${maxDepth}. Please simplify your query.`;
+        },
+    },
+    'ptg-8': {
+        description: 'invalid input',
+        message({inputName}: {inputName: string}) {
+            return `Missing valid '${inputName}' input.`;
+        },
+    },
+    'ptg-9': {
+        description: 'not yet implemented',
+        message({name}: {name: string}) {
+            return `'${name}' is not yet implemented.`;
+        },
+    },
+    'ptg-10': {
+        description: 'missing mutation args',
+        message: 'At least one mutation arg must be provided: create, update, or upsert.',
+    },
+    'ptg-11': {
+        description: 'missing query args',
+        message: "Neither 'total' or 'items' where selected: there's nothing to do.",
     },
 } as const satisfies {
     /** `ptg` stands for prisma-to-graphql. */
