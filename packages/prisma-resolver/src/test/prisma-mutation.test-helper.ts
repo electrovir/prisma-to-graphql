@@ -211,11 +211,15 @@ export const prismaMutationTests: ResolverTests = {
             },
         },
         {
-            it: 'fails on delete',
+            it: 'runs empty delete',
             async test({prismaClient}) {
                 return await runPrismaMutationOperation({
                     graphqlArgs: {
-                        delete: {},
+                        delete: {
+                            where: {
+                                id: {equals: 'invalid id'},
+                            },
+                        },
                     },
                     context: {prismaClient},
                     prismaModelName: 'User',
@@ -226,12 +230,14 @@ export const prismaMutationTests: ResolverTests = {
                     },
                 });
             },
-            throws: outputMessages.byDescription['not yet implemented'].message({
-                name: 'delete resolver',
-            }),
+            expect: {
+                total: 0,
+                items: [],
+                messages: [],
+            },
         },
         {
-            it: 'fails on delete',
+            it: 'fails on deep delete',
             async test({prismaClient}) {
                 return await runPrismaMutationOperation({
                     graphqlArgs: {

@@ -4,6 +4,7 @@ import {log} from '@augment-vir/node-js';
 import {assert} from 'chai';
 import {assertThrows} from 'run-time-assertions';
 import {prismaCreateTests} from './prisma-create.test-helper';
+import {prismaDeleteTests} from './prisma-delete.test-helper';
 import {prismaMutationTests} from './prisma-mutation.test-helper';
 import {prismaQueryTests} from './prisma-query.test-helper';
 import {prismaResolverTests} from './prisma-resolver.test-helper';
@@ -23,6 +24,7 @@ const testCases: ReadonlyArray<Readonly<ResolverTests>> = [
     prismaResolverTests,
     prismaUpdateTests,
     prismaUpsertTests,
+    prismaDeleteTests,
 ];
 
 async function truncateAllTables(prismaClient: PrismaClient) {

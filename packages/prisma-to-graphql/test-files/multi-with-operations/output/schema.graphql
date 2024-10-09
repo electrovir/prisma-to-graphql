@@ -5,11 +5,13 @@ type Mutation {
         create: User_CreateInput
         update: User_UpdateInput
         upsert: User_UpsertInput
+        delete: User_DeleteInput
     ): User_Output!
     Companies(
         create: Company_CreateInput
         update: Company_UpdateInput
         upsert: Company_UpsertInput
+        delete: Company_DeleteInput
     ): Company_Output!
 }
 
@@ -188,6 +190,10 @@ input User_UpsertInput {
     where: User_WhereRequiredProvidedUniqueInput!
 }
 
+input User_DeleteInput {
+    where: User_WhereInput!
+}
+
 input User_WhereRequiredProvidedUniqueInput {
     id: String!
     createdAt: DateTimeFilterInput
@@ -284,6 +290,10 @@ input Company_UpdateInput {
 input Company_UpsertInput {
     data: Company_UpdateDataInput!
     where: Company_WhereRequiredProvidedUniqueInput!
+}
+
+input Company_DeleteInput {
+    where: Company_WhereInput!
 }
 
 input Company_WhereRequiredProvidedUniqueInput {

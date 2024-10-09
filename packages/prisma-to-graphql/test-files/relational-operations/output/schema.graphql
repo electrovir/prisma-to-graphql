@@ -5,11 +5,13 @@ type Mutation {
         create: User_CreateInput
         update: User_UpdateInput
         upsert: User_UpsertInput
+        delete: User_DeleteInput
     ): User_Output!
     UserSettings(
         create: UserSettings_CreateInput
         update: UserSettings_UpdateInput
         upsert: UserSettings_UpsertInput
+        delete: UserSettings_DeleteInput
     ): UserSettings_Output!
 }
 
@@ -191,6 +193,10 @@ input User_UpsertInput {
     where: User_WhereRequiredProvidedUniqueInput!
 }
 
+input User_DeleteInput {
+    where: User_WhereInput!
+}
+
 input User_WhereRequiredProvidedUniqueInput {
     id: String!
     createdAt: DateTimeFilterInput
@@ -319,6 +325,10 @@ input UserSettings_UpdateInput {
 input UserSettings_UpsertInput {
     data: UserSettings_UpdateDataInput!
     where: UserSettings_WhereRequiredProvidedUniqueInput!
+}
+
+input UserSettings_DeleteInput {
+    where: UserSettings_WhereInput!
 }
 
 input UserSettings_WhereRequiredProvidedUniqueInput {

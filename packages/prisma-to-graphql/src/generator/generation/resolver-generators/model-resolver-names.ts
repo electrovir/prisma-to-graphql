@@ -28,11 +28,12 @@ export type ResolverInputNames = {
     Mutation:
         | 'create'
         | 'createData'
-        | 'whereUnfilteredUnique'
-        | 'whereRequiredProvidedUnique'
+        | 'delete'
         | 'update'
         | 'updateData'
-        | 'upsert';
+        | 'upsert'
+        | 'whereRequiredProvidedUnique'
+        | 'whereUnfilteredUnique';
 };
 
 /**

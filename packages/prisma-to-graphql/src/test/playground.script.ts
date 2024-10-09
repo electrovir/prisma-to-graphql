@@ -13,38 +13,6 @@
 import {PrismaClient} from '.prisma';
 
 async function main(prismaClient: PrismaClient) {
-    await prismaClient.user.update({
-        where: {
-            id: 'b12b86db-36a7-4644-8531-297cbb7b2d87',
-        },
-        data: {
-            email: 'hello@example.com',
-        },
-    });
-
-    await prismaClient.user.create({
-        data: {
-            id: '1',
-            email: 'something@example.com',
-            password: 'something',
-            firstName: 'Fred',
-            lastName: 'George',
-            posts: {
-                create: [
-                    {
-                        body: 'stuff',
-                        title: 'stuff',
-                    },
-                ],
-            },
-            regions: {
-                connect: {
-                    regionName: 'USA',
-                },
-            },
-        },
-    });
-
     await prismaClient.user.create({
         data: {
             id: '1',

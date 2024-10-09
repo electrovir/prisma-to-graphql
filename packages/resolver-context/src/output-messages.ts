@@ -166,6 +166,12 @@ const messageDefinitions = {
         description: 'missing query args',
         message: "Neither 'total' or 'items' where selected: there's nothing to do.",
     },
+    'ptg-12': {
+        message({max, count}: {max: number; count: number}) {
+            return `Delete failed. The given query would delete ${count} rows but the max is ${max}. Please provide a tighter "where" argument.`;
+        },
+        description: 'delete too big',
+    },
 } as const satisfies {
     /** `ptg` stands for prisma-to-graphql. */
     [MessageCode in `ptg-${number}`]: Omit<MessageDefinition, 'code'>;

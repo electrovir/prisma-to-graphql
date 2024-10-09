@@ -29,6 +29,7 @@ export type Mutation_UsersArgs = {
   create?: InputMaybe<User_CreateInput>;
   update?: InputMaybe<User_UpdateInput>;
   upsert?: InputMaybe<User_UpsertInput>;
+  delete?: InputMaybe<User_DeleteInput>;
 };
 
 
@@ -36,6 +37,7 @@ export type Mutation_CompaniesArgs = {
   create?: InputMaybe<Company_CreateInput>;
   update?: InputMaybe<Company_UpdateInput>;
   upsert?: InputMaybe<Company_UpsertInput>;
+  delete?: InputMaybe<Company_DeleteInput>;
 };
 
 export type Query = {
@@ -215,6 +217,10 @@ export type User_UpsertInput = {
   readonly where: User_WhereRequiredProvidedUniqueInput;
 };
 
+export type User_DeleteInput = {
+  readonly where: User_WhereInput;
+};
+
 export type User_WhereRequiredProvidedUniqueInput = {
   readonly id: Scalars['String']['input'];
   readonly createdAt?: InputMaybe<DateTimeFilterInput>;
@@ -309,6 +315,10 @@ export type Company_UpdateInput = {
 export type Company_UpsertInput = {
   readonly data: Company_UpdateDataInput;
   readonly where: Company_WhereRequiredProvidedUniqueInput;
+};
+
+export type Company_DeleteInput = {
+  readonly where: Company_WhereInput;
 };
 
 export type Company_WhereRequiredProvidedUniqueInput = {
@@ -427,6 +437,7 @@ export type ResolversTypes = {
   User_CreateInput: User_CreateInput;
   User_UpdateInput: User_UpdateInput;
   User_UpsertInput: User_UpsertInput;
+  User_DeleteInput: User_DeleteInput;
   User_WhereRequiredProvidedUniqueInput: User_WhereRequiredProvidedUniqueInput;
   User_CreateDataInput: User_CreateDataInput;
   User_UpdateDataInput: User_UpdateDataInput;
@@ -439,6 +450,7 @@ export type ResolversTypes = {
   Company_CreateInput: Company_CreateInput;
   Company_UpdateInput: Company_UpdateInput;
   Company_UpsertInput: Company_UpsertInput;
+  Company_DeleteInput: Company_DeleteInput;
   Company_WhereRequiredProvidedUniqueInput: Company_WhereRequiredProvidedUniqueInput;
   Company_CreateDataInput: Company_CreateDataInput;
   Company_UpdateDataInput: Company_UpdateDataInput;
@@ -467,6 +479,7 @@ export type ResolversParentTypes = {
   User_CreateInput: User_CreateInput;
   User_UpdateInput: User_UpdateInput;
   User_UpsertInput: User_UpsertInput;
+  User_DeleteInput: User_DeleteInput;
   User_WhereRequiredProvidedUniqueInput: User_WhereRequiredProvidedUniqueInput;
   User_CreateDataInput: User_CreateDataInput;
   User_UpdateDataInput: User_UpdateDataInput;
@@ -479,6 +492,7 @@ export type ResolversParentTypes = {
   Company_CreateInput: Company_CreateInput;
   Company_UpdateInput: Company_UpdateInput;
   Company_UpsertInput: Company_UpsertInput;
+  Company_DeleteInput: Company_DeleteInput;
   Company_WhereRequiredProvidedUniqueInput: Company_WhereRequiredProvidedUniqueInput;
   Company_CreateDataInput: Company_CreateDataInput;
   Company_UpdateDataInput: Company_UpdateDataInput;
@@ -569,6 +583,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 create: 'User_CreateInput',
                 update: 'User_UpdateInput',
                 upsert: 'User_UpsertInput',
+                delete: 'User_DeleteInput',
             },
             output: 'User_Output!',
         },
@@ -577,6 +592,7 @@ export const operationParams: Readonly<SchemaOperationParams> = {
                 create: 'Company_CreateInput',
                 update: 'Company_UpdateInput',
                 upsert: 'Company_UpsertInput',
+                delete: 'Company_DeleteInput',
             },
             output: 'Company_Output!',
         },

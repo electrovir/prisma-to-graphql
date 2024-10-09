@@ -55,6 +55,7 @@ export type Mutation_UsersArgs = {
     create?: InputMaybe<User_CreateInput>;
     update?: InputMaybe<User_UpdateInput>;
     upsert?: InputMaybe<User_UpsertInput>;
+    delete?: InputMaybe<User_DeleteInput>;
 };
 export type Query = {
     readonly Users: User_Output;
@@ -174,6 +175,9 @@ export type User_UpsertInput = {
     readonly data: User_UpdateDataInput;
     readonly where: User_WhereRequiredProvidedUniqueInput;
 };
+export type User_DeleteInput = {
+    readonly where: User_WhereInput;
+};
 export type User_WhereRequiredProvidedUniqueInput = {
     readonly id: Scalars['String']['input'];
     readonly createdAt?: InputMaybe<DateTimeFilterInput>;
@@ -246,6 +250,7 @@ export type ResolversTypes = {
     User_CreateInput: User_CreateInput;
     User_UpdateInput: User_UpdateInput;
     User_UpsertInput: User_UpsertInput;
+    User_DeleteInput: User_DeleteInput;
     User_WhereRequiredProvidedUniqueInput: User_WhereRequiredProvidedUniqueInput;
     User_CreateDataInput: User_CreateDataInput;
     User_UpdateDataInput: User_UpdateDataInput;
@@ -273,6 +278,7 @@ export type ResolversParentTypes = {
     User_CreateInput: User_CreateInput;
     User_UpdateInput: User_UpdateInput;
     User_UpsertInput: User_UpsertInput;
+    User_DeleteInput: User_DeleteInput;
     User_WhereRequiredProvidedUniqueInput: User_WhereRequiredProvidedUniqueInput;
     User_CreateDataInput: User_CreateDataInput;
     User_UpdateDataInput: User_UpdateDataInput;

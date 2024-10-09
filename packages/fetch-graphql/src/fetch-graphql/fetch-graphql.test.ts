@@ -63,6 +63,25 @@ describe(createGraphqlFetcher.name, () => {
             },
         );
 
+        const fakeResult2 = await fetchGraphql(
+            {
+                operationName: 'Test1',
+                operationType: 'Query',
+                url: 'example.com',
+                options: {
+                    customFetch: fakeFetch,
+                },
+            },
+            {
+                Users: {
+                    args: {},
+                    select: {},
+                },
+            },
+        );
+
+        fakeResult.Users;
+
         assert.deepStrictEqual(fakeResult, {Users: {}});
     });
 

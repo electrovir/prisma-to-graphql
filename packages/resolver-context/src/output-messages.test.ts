@@ -119,6 +119,13 @@ describe('outputMessages', () => {
                 inputs: undefined,
                 expect: "ptg-11: Neither 'total' or 'items' where selected: there's nothing to do.",
             },
+            'ptg-12': {
+                inputs: {
+                    count: 40,
+                    max: 12,
+                },
+                expect: 'ptg-12: Delete failed. The given query would delete 40 rows but the max is 12. Please provide a tighter "where" argument.',
+            },
         };
 
         getObjectTypedEntries(testCases).forEach(

@@ -28,6 +28,7 @@ exports.operationParams = {
                 create: 'User_CreateInput',
                 update: 'User_UpdateInput',
                 upsert: 'User_UpsertInput',
+                delete: 'User_DeleteInput',
             },
             output: 'User_Output!',
         },

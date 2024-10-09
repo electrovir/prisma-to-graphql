@@ -5,11 +5,13 @@ type Mutation {
         create: User_CreateInput
         update: User_UpdateInput
         upsert: User_UpsertInput
+        delete: User_DeleteInput
     ): User_Output!
     Posts(
         create: Post_CreateInput
         update: Post_UpdateInput
         upsert: Post_UpsertInput
+        delete: Post_DeleteInput
     ): Post_Output!
 }
 
@@ -161,6 +163,10 @@ input User_UpsertInput {
     where: User_WhereRequiredProvidedUniqueInput!
 }
 
+input User_DeleteInput {
+    where: User_WhereInput!
+}
+
 input User_WhereRequiredProvidedUniqueInput {
     id: String!
     createdAt: DateTimeFilterInput
@@ -265,6 +271,10 @@ input Post_UpdateInput {
 input Post_UpsertInput {
     data: Post_UpdateDataInput!
     where: Post_WhereRequiredProvidedUniqueInput!
+}
+
+input Post_DeleteInput {
+    where: Post_WhereInput!
 }
 
 input Post_WhereRequiredProvidedUniqueInput {

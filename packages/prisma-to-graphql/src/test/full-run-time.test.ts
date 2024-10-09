@@ -10,20 +10,19 @@ import {GraphqlTestCase, runGraphqlServerTests} from '@prisma-to-graphql/scripts
 import {assert} from 'chai';
 import {createUtcFullDate} from 'date-vir';
 import {assertDefined, assertRunTimeType, assertThrows, assertTypeOf} from 'run-time-assertions';
-import {joinUrlParts} from 'url-vir';
 import {setupTestServerConfig} from './full-run-time.test-helper';
 import {graphqlServerHeaders} from './server-headers.mock';
 
 const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     {
         it: 'finds multiple users',
-        async test({serverUrl, fetchGraphql}) {
+        async test({graphqlUrl, fetchGraphql}) {
             const graphqlFetchResult = await fetchGraphql(
                 {
                     operationName: 'FindMultipleUsers',
                     // @ts-ignore: this won't be generated until tests run at least once
                     operationType: 'Query',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                 },
                 {
                     Users: {
@@ -81,7 +80,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
             >();
 
             const users = (
-                await fetchRawGraphql(joinUrlParts(serverUrl, 'graphql'), {
+                await fetchRawGraphql(graphqlUrl, {
                     query: /* GraphQL */ `
                         query {
                             Users(
@@ -142,13 +141,13 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'supports multiple queries',
-        async test({serverUrl, fetchGraphql}) {
+        async test({graphqlUrl, fetchGraphql}) {
             const graphqlFetchResult = await fetchGraphql(
                 {
                     operationName: 'multiple queries',
                     // @ts-ignore: this won't be generated until tests run at least once
                     operationType: 'Query',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                 },
                 {
                     Users: {
@@ -307,13 +306,13 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'supports a query alias',
-        async test({serverUrl, fetchGraphql}) {
+        async test({graphqlUrl, fetchGraphql}) {
             const graphqlFetchResult = await fetchGraphql(
                 {
                     operationName: 'multiple queries',
                     // @ts-ignore: this won't be generated until tests run at least once
                     operationType: 'Query',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                 },
                 {
                     Users: {
@@ -409,13 +408,13 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'supports multiple queries to the same resolver',
-        async test({serverUrl, fetchGraphql}) {
+        async test({graphqlUrl, fetchGraphql}) {
             const graphqlFetchResult = await fetchGraphql(
                 {
                     operationName: 'multiple queries',
                     // @ts-ignore: this won't be generated until tests run at least once
                     operationType: 'Query',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                 },
                 {
                     Users: [
@@ -549,9 +548,9 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'loads dates as strings',
-        async test({serverUrl}) {
+        async test({graphqlUrl}) {
             const users = (
-                await fetchRawGraphql(joinUrlParts(serverUrl, 'graphql'), {
+                await fetchRawGraphql(graphqlUrl, {
                     query: /* GraphQL */ `
                         query {
                             Users(where: {role: {equals: "user"}}, orderBy: {}) {
@@ -572,9 +571,9 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'can sort by a relational field',
-        async test({serverUrl}) {
+        async test({graphqlUrl}) {
             const users = (
-                await fetchRawGraphql(joinUrlParts(serverUrl, 'graphql'), {
+                await fetchRawGraphql(graphqlUrl, {
                     query: /* GraphQL */ `
                         query {
                             Users(
@@ -625,9 +624,9 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'can use a cursor',
-        async test({serverUrl, prismaClient}) {
+        async test({graphqlUrl, prismaClient}) {
             const firstPageFromGraphql = (
-                await fetchRawGraphql(joinUrlParts(serverUrl, 'graphql'), {
+                await fetchRawGraphql(graphqlUrl, {
                     query: /* GraphQL */ `
                         query {
                             Users(
@@ -681,7 +680,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
             assert.isTrue(isUuid(cursorId));
 
             const secondPageFromGraphql = (
-                await fetchRawGraphql(joinUrlParts(serverUrl, 'graphql'), {
+                await fetchRawGraphql(graphqlUrl, {
                     query: /* GraphQL */ `
                         query ($cursorId: String!) {
                             Users(
@@ -741,9 +740,9 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'supports the distinct field',
-        async test({serverUrl, prismaClient}) {
+        async test({graphqlUrl, prismaClient}) {
             const graphqlResult = (
-                await fetchRawGraphql(joinUrlParts(serverUrl, 'graphql'), {
+                await fetchRawGraphql(graphqlUrl, {
                     query: /* GraphQL */ `
                         query {
                             Users(
@@ -795,7 +794,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'updates a value',
-        async test({serverUrl, prismaClient}) {
+        async test({graphqlUrl, prismaClient}) {
             const createdUser = await prismaClient.user.create({
                 data: {
                     password: 'yolo-password2',
@@ -807,7 +806,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
             });
 
             const updateGraphqlResult = (
-                await fetchRawGraphql(joinUrlParts(serverUrl, 'graphql'), {
+                await fetchRawGraphql(graphqlUrl, {
                     query: /* GraphQL */ `
                         mutation {
                             Users(
@@ -863,7 +862,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'creates multiple values',
-        async test({serverUrl, prismaClient}) {
+        async test({graphqlUrl, prismaClient}) {
             const usersBefore = await prismaClient.user.findMany({
                 select: {
                     id: true,
@@ -871,7 +870,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
             });
 
             const multiCreationGraphqlResult = (
-                await fetchRawGraphql(joinUrlParts(serverUrl, 'graphql'), {
+                await fetchRawGraphql(graphqlUrl, {
                     query: /* GraphQL */ `
                         mutation {
                             Users(
@@ -934,13 +933,13 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'creates nested values',
-        async test({serverUrl, prismaClient, fetchGraphql}) {
+        async test({graphqlUrl, prismaClient, fetchGraphql}) {
             const graphqlResult = await fetchGraphql(
                 {
                     operationName: 'CreateNestedValues',
                     // @ts-ignore: this won't be generated until tests run at least once
                     operationType: 'Mutation',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                 },
                 {
                     Users: {
@@ -1048,7 +1047,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'fails to read hidden output fields',
-        async test({fetchGraphql, serverUrl}) {
+        async test({fetchGraphql, graphqlUrl}) {
             // @ts-ignore this will fail until the test is run once
             type UsersOutput = ArrayElement<ResolverOutput<Resolvers, 'Query', 'Users'>['items']>;
 
@@ -1063,7 +1062,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
                             operationName: 'CreateNestedValues',
                             // @ts-ignore: this won't be generated until tests run at least once
                             operationType: 'Query',
-                            url: joinUrlParts(serverUrl, 'graphql'),
+                            url: graphqlUrl,
                         },
                         {
                             Users: {
@@ -1096,7 +1095,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'updates multiple values',
-        async test({serverUrl, prismaClient}) {
+        async test({graphqlUrl, prismaClient}) {
             const createdUsers = [
                 await prismaClient.user.create({
                     data: {
@@ -1119,7 +1118,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
             ];
 
             const updateGraphqlResult = (
-                await fetchRawGraphql(joinUrlParts(serverUrl, 'graphql'), {
+                await fetchRawGraphql(graphqlUrl, {
                     query: /* GraphQL */ `
                         mutation {
                             Users(
@@ -1167,7 +1166,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'scopes data with lots of entries',
-        async test({serverUrl, fetchGraphql}) {
+        async test({graphqlUrl, fetchGraphql}) {
             const query = {
                 Users: {
                     args: {
@@ -1231,7 +1230,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
                     operationName: 'non-scoped user stuff',
                     // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                 },
                 query,
             );
@@ -1313,7 +1312,7 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
                     operationName: 'non-scoped user stuff',
                     // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                     options: {
                         fetchOptions: {
                             headers: {
@@ -1378,13 +1377,13 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'allows querying by a many field',
-        async test({serverUrl, fetchGraphql}) {
+        async test({graphqlUrl, fetchGraphql}) {
             const uniquePostUsers = await fetchGraphql(
                 {
                     operationName: 'many field where',
                     // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                 },
                 {
                     Users: {
@@ -1476,13 +1475,13 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'supports operation scope by a many field',
-        async test({serverUrl, fetchGraphql}) {
+        async test({graphqlUrl, fetchGraphql}) {
             const uniquePostUsers = await fetchGraphql(
                 {
                     operationName: 'scoped many where',
                     // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                     options: {
                         fetchOptions: {
                             headers: {
@@ -1556,13 +1555,13 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'scopes deeply nested operations',
-        async test({serverUrl, fetchGraphql}) {
+        async test({graphqlUrl, fetchGraphql}) {
             const uniquePostUsers = await fetchGraphql(
                 {
                     operationName: 'nested scope',
                     // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                     options: {
                         fetchOptions: {
                             headers: {
@@ -1641,13 +1640,13 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
     },
     {
         it: 'limits query result count',
-        async test({serverUrl, fetchGraphql}) {
+        async test({graphqlUrl, fetchGraphql}) {
             const uniquePostUsers = await fetchGraphql(
                 {
                     operationName: 'nested scope',
                     // @ts-ignore: this won't work until the prisma output has been generated
                     operationType: 'Query',
-                    url: joinUrlParts(serverUrl, 'graphql'),
+                    url: graphqlUrl,
                     options: {
                         fetchOptions: {
                             headers: {
@@ -1713,6 +1712,60 @@ const testCases: GraphqlTestCase<PrismaClient, Resolvers>[] = [
                     ],
                 },
             });
+        },
+    },
+    {
+        it: 'deletes multiple values',
+        async test({graphqlUrl, prismaClient, fetchGraphql}) {
+            const usersBefore = await prismaClient.user.findMany({
+                where: {
+                    role: {
+                        equals: 'user',
+                    },
+                },
+            });
+
+            const deleteResult = await fetchGraphql(
+                {
+                    operationName: 'delete multiple values',
+                    operationType: 'Mutation',
+                    url: graphqlUrl,
+                },
+                {
+                    Users: {
+                        select: {
+                            items: {
+                                id: true,
+                            },
+                            messages: {
+                                message: true,
+                            },
+                            total: true,
+                        },
+                        args: {
+                            delete: {
+                                where: {
+                                    role: {
+                                        equals: 'user',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            );
+
+            const usersAfter = await prismaClient.user.findMany({
+                where: {
+                    role: {
+                        equals: 'user',
+                    },
+                },
+            });
+
+            assert.strictEqual(deleteResult.Users.total, 4);
+            assert.lengthOf(usersBefore, 4);
+            assert.isEmpty(usersAfter);
         },
     },
 ];

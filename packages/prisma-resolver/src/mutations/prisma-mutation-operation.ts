@@ -7,6 +7,7 @@ import {
 import {GraphQLError} from 'graphql';
 import {PrismaResolverInputs, PrismaResolverOutput} from '../prisma-resolver';
 import {runPrismaCreate} from './prisma-create-operation';
+import {runPrismaDelete} from './prisma-delete-operation';
 import {runPrismaUpdate} from './prisma-update-operation';
 import {runPrismaUpsert} from './prisma-upsert-operation';
 
@@ -93,11 +94,18 @@ export async function runPrismaMutationOperation(
             scope: params.context.operationScope,
             capitalizedDataName: 'Delete data',
         });
-        throw new GraphQLError(
-            outputMessages.byDescription['not yet implemented'].message({
-                name: 'delete resolver',
-            }),
-        );
+        const result = await runPrismaDelete(params);
+        return {
+            ...result,
+            messages: [
+                ...result.messages,
+                createIgnoredInputsMessages({
+                    createArg,
+                    updateArg,
+                    upsertArg,
+                }),
+            ].filter(isTruthy),
+        };
     } else {
         throw new GraphQLError(outputMessages.byDescription['missing mutation args'].message());
     }

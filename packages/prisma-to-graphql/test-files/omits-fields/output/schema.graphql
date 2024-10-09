@@ -5,6 +5,7 @@ type Mutation {
         create: User_CreateInput
         update: User_UpdateInput
         upsert: User_UpsertInput
+        delete: User_DeleteInput
     ): User_Output!
 }
 
@@ -146,6 +147,10 @@ input User_UpdateInput {
 input User_UpsertInput {
     data: User_UpdateDataInput!
     where: User_WhereRequiredProvidedUniqueInput!
+}
+
+input User_DeleteInput {
+    where: User_WhereInput!
 }
 
 input User_WhereRequiredProvidedUniqueInput {

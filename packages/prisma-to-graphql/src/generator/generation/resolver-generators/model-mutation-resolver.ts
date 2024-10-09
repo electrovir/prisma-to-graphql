@@ -307,6 +307,14 @@ function createCreateInputBlocks(prismaModel: PrismaModel) {
     };
 }
 
+function createDeleteInputBlocks(prismaModel: PrismaModel) {
+    const whereInputBlock = createWhereInputBlock(prismaModel);
+
+    return {
+        where: whereInputBlock,
+    };
+}
+
 function createUpdateInputBlocks(prismaModel: PrismaModel) {
     const updateDataInputBlock: GraphqlBlockByType<'input'> = {
         type: 'input',
@@ -395,6 +403,24 @@ function createArgInputBlocks(prismaModel: Readonly<PrismaModel>) {
         ],
     };
 
+    const deleteInputBlocks = createDeleteInputBlocks(prismaModel);
+
+    const deleteArgInputBlock: GraphqlBlockByType<'input'> = {
+        type: 'input',
+        name: createResolverInputName({
+            inputName: 'delete',
+            modelName: prismaModel.modelName,
+        }),
+        props: [
+            {
+                type: 'property',
+                name: 'where',
+                value: deleteInputBlocks.where.name,
+                required: true,
+            },
+        ],
+    };
+
     const whereRequiredProvidedUniqueBlock: GraphqlBlockByType<'input'> =
         createWhereRequiredProvidedUniqueBlock(prismaModel);
 
@@ -424,10 +450,12 @@ function createArgInputBlocks(prismaModel: Readonly<PrismaModel>) {
         create: createArgInputBlock,
         update: updateArgInputBlock,
         upsert: upsertArgInputBlock,
+        delete: deleteArgInputBlock,
         whereRequiredProvided: whereRequiredProvidedUniqueBlock,
         inputBlocks: [
             ...Object.values(createInputBlocks),
             ...Object.values(updateInputBlocks),
+            ...Object.values(deleteInputBlocks),
         ],
     };
 }
@@ -467,6 +495,12 @@ export const modelMutationOperation: ResolverGenerator = {
                     type: 'property',
                     name: 'upsert',
                     value: argBlocks.upsert.name,
+                    required: false,
+                },
+                {
+                    type: 'property',
+                    name: 'delete',
+                    value: argBlocks.delete.name,
                     required: false,
                 },
             ],

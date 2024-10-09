@@ -71,7 +71,7 @@ export type GraphqlTestCase<PrismaClient, Resolvers extends Readonly<BaseResolve
      */
     // only?: true;
     test(params: {
-        serverUrl: string;
+        graphqlUrl: string;
         fetchGraphql: GraphqlFetcher<Resolvers>;
         prismaClient: PrismaClient;
     }): MaybePromise<void>;
@@ -104,6 +104,7 @@ export async function runGraphqlServerTests<
         const fetchGraphql = createGraphqlFetcher<Resolvers>(operationParams);
 
         const itNames = new Set<string>();
+        const graphqlUrl = joinUrlParts(serverUrl, 'graphql');
 
         await awaitedForEach(testCases, async (testCase) => {
             if (itNames.has(testCase.it)) {
@@ -113,7 +114,7 @@ export async function runGraphqlServerTests<
             try {
                 log.faint(testCase.it);
                 await testCase.test({
-                    serverUrl,
+                    graphqlUrl,
                     fetchGraphql,
                     prismaClient: fullServer.prismaClient,
                 });

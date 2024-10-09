@@ -3,6 +3,7 @@ import {IsAny} from 'type-fest';
 import {buildUrl} from 'url-vir';
 import {buildGraphqlQuery} from '../build-query/build-graphql-query';
 import {BuildGraphqlQueryOptions} from '../build-query/build-graphql-query-options';
+import {sanitizeQueryString} from '../build-query/sanitize-query-string';
 import {FetchRawGraphqlOptions, GraphqlQuery, fetchRawGraphql} from './fetch-raw-graphql';
 import {GraphqlOperations, ResolverOutputWithSelection} from './type-transforms/operations';
 import {AvailableOperationTypes, BaseResolvers} from './type-transforms/resolvers';
@@ -121,7 +122,7 @@ export function createGraphqlFetcher<const Resolvers extends Readonly<BaseResolv
 
         const urlWithOperationName =
             url && !options?.omitOperationNameFromUrl
-                ? buildUrl(url, {search: {operation: operationName}}).href
+                ? buildUrl(url, {search: {operation: sanitizeQueryString(operationName)}}).href
                 : url;
 
         return await fetchRawGraphql(urlWithOperationName, graphqlQuery, options);
