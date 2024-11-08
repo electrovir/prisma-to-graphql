@@ -1,0 +1,47 @@
+{
+    "name": "prisma-to-graphql",
+    "description": "",
+    "keywords": [],
+    "homepage": "https://github.com/electrovir/prisma-to-graphql",
+    "bugs": {
+        "url": "https://github.com/electrovir/prisma-to-graphql/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/electrovir/prisma-to-graphql.git"
+    },
+    "license": "(MIT or CC0 1.0)",
+    "author": {
+        "name": "electrovir",
+        "url": "https://github.com/electrovir"
+    },
+    "type": "module",
+    "main": "src/index.ts",
+    "module": "src/index.ts",
+    "types": "src/index.ts",
+    "bin": "dist/cli.script.ts",
+    "scripts": {
+        "compile": "virmator compile",
+        "docs": "virmator docs",
+        "start": "tsx src/index.ts",
+        "test": "virmator test node",
+        "test:coverage": "npm run test coverage",
+        "test:docs": "virmator docs check",
+        "test:update": "npm test update"
+    },
+    "dependencies": {
+        "@augment-vir/assert": "^30.6.2"
+    },
+    "devDependencies": {
+        "@augment-vir/test": "^30.6.2",
+        "@types/node": "^22.9.0",
+        "c8": "^10.1.2",
+        "istanbul-smart-text-reporter": "^1.1.5"
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
