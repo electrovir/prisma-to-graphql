@@ -1,0 +1,7 @@
+exports[`createCommonScalarWhereBlockProps > builds common input props 1`] = `
+"[{\\"type\\":\\"property\\",\\"name\\":\\"equals\\",\\"value\\":\\"DateTime\\",\\"required\\":false},{\\"type\\":\\"property\\",\\"name\\":\\"in\\",\\"value\\":\\"[DateTime!]\\",\\"required\\":false},{\\"type\\":\\"property\\",\\"name\\":\\"notIn\\",\\"value\\":\\"[DateTime!]\\",\\"required\\":false},{\\"type\\":\\"property\\",\\"name\\":\\"lt\\",\\"value\\":\\"DateTime\\",\\"required\\":false},{\\"type\\":\\"property\\",\\"name\\":\\"lte\\",\\"value\\":\\"DateTime\\",\\"required\\":false},{\\"type\\":\\"property\\",\\"name\\":\\"gt\\",\\"value\\":\\"DateTime\\",\\"required\\":false},{\\"type\\":\\"property\\",\\"name\\":\\"gte\\",\\"value\\":\\"DateTime\\",\\"required\\":false},{\\"type\\":\\"property\\",\\"name\\":\\"not\\",\\"value\\":\\"DateTimeWhereInput\\",\\"required\\":false}]"
+`;
+
+exports[`createIterableScalarWhereBlockProps > builds iterable where input properties 1`] = `
+"[{\\"type\\":\\"property\\",\\"name\\":\\"contains\\",\\"value\\":\\"String\\",\\"required\\":false},{\\"type\\":\\"property\\",\\"name\\":\\"startsWith\\",\\"value\\":\\"String\\",\\"required\\":false},{\\"type\\":\\"property\\",\\"name\\":\\"endsWith\\",\\"value\\":\\"String\\",\\"required\\":false}]"
+`;

@@ -4,6 +4,8 @@ module.exports = {
     ...baseConfig,
     ignorePaths: [
         ...baseConfig.ignorePaths,
+        '**/schema.graphql',
+        '**/schema.prisma',
     ],
     words: [
         ...baseConfig.words,

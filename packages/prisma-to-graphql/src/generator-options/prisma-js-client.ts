@@ -2,6 +2,12 @@ import {log, type SelectFrom} from '@augment-vir/common';
 import {type GeneratorConfig} from '@prisma/generator-helper';
 import prismaInternals from '@prisma/internals';
 
+/**
+ * Tries to find Prisma's default prisma-client-js generator and use its output path. If this fails,
+ * it just returns `undefined`.
+ *
+ * @category Internal
+ */
 export function getOriginalPrismaJsClientOutputPath(
     otherGenerators: ReadonlyArray<
         Readonly<

@@ -1,0 +1,35 @@
+generator graphql {
+    provider = "tsx src/cli/cli.script.ts"
+    output   = "./output/"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = "file:../../../.not-committed/dev.db"
+}
+
+model User {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    email    String
+    password String
+
+    firstName   String?
+    lastName    String?
+    role        String?
+    phoneNumber String?
+
+    settings UserSettings?
+}
+
+model UserSettings {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    userId String @unique
+
+    user User @relation(fields: [userId], references: [id])
+}

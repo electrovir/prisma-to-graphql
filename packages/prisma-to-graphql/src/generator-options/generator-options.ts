@@ -11,7 +11,7 @@ import {getOriginalPrismaJsClientOutputPath} from './prisma-js-client.js';
  * Shape definition for all supported `prisma-to-graphql` generator options, for use as run-time
  * validation.
  *
- * @category Prisma Generator
+ * @category Internal
  */
 export const prismaToGraphqlGeneratorOptionsShape = defineShape(
     and(
@@ -31,14 +31,14 @@ export const prismaToGraphqlGeneratorOptionsShape = defineShape(
  * All supported options for the `prisma-to-graphql` generator. They are assigned in the Prisma
  * schema file which is passed to the generator.
  *
- * @category Main Types
+ * @category Prisma Generator
  */
 export type PrismaToGraphqlGeneratorOptions =
     typeof prismaToGraphqlGeneratorOptionsShape.runtimeType;
 /**
  * All default options for the `prisma-to-graphql` generator.
  *
- * @category Prisma Generator
+ * @category Internal
  */
 export const defaultPrismaToGraphqlGeneratorOptions =
     prismaToGraphqlGeneratorOptionsShape.defaultValue;
@@ -47,7 +47,7 @@ export const defaultPrismaToGraphqlGeneratorOptions =
  * Reads all options for the `prisma-to-graphql` generator from the current Prisma generator
  * context.
  *
- * @category Prisma Generator
+ * @category Internal
  */
 export function readPrismaToGraphqlGeneratorOptions(
     generatorConfig: Readonly<Pick<GeneratorConfig, 'output' | 'config' | 'isCustomOutput'>>,

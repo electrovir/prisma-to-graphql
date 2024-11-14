@@ -4,7 +4,7 @@ import {defineShape} from 'object-shape-tester';
  * GraphQL generation options shape for `prisma-to-graphql`. Used to verify option validity and set
  * default values.
  *
- * @category Prisma Generator
+ * @category Internal
  */
 export const graphqlGenerationOptionsShape = defineShape({
     /**
@@ -24,6 +24,6 @@ export const graphqlGenerationOptionsShape = defineShape({
 /**
  * GraphQL generation options for `prisma-to-graphql`.
  *
- * @category Prisma Generator
+ * @category Internal
  */
 export type GraphqlGenerationOptions = typeof graphqlGenerationOptionsShape.runtimeType;

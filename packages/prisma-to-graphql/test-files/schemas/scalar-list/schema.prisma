@@ -1,0 +1,14 @@
+generator graphql {
+    provider = "tsx src/cli/cli.script.ts"
+    output   = "./output/"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = "some-url"
+}
+
+model SomeModel {
+    id          String   @id @default(uuid()) @db.Uuid
+    multiScalar String[]
+}

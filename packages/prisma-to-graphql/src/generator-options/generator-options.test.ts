@@ -45,6 +45,25 @@ describe(readPrismaToGraphqlGeneratorOptions.name, () => {
             },
         },
         {
+            it: 'handles a missing prisma client js output path',
+            inputs: [
+                {
+                    config: {},
+                    isCustomOutput: false,
+                    output: null,
+                },
+                [
+                    {
+                        provider: {
+                            value: 'prisma-client-js',
+                        },
+                        output: null,
+                    },
+                ],
+            ],
+            expect: defaultPrismaToGraphqlGeneratorOptions,
+        },
+        {
             it: 'uses an output override',
             inputs: [
                 {

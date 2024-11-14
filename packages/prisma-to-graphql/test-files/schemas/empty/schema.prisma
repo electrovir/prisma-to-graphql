@@ -1,0 +1,9 @@
+generator graphql {
+    provider = "tsx src/cli/cli.script.ts"
+    output   = "./output/"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = "file:../../../.not-committed/dev.db"
+}

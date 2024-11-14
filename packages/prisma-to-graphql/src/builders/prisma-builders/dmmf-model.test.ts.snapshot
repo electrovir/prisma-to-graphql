@@ -1,0 +1,15 @@
+exports[`parseDmmfModel > handles a model without fields 1`] = `
+"{\\"modelName\\":\\"TestNoFields\\",\\"fields\\":{},\\"pluralModelName\\":\\"TestNoFields\\"}"
+`;
+
+exports[`parseDmmfModel > handles an enum field 1`] = `
+"{\\"modelName\\":\\"TestFields\\",\\"fields\\":{\\"id\\":{\\"hasDefaultValue\\":true,\\"isId\\":true,\\"isList\\":false,\\"isRequired\\":true,\\"isUnique\\":true,\\"name\\":\\"id\\",\\"type\\":\\"MyEnum\\",\\"isEnumType\\":true}},\\"pluralModelName\\":\\"TestFields\\"}"
+`;
+
+exports[`parseDmmfModel > handles an id field 1`] = `
+"{\\"modelName\\":\\"TestFields\\",\\"fields\\":{\\"id\\":{\\"hasDefaultValue\\":true,\\"isId\\":true,\\"isList\\":false,\\"isRequired\\":true,\\"isUnique\\":true,\\"name\\":\\"id\\",\\"type\\":\\"Int\\",\\"isEnumType\\":false}},\\"pluralModelName\\":\\"TestFields\\"}"
+`;
+
+exports[`parseDmmfModel > handles relations 1`] = `
+"{\\"modelName\\":\\"TestFields\\",\\"fields\\":{\\"user\\":{\\"name\\":\\"user\\",\\"isList\\":false,\\"isRequired\\":true,\\"isUnique\\":false,\\"isId\\":false,\\"hasDefaultValue\\":false,\\"type\\":\\"User\\",\\"relationName\\":\\"UserToUserSettings\\",\\"relationFromFields\\":[\\"userId\\"],\\"relationToFields\\":[\\"id\\"],\\"isGenerated\\":false,\\"isUpdatedAt\\":false,\\"isEnumType\\":false}},\\"pluralModelName\\":\\"TestFields\\"}"
+`;

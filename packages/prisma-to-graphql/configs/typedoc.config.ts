@@ -11,10 +11,17 @@ export const typeDocConfig: Partial<TypeDocOptions> = {
     entryPoints: [
         indexTsFile,
     ],
+    highlightLanguages: [
+        'prisma',
+        'typescript',
+        'shell',
+    ],
     intentionallyNotExported: [],
     defaultCategory: 'MISSING CATEGORY',
     categoryOrder: [
-        'Main',
+        'Prisma Generator',
+        '*',
+        'Util',
         'Internal',
     ],
 };
