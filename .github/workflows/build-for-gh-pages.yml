@@ -23,8 +23,9 @@ jobs:
             - name: build
               run: |
                   npm ci
+                  cd packages/prisma-to-graphql
                   npm run docs
             - uses: JamesIves/github-pages-deploy-action@v4.6.3
               with:
                   branch: 'gh-pages'
-                  folder: 'dist-docs'
+                  folder: packages/prisma-to-graphql/dist-docs
