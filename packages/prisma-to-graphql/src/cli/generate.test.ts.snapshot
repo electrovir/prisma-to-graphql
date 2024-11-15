@@ -3,27 +3,27 @@ exports[`buildAllOutputs > generates outputs for 'test-files/empty' 1`] = `
 `;
 
 exports[`buildAllOutputs > generates outputs for 'test-files/includes-a-list-field' 1`] = `
-"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/includes-a-list-field/schema.prisma ✔ Generated GraphQL Schema Generator (0.0.1) to ./test-files/schemas/includes-a-list-field/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
+"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/includes-a-list-field/schema.prisma ✔ Generated GraphQL Schema Generator to ./test-files/schemas/includes-a-list-field/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
 `;
 
 exports[`buildAllOutputs > generates outputs for 'test-files/multi-model' 1`] = `
-"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/multi-model/schema.prisma ✔ Generated GraphQL Schema Generator (0.0.1) to ./test-files/schemas/multi-model/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
+"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/multi-model/schema.prisma ✔ Generated GraphQL Schema Generator to ./test-files/schemas/multi-model/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
 `;
 
 exports[`buildAllOutputs > generates outputs for 'test-files/multi-model-no-operations' 1`] = `
-"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/multi-model-no-operations/schema.prisma ✔ Generated GraphQL Schema Generator (0.0.1) to ./test-files/schemas/multi-model-no-operations/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
+"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/multi-model-no-operations/schema.prisma ✔ Generated GraphQL Schema Generator to ./test-files/schemas/multi-model-no-operations/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
 `;
 
 exports[`buildAllOutputs > generates outputs for 'test-files/relational-operations' 1`] = `
-"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/relational-operations/schema.prisma ✔ Generated GraphQL Schema Generator (0.0.1) to ./test-files/schemas/relational-operations/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
+"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/relational-operations/schema.prisma ✔ Generated GraphQL Schema Generator to ./test-files/schemas/relational-operations/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
 `;
 
 exports[`buildAllOutputs > generates outputs for 'test-files/scalar-list' 1`] = `
-"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/scalar-list/schema.prisma ✔ Generated GraphQL Schema Generator (0.0.1) to ./test-files/schemas/scalar-list/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
+"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/scalar-list/schema.prisma ✔ Generated GraphQL Schema Generator to ./test-files/schemas/scalar-list/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
 `;
 
 exports[`buildAllOutputs > generates outputs for 'test-files/single-model' 1`] = `
-"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/single-model/schema.prisma ✔ Generated GraphQL Schema Generator (0.0.1) to ./test-files/schemas/single-model/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
+"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/single-model/schema.prisma ✔ Generated GraphQL Schema Generator to ./test-files/schemas/single-model/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
 `;
 
 exports[`buildAllOutputs > generates outputs for 'test-files/unexpected-type' 1`] = `
@@ -31,5 +31,5 @@ exports[`buildAllOutputs > generates outputs for 'test-files/unexpected-type' 1`
 `;
 
 exports[`buildAllOutputs > generates outputs for 'test-files/with-enum' 1`] = `
-"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/with-enum/schema.prisma ✔ Generated GraphQL Schema Generator (0.0.1) to ./test-files/schemas/with-enum/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
+"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/with-enum/schema.prisma ✔ Generated GraphQL Schema Generator to ./test-files/schemas/with-enum/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
 `;

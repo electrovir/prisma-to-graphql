@@ -1,6 +1,6 @@
 {
     "name": "@prisma-to-graphql/mono-repo",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "private": true,
     "homepage": "https://github.com/electrovir/prisma-to-graphql",
     "bugs": {

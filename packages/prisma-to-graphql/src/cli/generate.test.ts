@@ -51,7 +51,13 @@ async function testGeneration(schemaTestName: string) {
         (key, value) => {
             if (check.isString(value)) {
                 return collapseWhiteSpace(
-                    removeColor(value.replaceAll(/ in \d+m?s/g, '').replaceAll(monoRepoPath, '')),
+                    removeColor(value)
+                        .replaceAll(/ in \d+m?s/g, '')
+                        .replaceAll(monoRepoPath, '')
+                        .replaceAll(
+                            /Generated GraphQL Schema Generator \([^)]+\) to/g,
+                            'Generated GraphQL Schema Generator to',
+                        ),
                 );
             } else {
                 return value;
