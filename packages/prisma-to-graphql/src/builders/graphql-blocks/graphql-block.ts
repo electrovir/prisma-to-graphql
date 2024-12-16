@@ -1,12 +1,4 @@
-/**
- * The GraphQL operation types supported by `prisma-to-graphql`.
- *
- * @category GraphQL Blocks
- */
-export enum OperationType {
-    Mutation = 'Mutation',
-    Query = 'Query',
-}
+import {OperationType} from '@prisma-to-graphql/core';
 
 /**
  * All supported GraphQL block types.

@@ -8,12 +8,12 @@ import {
     mergePropertyArrays,
     removeSuffix,
 } from '@augment-vir/common';
+import {OperationType} from '@prisma-to-graphql/core';
 import {
     GraphqlBlock,
     GraphqlBlockByType,
     GraphqlBlockType,
     NamedGraphqlBlock,
-    OperationType,
     TopLevelNamedGraphqlBlock,
 } from '../graphql-blocks/graphql-block.js';
 import {GraphqlBuildError} from './graphql-build.error.js';

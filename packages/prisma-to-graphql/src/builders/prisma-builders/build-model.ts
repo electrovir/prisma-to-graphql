@@ -1,9 +1,9 @@
 import {check} from '@augment-vir/assert';
 import {filterMap, log, mergePropertyArrays} from '@augment-vir/common';
+import {OperationType} from '@prisma-to-graphql/core';
 import type {PrismaToGraphqlGeneratorOptions} from '../../generator-options/generator-options.js';
 import {
     GraphqlBlockType,
-    OperationType,
     type GraphqlBlockByType,
     type TopLevelNamedGraphqlBlock,
 } from '../graphql-blocks/graphql-block.js';

@@ -1,8 +1,8 @@
 import {check} from '@augment-vir/assert';
 import {filterMap} from '@augment-vir/common';
+import {OperationType} from '@prisma-to-graphql/core';
 import {
     GraphqlBlockType,
-    OperationType,
     type GraphqlBlockByType,
     type TopLevelNamedGraphqlBlock,
 } from '../graphql-blocks/graphql-block.js';

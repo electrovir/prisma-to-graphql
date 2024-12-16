@@ -1,10 +1,7 @@
 import {assert} from '@augment-vir/assert';
 import {describe, it, itCases} from '@augment-vir/test';
-import {
-    GraphqlBlockByType,
-    GraphqlBlockType,
-    OperationType,
-} from '../graphql-blocks/graphql-block.js';
+import {OperationType} from '@prisma-to-graphql/core';
+import {GraphqlBlockByType, GraphqlBlockType} from '../graphql-blocks/graphql-block.js';
 import {GraphqlBuildError} from './graphql-build.error.js';
 import {
     buildGraphqlBlock,

@@ -1,10 +1,7 @@
 import {check} from '@augment-vir/assert';
 import {filterMap} from '@augment-vir/common';
-import {
-    GraphqlBlockType,
-    OperationType,
-    type GraphqlBlockByType,
-} from '../graphql-blocks/graphql-block.js';
+import {OperationType} from '@prisma-to-graphql/core';
+import {GraphqlBlockType, type GraphqlBlockByType} from '../graphql-blocks/graphql-block.js';
 import {GraphqlBuiltinScalar, getFieldGraphqlScalar} from '../graphql-scalars/scalar-type-map.js';
 import {
     createScalarWhereInputName,
