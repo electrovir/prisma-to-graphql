@@ -1,5 +1,5 @@
 import {getObjectTypedKeys} from '@augment-vir/common';
-import {GraphqlBlockType, type GraphqlBlockByType} from '../graphql-blocks/graphql-block.js';
+import {GraphqlBlockType, type GraphqlBlockByType} from '../graphql-block.js';
 import {GraphqlExtraScalar} from './scalar-type-map.js';
 
 /**

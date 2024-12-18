@@ -1,5 +1,5 @@
 import {describe, itCases} from '@augment-vir/test';
-import {GraphqlBlockType} from '../graphql-blocks/graphql-block.js';
+import {GraphqlBlockType} from '../graphql-block.js';
 import {generateExtraScalarBlocks} from './graphql-scalars.js';
 import {GraphqlExtraScalar} from './scalar-type-map.js';
 

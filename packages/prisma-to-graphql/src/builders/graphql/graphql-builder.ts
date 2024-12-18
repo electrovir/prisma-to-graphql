@@ -15,7 +15,7 @@ import {
     GraphqlBlockType,
     NamedGraphqlBlock,
     TopLevelNamedGraphqlBlock,
-} from '../graphql-blocks/graphql-block.js';
+} from './graphql-block.js';
 import {GraphqlBuildError} from './graphql-build.error.js';
 
 const indent = '    ';

@@ -1,6 +1,6 @@
 import {check} from '@augment-vir/assert';
 import {ArrayElement, arrayToObject, MaybeArray} from '@augment-vir/common';
-import {GraphqlBlockByType, GraphqlBlockType} from '../graphql-blocks/graphql-block.js';
+import {GraphqlBlockByType, GraphqlBlockType} from '../graphql-block.js';
 import type {PrismaField} from '../prisma-builders/dmmf-model.js';
 import {
     getFieldGraphqlScalar,

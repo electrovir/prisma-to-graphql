@@ -1,7 +1,7 @@
 import {assert} from '@augment-vir/assert';
 import {describe, it, itCases} from '@augment-vir/test';
 import {OperationType} from '@prisma-to-graphql/core';
-import {GraphqlBlockByType, GraphqlBlockType} from '../graphql-blocks/graphql-block.js';
+import {GraphqlBlockByType, GraphqlBlockType} from './graphql-block.js';
 import {GraphqlBuildError} from './graphql-build.error.js';
 import {
     buildGraphqlBlock,
@@ -17,7 +17,7 @@ import {
     flattenAllSchemaBlocks,
     flattenOperationBlocks,
     makeOperationsBlockBuilder,
-} from './graphql-builder.js';
+} from './graphql-builders/graphql-builder.js';
 
 function indentOutput(indent: string, count: number, output: string): string {
     if (!output) {
