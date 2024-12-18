@@ -1,6 +1,7 @@
 # Questions to Answer
 
 1. If a table in a prisma schema has a non-automatically-generated id, does it still need to be omitted when setting relations?
+2. What are the correct input/output mappings in codegen for `Decimal`?
 
 # Features to support
 
