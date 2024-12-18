@@ -27,7 +27,7 @@ exports[`buildAllOutputs > generates outputs for 'test-files/single-model' 1`] =
 `;
 
 exports[`buildAllOutputs > generates outputs for 'test-files/unexpected-type' 1`] = `
-"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/unexpected-type/schema.prisma\\",\\"stderr\\":\\"Error: Prisma schema validation - (get-dmmf wasm) Error code: P1012 error: Type \\\\\\"SomethingElse\\\\\\" is neither a built-in type, nor refers to another model, composite type, or enum. --> test-files/schemas/unexpected-type/schema.prisma:18 | 17 | 18 | password SomethingElse | Validation Error Count: 1 [Context: getDmmf] Prisma CLI Version : 5.22.0\\",\\"exitCode\\":1}"
+"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/unexpected-type/schema.prisma\\",\\"stderr\\":\\"Error: Prisma schema validation - (get-dmmf wasm) Error code: P1012 error: Type \\\\\\"SomethingElse\\\\\\" is neither a built-in type, nor refers to another model, composite type, or enum. --> test-files/schemas/unexpected-type/schema.prisma:18 | 17 | 18 | password SomethingElse | Validation Error Count: 1 [Context: getDmmf] Prisma CLI Version : 6.1.0\\",\\"exitCode\\":1}"
 `;
 
 exports[`buildAllOutputs > generates outputs for 'test-files/with-enum' 1`] = `
