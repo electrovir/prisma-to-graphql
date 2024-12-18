@@ -34,6 +34,12 @@
         "test:spelling": "virmator spellcheck",
         "test:update": "mono-vir for-each-async npm run test:update"
     },
+    "dependencies": {
+        "@graphql-codegen/core": "^4.0.2",
+        "@graphql-codegen/plugin-helpers": "^5.1.0",
+        "@graphql-codegen/typescript": "^4.1.2",
+        "@graphql-codegen/typescript-resolvers": "^4.4.1"
+    },
     "devDependencies": {
         "@eslint/eslintrc": "^3.2.0",
         "@eslint/js": "9.14.0",

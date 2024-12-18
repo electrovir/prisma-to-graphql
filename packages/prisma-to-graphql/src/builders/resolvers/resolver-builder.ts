@@ -2,11 +2,8 @@
 /** This file is just types. */
 
 import {type OperationType} from '@prisma-to-graphql/core';
-import {
-    type GraphqlBlockByType,
-    type TopLevelNamedGraphqlBlock,
-} from '../graphql-blocks/graphql-block.js';
-import {type PrismaModel} from '../prisma-builders/dmmf-model.js';
+import {type GraphqlBlockByType, type TopLevelNamedGraphqlBlock} from '../graphql/graphql-block.js';
+import {type PrismaModel} from '../prisma/dmmf-model.js';
 
 /**
  * A generator used inside of the `prisma-to-graphql` Prisma generator to create resolvers and all

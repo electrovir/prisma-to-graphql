@@ -1,11 +1,7 @@
 import {assert} from '@augment-vir/assert';
 import {describe, it} from '@augment-vir/test';
 import {OperationType} from '@prisma-to-graphql/core';
-import {
-    GraphqlBlockByType,
-    GraphqlBlockType,
-    TopLevelBlockType,
-} from './graphql-blocks/graphql-block.js';
+import {GraphqlBlockByType, GraphqlBlockType, TopLevelBlockType} from './graphql-block.js';
 
 describe('GraphqlBlockByType', () => {
     it('extracts specific block types', () => {

@@ -1,5 +1,5 @@
 import {DMMF} from '@prisma/generator-helper';
-import {type GraphqlBlockByType, GraphqlBlockType} from '../graphql-blocks/graphql-block.js';
+import {type GraphqlBlockByType, GraphqlBlockType} from '../graphql/graphql-block.js';
 
 /**
  * Build an enum GraphQL block.

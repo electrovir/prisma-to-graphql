@@ -17,7 +17,7 @@ import {
     flattenAllSchemaBlocks,
     flattenOperationBlocks,
     makeOperationsBlockBuilder,
-} from './graphql-builders/graphql-builder.js';
+} from './graphql-builder.js';
 
 function indentOutput(indent: string, count: number, output: string): string {
     if (!output) {

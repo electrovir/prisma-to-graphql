@@ -5,9 +5,9 @@ import {
     GraphqlBlockType,
     type GraphqlBlockByType,
     type TopLevelNamedGraphqlBlock,
-} from '../graphql-blocks/graphql-block.js';
-import {createScalarWhereInputName} from '../graphql-scalars/scalar-where-input-blocks.js';
-import type {PrismaField, PrismaModel} from '../prisma-builders/dmmf-model.js';
+} from '../graphql/graphql-block.js';
+import {createScalarWhereInputName} from '../graphql/graphql-scalars/scalar-where-input-blocks.js';
+import type {PrismaField, PrismaModel} from '../prisma/dmmf-model.js';
 import {
     createOutputTypeBlocks,
     createWhereInputBlock,

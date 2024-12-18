@@ -6,12 +6,15 @@ import {
     GraphqlBlockType,
     type GraphqlBlockByType,
     type TopLevelNamedGraphqlBlock,
-} from '../graphql-blocks/graphql-block.js';
+} from '../graphql/graphql-block.js';
 import {
     generateExtraScalarBlocks,
     UsedExtraGraphqlScalars,
-} from '../graphql-scalars/graphql-scalars.js';
-import {getFieldGraphqlScalar, GraphqlExtraScalar} from '../graphql-scalars/scalar-type-map.js';
+} from '../graphql/graphql-scalars/graphql-scalars.js';
+import {
+    getFieldGraphqlScalar,
+    GraphqlExtraScalar,
+} from '../graphql/graphql-scalars/scalar-type-map.js';
 import {findManyBuilder} from '../resolvers/find-many-builder.js';
 import {mutationsBuilder} from '../resolvers/mutations-builder.js';
 import {ResolverBuilder, type BuildOutput} from '../resolvers/resolver-builder.js';

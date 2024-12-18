@@ -1,20 +1,27 @@
-import {awaitedForEach, getObjectTypedEntries, mergePropertyArrays} from '@augment-vir/common';
+import {
+    awaitedForEach,
+    filterMap,
+    getObjectTypedEntries,
+    mergePropertyArrays,
+} from '@augment-vir/common';
 import {type DMMF} from '@prisma/generator-helper';
+import {existsSync} from 'node:fs';
 import {mkdir, writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {
     GraphqlBlockType,
     type GraphqlBlockByType,
     type TopLevelNamedGraphqlBlock,
-} from '../builders/graphql-blocks/graphql-block.js';
+} from '../builders/graphql/graphql-block.js';
 import {
     buildGraphqlSchemaString,
     deduplicateNamedBlocks,
-} from '../builders/graphql-builders/graphql-builder.js';
-import {buildEnum} from '../builders/prisma-builders/build-enum.js';
-import {buildModel} from '../builders/prisma-builders/build-model.js';
-import {parseDmmfModel} from '../builders/prisma-builders/dmmf-model.js';
+} from '../builders/graphql/graphql-builder.js';
+import {buildEnum} from '../builders/prisma/build-enum.js';
+import {buildModel} from '../builders/prisma/build-model.js';
+import {parseDmmfModel} from '../builders/prisma/dmmf-model.js';
 import type {BuildOutput} from '../builders/resolvers/resolver-builder.js';
+import {buildSchemaTs} from '../builders/typescript/graphql-typescript-codegen.js';
 import {type PrismaToGraphqlGeneratorOptions} from '../generator-options/generator-options.js';
 
 /**
@@ -27,9 +34,10 @@ export async function generate(
     dmmf: DMMF.Document,
     options: Readonly<PrismaToGraphqlGeneratorOptions>,
 ) {
-    const graphqlOutputs = buildAllOutputs(dmmf, options);
+    const graphqlOutputs = await buildAllOutputs(dmmf, options);
 
     await writeOutputs(graphqlOutputs, options);
+    await compileOutputs(options);
 }
 
 /**
@@ -37,10 +45,10 @@ export async function generate(
  *
  * @category Prisma Generator
  */
-export function buildAllOutputs(
+export async function buildAllOutputs(
     dmmf: DMMF.Document,
     options: Readonly<PrismaToGraphqlGeneratorOptions>,
-): PrismaToGraphqlOutputs {
+): Promise<PrismaToGraphqlOutputs> {
     const builtEnums = dmmf.datamodel.enums.map(buildEnum);
     const enumNames = builtEnums.map((builtEnum) => builtEnum.name);
     const prismaModels = dmmf.datamodel.models.map((model) => parseDmmfModel(model, enumNames));
@@ -75,6 +83,7 @@ export function buildAllOutputs(
     });
 
     return {
+        schemaTs: await buildSchemaTs(schemaString),
         graphqlSchema: schemaString,
     };
 }
@@ -87,7 +96,7 @@ export function buildAllOutputs(
 export type PrismaToGraphqlOutputs = {
     // resolversTs: string;
     graphqlSchema: string;
-    // schemaTs: string;
+    schemaTs: string;
     // modelsTs: string;
 };
 
@@ -100,7 +109,7 @@ export type PrismaToGraphqlOutputs = {
 export const graphqlOutputFileNames: PrismaToGraphqlOutputs = {
     // resolversTs: 'resolvers.ts',
     graphqlSchema: 'schema.graphql',
-    // schemaTs: 'schema.ts',
+    schemaTs: 'schema.ts',
     // modelsTs: 'models.ts',
 };
 
@@ -120,4 +129,16 @@ async function writeOutputs(
             await writeFile(join(options.outputDirPath, outputFileName), output + '\n');
         },
     );
+}
+
+async function compileOutputs(
+    options: Readonly<Pick<PrismaToGraphqlGeneratorOptions, 'outputDirPath'>>,
+) {
+    const tsOutputPaths = filterMap(
+        Object.values(graphqlOutputFileNames),
+        (fileName) => join(options.outputDirPath, fileName),
+        (filePath) => filePath.endsWith('.ts') && existsSync(filePath),
+    );
+
+    await compileTs(tsOutputPaths);
 }

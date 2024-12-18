@@ -1,5 +1,5 @@
 import {check} from '@augment-vir/assert';
-import type {PrismaField} from '../prisma-builders/dmmf-model.js';
+import type {PrismaField} from '../../prisma/dmmf-model.js';
 
 /**
  * Built-in GraphQL scalar types.

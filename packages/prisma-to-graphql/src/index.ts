@@ -3,15 +3,15 @@
  * `prisma-to-graphql` for external use if you wish.
  */
 
-export * from './builders/graphql-blocks/graphql-block.js';
-export * from './builders/graphql-builders/graphql-build.error.js';
-export * from './builders/graphql-builders/graphql-builder.js';
-export * from './builders/graphql-scalars/graphql-scalars.js';
-export * from './builders/graphql-scalars/scalar-type-map.js';
-export * from './builders/graphql-scalars/scalar-where-input-blocks.js';
-export * from './builders/prisma-builders/build-enum.js';
-export * from './builders/prisma-builders/build-model.js';
-export * from './builders/prisma-builders/dmmf-model.js';
+export * from './builders/graphql/graphql-block.js';
+export * from './builders/graphql/graphql-build.error.js';
+export * from './builders/graphql/graphql-builder.js';
+export * from './builders/graphql/graphql-scalars/graphql-scalars.js';
+export * from './builders/graphql/graphql-scalars/scalar-type-map.js';
+export * from './builders/graphql/graphql-scalars/scalar-where-input-blocks.js';
+export * from './builders/prisma/build-enum.js';
+export * from './builders/prisma/build-model.js';
+export * from './builders/prisma/dmmf-model.js';
 export * from './builders/resolvers/find-many-builder.js';
 export * from './builders/resolvers/mutations-builder.js';
 export * from './builders/resolvers/resolver-builder.js';

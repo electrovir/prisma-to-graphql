@@ -1,13 +1,16 @@
 import {check} from '@augment-vir/assert';
 import {filterMap} from '@augment-vir/common';
 import {OperationType} from '@prisma-to-graphql/core';
-import {GraphqlBlockType, type GraphqlBlockByType} from '../graphql-blocks/graphql-block.js';
-import {GraphqlBuiltinScalar, getFieldGraphqlScalar} from '../graphql-scalars/scalar-type-map.js';
+import {GraphqlBlockType, type GraphqlBlockByType} from '../graphql/graphql-block.js';
+import {
+    GraphqlBuiltinScalar,
+    getFieldGraphqlScalar,
+} from '../graphql/graphql-scalars/scalar-type-map.js';
 import {
     createScalarWhereInputName,
     graphqlScalarWhereInputBlocks,
-} from '../graphql-scalars/scalar-where-input-blocks.js';
-import type {PrismaModel} from '../prisma-builders/dmmf-model.js';
+} from '../graphql/graphql-scalars/scalar-where-input-blocks.js';
+import type {PrismaModel} from '../prisma/dmmf-model.js';
 import type {ResolverBuilder} from './resolver-builder.js';
 import {createResolverInputName, createResolverOutputName} from './resolver-names.js';
 
