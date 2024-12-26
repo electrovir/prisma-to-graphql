@@ -21,6 +21,7 @@ import {buildEnum} from '../builders/prisma/build-enum.js';
 import {buildModel} from '../builders/prisma/build-model.js';
 import {parseDmmfModel} from '../builders/prisma/dmmf-model.js';
 import type {BuildOutput} from '../builders/resolvers/resolver-builder.js';
+import {compileTs} from '../builders/typescript/compile-ts.js';
 import {buildSchemaTs} from '../builders/typescript/graphql-typescript-codegen.js';
 import {type PrismaToGraphqlGeneratorOptions} from '../generator-options/generator-options.js';
 

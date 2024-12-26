@@ -2,6 +2,10 @@ exports[`buildAllOutputs > generates outputs for 'test-files/empty' 1`] = `
 "{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/empty/schema.prisma\\",\\"stderr\\":\\"Error: You don't have any models defined in your schema.prisma, so nothing will be generated. You can define a model like this: model User { id Int @id @default(autoincrement()) email String @unique name String? } More information in our documentation: https://pris.ly/d/prisma-schema\\",\\"exitCode\\":1}"
 `;
 
+exports[`buildAllOutputs > generates outputs for 'test-files/full-run-time' 1`] = `
+"{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/full-run-time/schema.prisma ✔ Generated Prisma Client (v6.1.0) to ./test-files/node_modules/.prisma ✔ Generated GraphQL Schema Generator to ./test-files/schemas/full-run-time/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
+`;
+
 exports[`buildAllOutputs > generates outputs for 'test-files/includes-a-list-field' 1`] = `
 "{\\"stdout\\":\\"Prisma schema loaded from test-files/schemas/includes-a-list-field/schema.prisma ✔ Generated GraphQL Schema Generator to ./test-files/schemas/includes-a-list-field/output\\",\\"stderr\\":\\"\\",\\"exitCode\\":0}"
 `;

@@ -1,7 +1,7 @@
 import {assert} from '@augment-vir/assert';
 import {describe, it, itCases} from '@augment-vir/test';
 import {OperationType} from '@prisma-to-graphql/core';
-import {Resolvers, schemaOperationTypeNames} from '../example-outputs.mock.js';
+import {Resolvers, schemaOperationTypeNames} from '../schema-output.mock.js';
 import {createGraphqlFetcher} from './fetch-graphql.js';
 
 describe(createGraphqlFetcher.name, () => {

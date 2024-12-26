@@ -9,7 +9,7 @@ import {
     UserSettings_WhereUnfilteredUniqueInput,
     UserSettings_Without_User_CreateInput,
     UserSettings_Without_User_CreateOrConnectInput,
-} from '../../example-outputs.mock.js';
+} from '../../schema-output.mock.js';
 import {
     BaseGraphqlOperations,
     FlattenedOperations,

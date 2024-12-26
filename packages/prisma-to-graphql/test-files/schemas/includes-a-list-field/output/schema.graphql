@@ -65,6 +65,7 @@ type User {
     id: ID!
     createdAt: DateTime!
     updatedAt: DateTime!
+    posts: [Post]!
 }
 
 input SortOrderWithNulls {
@@ -214,6 +215,7 @@ type Post {
     id: ID!
     createdAt: DateTime!
     updatedAt: DateTime!
+    user: User!
 }
 
 type Post_Output {

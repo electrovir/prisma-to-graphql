@@ -1,8 +1,11 @@
 import {OperationType} from '@prisma-to-graphql/core';
 import {createGraphqlFetcher} from '../index.js';
 
-/** Both `Resolvers` and `operationParams` will be generated from the `prisma-to-graphql` package. */
-import {Resolvers, schemaOperationTypeNames} from '../example-outputs.mock.js';
+/**
+ * Both `Resolvers` and `schemaOperationTypeNames` will be generated from the `prisma-to-graphql`
+ * package.
+ */
+import {Resolvers, schemaOperationTypeNames} from '../schema-output.mock.js';
 
 const fetchGraphql = createGraphqlFetcher<Resolvers>(schemaOperationTypeNames);
 export type FetchGraphql = typeof fetchGraphql;

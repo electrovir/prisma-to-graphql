@@ -175,7 +175,7 @@ export type Resolvers<ContextType = any> = {
 
 import type {SchemaOperationTypeNames} from '@prisma-to-graphql/core';
 
-export const operationParams: Readonly<SchemaOperationTypeNames> = {
+export const schemaOperationTypeNames: Readonly<SchemaOperationTypeNames> = {
     Mutation: {},
     Query: {},
 };

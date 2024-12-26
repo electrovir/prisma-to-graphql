@@ -1,0 +1,1 @@
+../../prisma-to-graphql/test-files/schemas/full-run-time/output/schema.ts

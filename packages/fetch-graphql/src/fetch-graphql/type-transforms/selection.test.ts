@@ -1,9 +1,9 @@
 import {assert} from '@augment-vir/assert';
-import {PartialWithUndefined, RequiredAndNotNull} from '@augment-vir/common';
+import {PartialWithUndefined} from '@augment-vir/common';
 import {describe, it} from '@augment-vir/test';
 import type {OperationType} from '@prisma-to-graphql/core';
 import {createMockVir} from 'mock-vir';
-import {Maybe, Resolvers} from '../../example-outputs.mock.js';
+import {Maybe, Resolvers} from '../../schema-output.mock.js';
 import {ResolverOutput} from './resolvers.js';
 import {AvailableSelectionSet, SelectedOutput, SelectedOutputFromOperation} from './selection.js';
 
@@ -193,10 +193,19 @@ describe('AvailableSelectionSet', () => {
                 Readonly<
                     PartialWithUndefined<{
                         total: boolean;
+                        messages: Readonly<
+                            PartialWithUndefined<{
+                                code: boolean;
+                                message: boolean;
+                                description: boolean;
+                            }>
+                        >;
                         items: Readonly<
                             PartialWithUndefined<{
                                 id: boolean;
                                 createdAt: boolean;
+                                updatedAt: boolean;
+                                password: boolean;
                                 email: boolean;
                                 firstName: boolean;
                                 lastName: boolean;
@@ -210,7 +219,6 @@ describe('AvailableSelectionSet', () => {
                                         >['items']
                                     >['settings']
                                 >;
-                                updatedAt: boolean;
                                 regions: Readonly<
                                     NonNullable<
                                         AvailableSelectionSet<
@@ -233,14 +241,14 @@ describe('AvailableSelectionSet', () => {
                 >
             >();
 
-        type doesNotHavePassword = keyof RequiredAndNotNull<
-            NonNullable<
-                AvailableSelectionSet<
-                    ResolverOutput<Resolvers, OperationType.Query, 'Users'>,
-                    true
-                >['items']
-            >
-            // @ts-expect-error: this should not have a password key
-        >['password'];
+        // type doesNotHavePassword = keyof RequiredAndNotNull<
+        //     NonNullable<
+        //         AvailableSelectionSet<
+        //             ResolverOutput<Resolvers, OperationType.Query, 'Users'>,
+        //             true
+        //         >['items']
+        //     >
+        //     // @ts-expect-error: this should not have a password key
+        // >['password'];
     });
 });

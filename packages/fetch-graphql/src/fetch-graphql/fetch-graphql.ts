@@ -65,12 +65,13 @@ export type GraphqlFetcher<Resolvers extends Readonly<BaseResolvers>> = <
  * This is required to generate a `fetchGraphql` function by wrapping it in the GraphQL schema's
  * Resolver types.
  *
- * The required `Resolvers` type parameter and required `operationParams` argument are both
+ * The required `Resolvers` type parameter and required `schemaOperationTypeNames` argument are both
  * generated from the `prisma-to-graphql` package's Prisma generator.
  *
  * @category Main
- * @example // both `Resolvers` and `operationParams` are generated from the `prisma-to-graphql`
- * package. const fetchGraphql = createGraphqlFetcher<Resolvers>(operationParams);
+ * @example // both `Resolvers` and `schemaOperationTypeNames` are generated from the
+ * `prisma-to-graphql` package. const fetchGraphql =
+ * createGraphqlFetcher<Resolvers>(schemaOperationTypeNames);
  *
  *     const users = await fetchGraphql(
  *         {

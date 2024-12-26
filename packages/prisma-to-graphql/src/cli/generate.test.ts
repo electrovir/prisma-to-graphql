@@ -18,7 +18,7 @@ import {buildAllOutputs} from './generate.js';
 const allSchemaTestNames = await readdir(schemaTestFilesPath);
 
 const exclusiveTests: string[] = [
-    // 'single-model',
+    // 'relational-operations',
 ];
 
 async function testGeneration(schemaTestName: string) {
@@ -29,7 +29,7 @@ async function testGeneration(schemaTestName: string) {
     await mkdir(outputsPath, {recursive: true});
 
     const commandOutput = await runShellCommand(
-        `npx prisma generate --schema ${interpolationSafeWindowsPath(prismaSchemaPath)}`,
+        `npx prisma generate --no-hints --schema ${interpolationSafeWindowsPath(prismaSchemaPath)}`,
         {
             cwd: prismaToGraphqlPackagePath,
             // // uncomment for debugging
@@ -52,7 +52,7 @@ async function testGeneration(schemaTestName: string) {
             if (check.isString(value)) {
                 return collapseWhiteSpace(
                     removeColor(value)
-                        .replaceAll(/ in \d+m?s/g, '')
+                        .replaceAll(/ in [\d.]+m?s/g, '')
                         .replaceAll(monoRepoPath, '')
                         .replaceAll(
                             /Generated GraphQL Schema Generator \([^)]+\) to/g,

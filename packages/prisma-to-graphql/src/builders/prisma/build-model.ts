@@ -83,7 +83,8 @@ function buildModelTypeBlocks(
     const propertyBlocks = filterMap(
         Object.values(prismaModel.fields),
         (field): GraphqlBlockByType['property'] | undefined => {
-            const propType = getFieldGraphqlScalar(field);
+            const propType = field.relationName ? field.type : getFieldGraphqlScalar(field);
+
             if (!propType) {
                 log.warning(
                     `Encountered unknown field type '${field.type}' on field '${prismaModel.modelName}.${field.name}'. This field will not be included in prisma-to-graphql.`,

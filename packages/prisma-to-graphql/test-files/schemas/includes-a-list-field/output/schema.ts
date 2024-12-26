@@ -94,6 +94,7 @@ export type User = {
   readonly id: Scalars['ID']['output'];
   readonly createdAt: Scalars['DateTime']['output'];
   readonly updatedAt: Scalars['DateTime']['output'];
+  readonly posts: ReadonlyArray<Maybe<Post>>;
 };
 
 export type SortOrderWithNulls = {
@@ -241,6 +242,7 @@ export type Post = {
   readonly id: Scalars['ID']['output'];
   readonly createdAt: Scalars['DateTime']['output'];
   readonly updatedAt: Scalars['DateTime']['output'];
+  readonly user: User;
 };
 
 export type Post_Output = {
@@ -543,6 +545,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  posts?: Resolver<ReadonlyArray<Maybe<ResolversTypes['Post']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -564,6 +567,7 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -589,7 +593,7 @@ export type Resolvers<ContextType = any> = {
 
 import type {SchemaOperationTypeNames} from '@prisma-to-graphql/core';
 
-export const operationParams: Readonly<SchemaOperationTypeNames> = {
+export const schemaOperationTypeNames: Readonly<SchemaOperationTypeNames> = {
     Mutation: {
         Users: {
             args: {

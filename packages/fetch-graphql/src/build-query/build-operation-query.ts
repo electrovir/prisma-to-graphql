@@ -21,7 +21,7 @@ export function buildOperationQuery({
     operationIndex,
 }: Readonly<{
     resolverName: string;
-    operationType: OperationType;
+    operationType: OperationType | `${OperationType}`;
     operation: Readonly<BaseGraphqlOperation>;
     options: Readonly<Pick<BuildGraphqlQueryOptions, 'indent'>>;
     schemaOperationTypeNames: Readonly<SchemaOperationTypeNames>;

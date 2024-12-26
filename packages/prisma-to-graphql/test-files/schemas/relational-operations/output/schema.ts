@@ -106,6 +106,7 @@ export type User = {
   readonly lastName?: Maybe<Scalars['String']['output']>;
   readonly role?: Maybe<Scalars['String']['output']>;
   readonly phoneNumber?: Maybe<Scalars['String']['output']>;
+  readonly settings?: Maybe<UserSettings>;
 };
 
 export type SortOrderWithNulls = {
@@ -309,6 +310,7 @@ export type UserSettings = {
   readonly id: Scalars['ID']['output'];
   readonly createdAt: Scalars['DateTime']['output'];
   readonly updatedAt: Scalars['DateTime']['output'];
+  readonly user: User;
 };
 
 export type UserSettings_Output = {
@@ -619,6 +621,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  settings?: Resolver<Maybe<ResolversTypes['UserSettings']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -640,6 +643,7 @@ export type UserSettingsResolvers<ContextType = any, ParentType extends Resolver
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -665,7 +669,7 @@ export type Resolvers<ContextType = any> = {
 
 import type {SchemaOperationTypeNames} from '@prisma-to-graphql/core';
 
-export const operationParams: Readonly<SchemaOperationTypeNames> = {
+export const schemaOperationTypeNames: Readonly<SchemaOperationTypeNames> = {
     Mutation: {
         Users: {
             args: {

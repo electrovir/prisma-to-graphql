@@ -19,7 +19,7 @@ export function buildArgStrings({
     schemaOperationTypeNames: Readonly<SchemaOperationTypeNames>;
     indent: string;
     argPlace: 'usage' | 'definition';
-    operationType: OperationType;
+    operationType: OperationType | `${OperationType}`;
     operationIndex: number;
 }): string[] {
     if (!args || !Object.keys(args).length) {

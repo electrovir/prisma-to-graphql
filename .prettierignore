@@ -6,5 +6,6 @@
 **/graphics/
 **/node_modules/
 **/package-lock.json
+**/test-files/schemas/**/output
 **/tsconfig.tsbuildinfo
 /Icon?

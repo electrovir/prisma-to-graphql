@@ -9,6 +9,7 @@ export default [
     {
         ignores: [
             /** Add file globs that should be ignored. */
+            'packages/fetch-graphql/src/schema-output.mock.ts',
         ],
     },
     {

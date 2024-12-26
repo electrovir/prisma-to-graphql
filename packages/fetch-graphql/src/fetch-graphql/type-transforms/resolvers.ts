@@ -10,7 +10,7 @@ import {type EmptyObject, type IsNever} from 'type-fest';
  */
 export type AvailableOperationTypes<Resolvers extends Readonly<BaseResolvers>> = Extract<
     keyof Required<Resolvers>,
-    OperationType
+    OperationType | `${OperationType}`
 >;
 
 /**

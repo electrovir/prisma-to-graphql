@@ -36,7 +36,7 @@ export async function compileTs(filePaths: ReadonlyArray<string>): Promise<void>
         {
             ...packageTsconfig,
             declaration: false,
-            module: ModuleKind.ES2022,
+            module: ModuleKind.CommonJS,
         },
         '.cjs',
     );

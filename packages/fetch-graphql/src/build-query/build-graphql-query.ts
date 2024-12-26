@@ -22,7 +22,7 @@ export function buildGraphqlQuery({
     options,
     schemaOperationTypeNames,
 }: Readonly<{
-    operationType: OperationType;
+    operationType: OperationType | `${OperationType}`;
     operations: BaseGraphqlOperations;
     /**
      * A unique name given to this query. This name does not need to match any of your GraphQL

@@ -2,7 +2,7 @@
 import {assert} from '@augment-vir/assert';
 import {describe, it} from '@augment-vir/test';
 import type {OperationType} from '@prisma-to-graphql/core';
-import {Resolvers} from '../../example-outputs.mock.js';
+import {Resolvers} from '../../schema-output.mock.js';
 import {
     AvailableOperationTypes,
     AvailableResolverNames,
