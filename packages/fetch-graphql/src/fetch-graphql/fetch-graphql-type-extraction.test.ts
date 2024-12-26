@@ -36,7 +36,7 @@ describe('Operation', () => {
 });
 
 describe('FetchParams', () => {
-    it('stuff', () => {
+    it('can be assigned to by a real variable instance', () => {
         const myParams: FetchParams<typeof mockFetchGraphql> = {
             operationName: 'hello there',
             operationType: OperationType.Query,

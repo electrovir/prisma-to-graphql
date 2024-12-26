@@ -11,6 +11,7 @@ const baseConfig = defineConfig({
 /** @type {import('@web/test-runner').TestRunnerConfig} */
 const webTestRunnerConfig = {
     ...baseConfig,
+    preserveSymlinks: true,
     port: 8002,
 };
 
