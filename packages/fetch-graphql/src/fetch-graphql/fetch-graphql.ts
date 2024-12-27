@@ -8,6 +8,8 @@ import {FetchRawGraphqlOptions, GraphqlQuery, fetchRawGraphql} from './fetch-raw
 import {GraphqlOperations, ResolverOutputWithSelection} from './type-transforms/operations.js';
 import {AvailableOperationTypes, BaseResolvers} from './type-transforms/resolvers.js';
 
+export {OperationType} from '@prisma-to-graphql/core';
+
 /**
  * Options passed to both {@link createGraphqlFetcher} and its output function.
  *
@@ -34,7 +36,7 @@ export type FetchGraphqlParams<
     OperationType extends AvailableOperationTypes<Resolvers>,
 > = {
     url: string | URL;
-    operationType: OperationType;
+    operationType: OperationType | `${OperationType}`;
     /**
      * A unique name given to this query. This name does not need to match any of your GraphQL
      * types, it just needs to be a string (and should be a unique string to make debugging
