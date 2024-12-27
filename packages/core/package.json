@@ -32,9 +32,9 @@
         "test:docs": "virmator docs check"
     },
     "dependencies": {
-        "@augment-vir/assert": "^31.2.0",
-        "@augment-vir/common": "^31.2.0",
-        "@augment-vir/node": "^31.2.0",
+        "@augment-vir/assert": "^31.2.1",
+        "@augment-vir/common": "^31.2.1",
+        "@augment-vir/node": "^31.2.1",
         "@prisma/client": "^6.1.0",
         "@prisma/generator-helper": "^6.1.0",
         "@prisma/internals": "^6.1.0",
@@ -46,7 +46,7 @@
         "type-fest": "^4.31.0"
     },
     "devDependencies": {
-        "@augment-vir/test": "^31.2.0",
+        "@augment-vir/test": "^31.2.1",
         "@types/node": "^22.10.2",
         "@types/pluralize": "^0.0.33",
         "@web/dev-server-esbuild": "^1.0.3",

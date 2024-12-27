@@ -31,9 +31,9 @@
         "test:update": "npm test update"
     },
     "dependencies": {
-        "@augment-vir/assert": "^31.2.0",
-        "@augment-vir/common": "^31.2.0",
-        "@augment-vir/node": "^31.2.0",
+        "@augment-vir/assert": "^31.2.1",
+        "@augment-vir/common": "^31.2.1",
+        "@augment-vir/node": "^31.2.1",
         "@graphql-codegen/core": "^4.0.2",
         "@graphql-codegen/plugin-helpers": "^5.1.0",
         "@graphql-codegen/typescript": "^4.1.2",
@@ -50,7 +50,7 @@
         "type-fest": "^4.31.0"
     },
     "devDependencies": {
-        "@augment-vir/test": "^31.2.0",
+        "@augment-vir/test": "^31.2.1",
         "@types/node": "^22.10.2",
         "@types/pluralize": "^0.0.33",
         "c8": "^10.1.3",
