@@ -14,12 +14,22 @@ export type GraphqlQuery = {
 };
 
 /**
+ * Subset of the global built-in `fetch` function needed for `fetchGraphql` to work.
+ *
+ * @category Main Types
+ */
+export type InnerFetch = (
+    url: string | URL,
+    requestInit: RequestInit,
+) => Promise<Pick<Response, 'json' | 'status' | 'statusText' | 'ok'>>;
+
+/**
  * Lower level fetch options that are also included in `FetchGraphqlParams['options']`.
  *
  * @category Main Types
  */
 export type FetchRawGraphqlOptions = {
-    fetch: typeof fetch;
+    fetch: InnerFetch;
     requestInit: Omit<RequestInit, 'body'>;
 };
 
