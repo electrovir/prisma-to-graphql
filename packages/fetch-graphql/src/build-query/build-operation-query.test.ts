@@ -21,9 +21,6 @@ describe(buildOperationQuery.name, () => {
                         },
                     },
                 },
-                options: {
-                    indent: '    ',
-                },
                 schemaOperationTypeNames: {
                     [OperationType.Query]: {
                         MyResolver: {
@@ -72,9 +69,6 @@ describe(buildOperationQuery.name, () => {
                             nestedSomething: true,
                         },
                     },
-                },
-                options: {
-                    indent: '    ',
                 },
                 schemaOperationTypeNames: {
                     [OperationType.Query]: {

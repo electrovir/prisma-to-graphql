@@ -19,8 +19,8 @@ export type GraphqlQuery = {
  * @category Main Types
  */
 export type FetchRawGraphqlOptions = {
-    customFetch: typeof fetch;
-    fetchOptions: Omit<RequestInit, 'body'>;
+    fetch: typeof fetch;
+    requestInit: Omit<RequestInit, 'body'>;
 };
 
 /**
@@ -45,7 +45,7 @@ export async function fetchRawGraphql(
                 'Content-Type': 'application/json',
             },
         },
-        options.fetchOptions || {},
+        options.requestInit || {},
         {
             /** `body` cannot be overwritten by `fetchOptions`. */
             body: JSON.stringify(graphql),
@@ -53,7 +53,7 @@ export async function fetchRawGraphql(
     );
 
     /* node:coverage ignore next: not going to use real fetch in tests */
-    const response = await (options.customFetch || fetch)(url, requestInit);
+    const response = await (options.fetch || globalThis.fetch)(url, requestInit);
 
     if (!response.ok) {
         throw new Error(

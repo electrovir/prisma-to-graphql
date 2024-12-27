@@ -1,12 +1,28 @@
+import {mergeDefinedProperties} from '@augment-vir/common';
 import type {SchemaOperationTypeNames} from '@prisma-to-graphql/core';
 import {IsAny} from 'type-fest';
 import {buildUrl} from 'url-vir';
-import {BuildGraphqlQueryOptions} from '../build-query/build-graphql-query-options.js';
 import {buildGraphqlQuery} from '../build-query/build-graphql-query.js';
 import {sanitizeQueryString} from '../build-query/sanitize-query-string.js';
 import {FetchRawGraphqlOptions, GraphqlQuery, fetchRawGraphql} from './fetch-raw-graphql.js';
 import {GraphqlOperations, ResolverOutputWithSelection} from './type-transforms/operations.js';
 import {AvailableOperationTypes, BaseResolvers} from './type-transforms/resolvers.js';
+
+/**
+ * Options passed to both {@link createGraphqlFetcher} and its output function.
+ *
+ * @category Main Types
+ */
+export type FetchGraphqlOptions = Partial<
+    FetchRawGraphqlOptions & {
+        /**
+         * By default, the GraphQL operation name is appended to the URL as a query param to improve
+         * searchability (particularly the in browser dev tools's network tab). Set this property to
+         * true to prevent that behavior.
+         */
+        omitOperationNameFromUrl: boolean;
+    }
+>;
 
 /**
  * Inputs to a function of type `GraphqlFetcher`.
@@ -27,19 +43,7 @@ export type FetchGraphqlParams<
      * See https://graphql.org/learn/queries/#operation-name.
      */
     operationName: string;
-    options?:
-        | Partial<
-              FetchRawGraphqlOptions &
-                  BuildGraphqlQueryOptions & {
-                      /**
-                       * By default, the GraphQL operation name is appended to the URL as a query
-                       * param to improve searchability (particularly the in browser dev tools's
-                       * network tab). Set this property to true to prevent that behavior.
-                       */
-                      omitOperationNameFromUrl: boolean;
-                  }
-          >
-        | undefined;
+    options?: FetchGraphqlOptions | undefined;
 };
 
 /**
@@ -101,10 +105,11 @@ export type GraphqlFetcher<Resolvers extends Readonly<BaseResolvers>> = <
  */
 export function createGraphqlFetcher<const Resolvers extends Readonly<BaseResolvers>>(
     schemaOperationTypeNames: Readonly<SchemaOperationTypeNames>,
+    options?: FetchGraphqlOptions | undefined,
 ): GraphqlFetcher<Resolvers> {
     async function fetchGraphql(
         ...[
-            {operationType, operationName, url, options},
+            {operationType, operationName, url, options: fetchOptions},
             operations,
         ]: Parameters<GraphqlFetcher<Resolvers>>
     ): Promise<ReturnType<GraphqlFetcher<Resolvers>>> {
@@ -117,15 +122,16 @@ export function createGraphqlFetcher<const Resolvers extends Readonly<BaseResolv
             operationName,
             operationType,
             operations,
-            options,
         });
 
+        const finalOptions = options ? mergeDefinedProperties(options, fetchOptions) : fetchOptions;
+
         const urlWithOperationName =
-            url && !options?.omitOperationNameFromUrl
+            url && !finalOptions?.omitOperationNameFromUrl
                 ? buildUrl(url, {search: {operation: sanitizeQueryString(operationName)}}).href
                 : url;
 
-        return await fetchRawGraphql(urlWithOperationName, graphqlQuery, options);
+        return await fetchRawGraphql(urlWithOperationName, graphqlQuery, finalOptions);
     }
 
     return fetchGraphql as unknown as GraphqlFetcher<Resolvers>;

@@ -3,10 +3,6 @@ import {mergePropertyArrays} from '@augment-vir/common';
 import type {OperationType, SchemaOperationTypeNames} from '@prisma-to-graphql/core';
 import {GraphqlQuery} from '../fetch-graphql/fetch-raw-graphql.js';
 import {BaseGraphqlOperations} from '../fetch-graphql/type-transforms/operations.js';
-import {
-    BuildGraphqlQueryOptions,
-    defaultBuildGraphqlQueryOptions,
-} from './build-graphql-query-options.js';
 import {buildOperationQuery} from './build-operation-query.js';
 import {sanitizeQueryString} from './sanitize-query-string.js';
 
@@ -19,7 +15,6 @@ export function buildGraphqlQuery({
     operationType,
     operationName,
     operations,
-    options,
     schemaOperationTypeNames,
 }: Readonly<{
     operationType: OperationType | `${OperationType}`;
@@ -32,14 +27,8 @@ export function buildGraphqlQuery({
      * See https://graphql.org/learn/queries/#operation-name.
      */
     operationName: string;
-    options?: Partial<BuildGraphqlQueryOptions> | undefined;
     schemaOperationTypeNames: Readonly<SchemaOperationTypeNames>;
 }>): GraphqlQuery {
-    const fullOptions: BuildGraphqlQueryOptions = {
-        ...defaultBuildGraphqlQueryOptions,
-        ...options,
-    };
-
     const operationParts = Object.entries(operations).flatMap(
         ([
             resolverName,
@@ -53,7 +42,6 @@ export function buildGraphqlQuery({
                 buildOperationQuery({
                     operation,
                     operationType,
-                    options: fullOptions,
                     resolverName,
                     schemaOperationTypeNames,
                     operationIndex,

@@ -3,9 +3,10 @@ import type {OperationType, SchemaOperationTypeNames} from '@prisma-to-graphql/c
 import {JsonValue} from 'type-fest';
 import {BaseGraphqlOperation} from '../fetch-graphql/type-transforms/selection.js';
 import {buildArgStrings, buildArgVariableName} from './build-arg-strings.js';
-import {BuildGraphqlQueryOptions} from './build-graphql-query-options.js';
 import {buildSelectionStrings} from './build-selection-strings.js';
 import {sanitizeQueryString} from './sanitize-query-string.js';
+
+const indent = '    ';
 
 /**
  * Builds a GraphQL query for a single operation (query / mutation).
@@ -16,14 +17,12 @@ export function buildOperationQuery({
     resolverName,
     operationType,
     operation,
-    options,
     schemaOperationTypeNames,
     operationIndex,
 }: Readonly<{
     resolverName: string;
     operationType: OperationType | `${OperationType}`;
     operation: Readonly<BaseGraphqlOperation>;
-    options: Readonly<Pick<BuildGraphqlQueryOptions, 'indent'>>;
     schemaOperationTypeNames: Readonly<SchemaOperationTypeNames>;
     operationIndex: number;
 }>) {
@@ -37,27 +36,27 @@ export function buildOperationQuery({
 
     const argDefinitionStrings: string[] = buildArgStrings({
         argPlace: 'definition',
-        indent: options.indent,
+        indent: indent,
         ...argStringParams,
     });
     const argUsageStrings = buildArgStrings({
         argPlace: 'usage',
-        indent: options.indent.repeat(2),
+        indent: indent.repeat(2),
         ...argStringParams,
     });
     const argsUsageString = argUsageStrings.length
-        ? `(\n${argUsageStrings.join('\n')}\n${options.indent})`
+        ? `(\n${argUsageStrings.join('\n')}\n${indent})`
         : '';
 
-    const selectionStrings = buildSelectionStrings(operation.select, options.indent).map((line) =>
+    const selectionStrings = buildSelectionStrings(operation.select, indent).map((line) =>
         [
-            options.indent,
+            indent,
             line,
         ].join(''),
     );
 
     const selectionString = selectionStrings.length
-        ? ` {\n${selectionStrings.join('\n')}\n${options.indent}}`
+        ? ` {\n${selectionStrings.join('\n')}\n${indent}}`
         : '';
 
     const variables: [string, JsonValue][] = Object.entries(operation.args || {}).map(
@@ -86,7 +85,7 @@ export function buildOperationQuery({
     return {
         queries: [
             [
-                options.indent,
+                indent,
                 resolverWithAlias,
                 argsUsageString,
                 selectionString,

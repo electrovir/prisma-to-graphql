@@ -41,9 +41,6 @@ describe('FetchParams', () => {
             operationName: 'hello there',
             operationType: OperationType.Query,
             url: 'something.com',
-            options: {
-                indent: '   ',
-            },
         };
 
         assert

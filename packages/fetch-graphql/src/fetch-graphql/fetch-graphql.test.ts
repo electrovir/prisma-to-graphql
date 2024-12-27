@@ -28,7 +28,7 @@ describe(createGraphqlFetcher.name, () => {
                 operationType: OperationType.Mutation,
                 url: 'example.com',
                 options: {
-                    customFetch: fakeFetch,
+                    fetch: fakeFetch,
                 },
             },
             {
@@ -70,7 +70,7 @@ describe(createGraphqlFetcher.name, () => {
                 operationType: OperationType.Query,
                 url: 'example.com',
                 options: {
-                    customFetch: fakeFetch,
+                    fetch: fakeFetch,
                 },
             },
             {
@@ -95,7 +95,7 @@ describe(createGraphqlFetcher.name, () => {
                     operationType: OperationType.Mutation,
                     url: '',
                     options: {
-                        customFetch: fakeFetch,
+                        fetch: fakeFetch,
                     },
                 },
                 {},
@@ -112,7 +112,7 @@ describe(createGraphqlFetcher.name, () => {
                     operationType: OperationType.Query,
                     url: '',
                     options: {
-                        customFetch: fakeFetch,
+                        fetch: fakeFetch,
                     },
                 },
                 {
@@ -136,7 +136,7 @@ describe(createGraphqlFetcher.name, () => {
                     operationType: OperationType.Query,
                     url: 'example.com',
                     options: {
-                        customFetch() {
+                        fetch() {
                             return {
                                 status: 418,
                                 statusText: 'test',
@@ -165,7 +165,7 @@ describe(createGraphqlFetcher.name, () => {
                     operationType: OperationType.Query,
                     url: 'example.com',
                     options: {
-                        customFetch() {
+                        fetch() {
                             return {
                                 ok: true,
                                 json() {
@@ -201,7 +201,7 @@ describe(createGraphqlFetcher.name, () => {
                     operationType: OperationType.Query,
                     url: 'example.com',
                     options: {
-                        customFetch() {
+                        fetch() {
                             return {
                                 ok: true,
                                 json() {
@@ -233,7 +233,7 @@ describe(createGraphqlFetcher.name, () => {
                     url: 'example.com',
                     options: {
                         omitOperationNameFromUrl: true,
-                        customFetch() {
+                        fetch() {
                             return {
                                 ok: true,
                                 json() {

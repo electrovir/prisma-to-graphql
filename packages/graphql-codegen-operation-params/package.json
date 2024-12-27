@@ -1,6 +1,6 @@
 {
     "name": "@prisma-to-graphql/graphql-codegen-operation-params",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "description": "GraphQL-Codegen plugin for storing GraphQL param names as TypeScript strings.",
     "keywords": [
         "graphql-codegen",
@@ -37,7 +37,7 @@
     "dependencies": {
         "@augment-vir/assert": "^31.2.0",
         "@augment-vir/common": "^31.2.0",
-        "@prisma-to-graphql/core": "^0.1.1",
+        "@prisma-to-graphql/core": "^0.2.0",
         "graphql": "^16.10.0",
         "json5": "^2.2.3"
     },
