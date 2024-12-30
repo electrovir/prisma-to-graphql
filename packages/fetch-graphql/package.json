@@ -1,6 +1,6 @@
 {
     "name": "@prisma-to-graphql/fetch-graphql",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "",
     "keywords": [],
     "homepage": "https://github.com/electrovir/prisma-to-graphql",
@@ -32,7 +32,7 @@
     "dependencies": {
         "@augment-vir/assert": "^31.2.1",
         "@augment-vir/common": "^31.2.1",
-        "@prisma-to-graphql/core": "^0.2.2",
+        "@prisma-to-graphql/core": "^0.2.3",
         "date-vir": "^7.1.1",
         "type-fest": "^4.31.0",
         "url-vir": "^2.0.1"

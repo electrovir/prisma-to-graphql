@@ -21,6 +21,20 @@ describe(createGraphqlFetcher.name, () => {
         } as unknown as ReturnType<typeof fetch>;
     }
 
+    it('fails if the type parameter is missing', () => {
+        // @ts-expect-error: invalid input
+        const failedGraphqlFetch = createGraphqlFetcher(schemaOperationTypeNames);
+
+        assert.throws(() =>
+            createGraphqlFetcher(
+                'ERROR: a type parameter must be provided to createGraphqlFetcher',
+            ),
+        );
+
+        // @ts-expect-error: TS thinks this is a string
+        assert.throws(() => failedGraphqlFetch());
+    });
+
     it('has correct operation types', async () => {
         const fakeResult = await fetchGraphql(
             {

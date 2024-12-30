@@ -1,6 +1,6 @@
 {
     "name": "@prisma-to-graphql/core",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "Functionality shared by multiple prisma-to-graphql packages.",
     "keywords": [
         "prisma-to-graphql"

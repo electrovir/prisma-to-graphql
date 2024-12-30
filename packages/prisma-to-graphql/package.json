@@ -1,6 +1,6 @@
 {
     "name": "prisma-to-graphql",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "",
     "keywords": [],
     "homepage": "https://github.com/electrovir/prisma-to-graphql",
@@ -38,8 +38,8 @@
         "@graphql-codegen/plugin-helpers": "^5.1.0",
         "@graphql-codegen/typescript": "^4.1.2",
         "@graphql-codegen/typescript-resolvers": "^4.4.1",
-        "@prisma-to-graphql/core": "^0.2.2",
-        "@prisma-to-graphql/graphql-codegen-operation-params": "^0.2.2",
+        "@prisma-to-graphql/core": "^0.2.3",
+        "@prisma-to-graphql/graphql-codegen-operation-params": "^0.2.3",
         "@prisma/client": "^6.1.0",
         "@prisma/generator-helper": "^6.1.0",
         "@prisma/internals": "^6.1.0",
