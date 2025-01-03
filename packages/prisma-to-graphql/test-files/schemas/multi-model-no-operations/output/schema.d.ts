@@ -148,5 +148,5 @@ export type Resolvers<ContextType = any> = {
     User?: UserResolvers<ContextType>;
     Company?: CompanyResolvers<ContextType>;
 };
-import type { SchemaOperationTypeNames } from '@prisma-to-graphql/core';
+import { type SchemaOperationTypeNames } from 'prisma-to-graphql';
 export declare const schemaOperationTypeNames: Readonly<SchemaOperationTypeNames>;

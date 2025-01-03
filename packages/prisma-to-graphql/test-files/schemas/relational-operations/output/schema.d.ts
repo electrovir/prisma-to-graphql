@@ -585,5 +585,5 @@ export type Resolvers<ContextType = any> = {
     UserSettings?: UserSettingsResolvers<ContextType>;
     UserSettings_Output?: UserSettings_OutputResolvers<ContextType>;
 };
-import type { SchemaOperationTypeNames } from '@prisma-to-graphql/core';
+import { type SchemaOperationTypeNames } from 'prisma-to-graphql';
 export declare const schemaOperationTypeNames: Readonly<SchemaOperationTypeNames>;

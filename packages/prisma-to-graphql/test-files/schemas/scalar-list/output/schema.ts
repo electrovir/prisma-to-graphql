@@ -342,7 +342,7 @@ export type Resolvers<ContextType = any> = {
 };
 
 
-import type {SchemaOperationTypeNames} from '@prisma-to-graphql/core';
+import {type SchemaOperationTypeNames} from 'prisma-to-graphql';
 
 export const schemaOperationTypeNames: Readonly<SchemaOperationTypeNames> = {
     Mutation: {

@@ -2,7 +2,7 @@ import type {ResolverTypeNames, SchemaOperationTypeNames} from '@prisma-to-graph
 import {GraphQLSchema, Kind, TypeNode, type GraphQLNamedType} from 'graphql';
 import JSON5 from 'json5';
 
-export const defaultGenerationOutput = `import type {SchemaOperationTypeNames} from '@prisma-to-graphql/core';
+export const defaultGenerationOutput = `import {type SchemaOperationTypeNames} from 'prisma-to-graphql';
 
 export const schemaOperationTypeNames: Readonly<SchemaOperationTypeNames> = `;
 
