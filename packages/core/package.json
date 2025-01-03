@@ -1,6 +1,6 @@
 {
     "name": "@prisma-to-graphql/core",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "Functionality shared by multiple prisma-to-graphql packages.",
     "keywords": [
         "prisma-to-graphql"
@@ -32,9 +32,9 @@
         "test:docs": "virmator docs check"
     },
     "dependencies": {
-        "@augment-vir/assert": "^31.2.1",
-        "@augment-vir/common": "^31.2.1",
-        "@augment-vir/node": "^31.2.1",
+        "@augment-vir/assert": "^31.3.0",
+        "@augment-vir/common": "^31.3.0",
+        "@augment-vir/node": "^31.3.0",
         "@prisma/client": "^6.1.0",
         "@prisma/generator-helper": "^6.1.0",
         "@prisma/internals": "^6.1.0",
@@ -46,8 +46,8 @@
         "type-fest": "^4.31.0"
     },
     "devDependencies": {
-        "@augment-vir/test": "^31.2.1",
-        "@types/node": "^22.10.2",
+        "@augment-vir/test": "^31.3.0",
+        "@types/node": "^22.10.5",
         "@types/pluralize": "^0.0.33",
         "@web/dev-server-esbuild": "^1.0.3",
         "@web/test-runner": "^0.19.0",
