@@ -23,3 +23,5 @@ export * from './generator-options/generator-options.js';
 export * from './generator-options/graphql-options.js';
 export * from './generator-options/prisma-js-client.js';
 export * from './validate-graphql.js';
+
+export * from '@prisma-to-graphql/core';
