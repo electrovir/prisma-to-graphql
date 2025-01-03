@@ -22,6 +22,11 @@ export const prismaToGraphqlGeneratorOptionsShape = defineShape(
              * This defaults to a `graphql` folder inside of your Prisma JS client's output path.
              */
             outputDirPath: join('node_modules', '.prisma', 'graphql'),
+            /**
+             * If `true`, all `.ts` outputs will also be compiled into JavaScript outputs. If
+             * `false`, only the `.ts` files will be emitted.
+             */
+            compileOutput: true,
         },
         graphqlGenerationOptionsShape,
     ),

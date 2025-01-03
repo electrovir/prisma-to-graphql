@@ -38,7 +38,9 @@ export async function generate(
     const graphqlOutputs = await buildAllOutputs(dmmf, options);
 
     await writeOutputs(graphqlOutputs, options);
-    await compileOutputs(options);
+    if (options.compileOutput) {
+        await compileOutputs(options);
+    }
 }
 
 /**
